@@ -6,7 +6,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2016-09-22T09:17:39.519086Z</updated>
+    <updated>2016-09-22T09:20:20.220520Z</updated>
     <entry>
         <title>Webpack loader to use svg icons as snabbdom VNode</title>
         <link href="https://ysegorov.github.com/2016/svg-snabbdom-loader/" rel="alternate" />
