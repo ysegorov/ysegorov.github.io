@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Module level abstraction in python</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+
+        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="module-level-abstraction-in-python">Module-level abstraction in Python</h1>
+<p>Sample code first.</p>
+<pre><code class="python"># -*- coding: utf-8 -*-
+#
+# file: jukoro/pickle.py
+
+import cPickle
+
+
+load = cPickle.load
+loads = cPickle.loads
+
+
+def dump(obj, f):
+    return cPickle.dump(obj, f, protocol=cPickle.HIGHEST_PROTOCOL)
+
+
+def dumps(obj):
+    return cPickle.dumps(obj, protocol=cPickle.HIGHEST_PROTOCOL)
+
+</code></pre>
+
+<p>No magic inside - in our own project we've created <strong>pickle.py</strong> module,
+the one to be used in place of <strong>cPickle</strong> from standart library.</p>
+<p>As a result we've got an <a href="http://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)">abstraction</a>, which helps us to keep code DRY and
+improves code manageability.</p>
+<p>I like this approach.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2015-01-30 17:40:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2015/initial-commit/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Initial commit</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    <a class="content-next-link" href="/2015/grief/">
+                        <span class="ib">Grief</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>

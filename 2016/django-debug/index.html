@@ -1,0 +1,128 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Django project debugging</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+
+        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="django-project-debugging">Django project debugging</h1>
+<p>Quite often there is a need to debug some code, to see what's going on and why
+there is so much time spent generating pretty simple web page.</p>
+<p>There are tools making this task easier, <a href="https://github.com/django-debug-toolbar/django-debug-toolbar">django-debug-toolbar</a> looks like
+<strong>must have</strong> debug swiss knife but I'd like to use a self-made solution.</p>
+<p>I used to use logging as a way to get the information needed so <a href="https://gist.github.com/ysegorov/7191601fd58bb37a9efd">here are</a>
+two classes to debug code execution time and SQL queries and timings.
+They can be used as decorators or as context managers (see below).</p>
+<script src="https://gist.github.com/ysegorov/7191601fd58bb37a9efd.js"></script>
+
+<p>To initialize these classes you will have to pass <code>prefix</code> as the only
+argument (needed to grep logging output).</p>
+<p>Here are some abstract usage examples:</p>
+<pre><code class="python">
+# -*- coding: utf-8 -*-
+
+from django.shortcuts import render
+
+from project.articles import get_articles, get_stats
+from project.debug import timer, debug_sql
+
+
+@debug_sql('index')
+@timer('index')
+def index(request):
+    return render(request, 'index.html')
+
+
+def articles(request):
+    with timer('articles'):
+        articles = get_articles()
+        with debug_sql('articles'):
+            stats = get_stats(articles)
+    return render(request, 'articles.html', context={'articles': articles,
+                                                     'stats': stats})
+
+</code></pre>
+
+<p>It's pretty easy to use the helpers, there is no need for a project-wide
+configuration and you can focus on the code you are debugging to avoid logging
+noise.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2016-01-17 12:32:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2015/juvi/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Meet Juvi</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    <a class="content-next-link" href="/2016/svg-snabbdom-loader/">
+                        <span class="ib">Webpack loader to use svg icons as snabbdom VNode</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>
