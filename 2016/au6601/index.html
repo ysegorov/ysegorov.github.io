@@ -1,0 +1,142 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Alcor Micro AU6601 PCI-E Flash card reader controller</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+
+        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux">Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux</h1>
+<p>I'm running <a href="https://archlinux.org">ArchLinux</a> on this <a href="https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/">perfect ASUSPRO BU401LG notebook</a>
+by ASUS and the only problem I faced recently was sd-card reader
+not working at all.</p>
+<p><strong><code>lspci</code></strong> shows the following:</p>
+<pre><code class="shell">
+$ lspci
+00:00.0 Host bridge: Intel Corporation Haswell-ULT DRAM Controller (rev 09)
+00:02.0 VGA compatible controller: Intel Corporation Haswell-ULT Integrated Graphics Controller (rev 09)
+00:03.0 Audio device: Intel Corporation Haswell-ULT HD Audio Controller (rev 09)
+00:04.0 Signal processing controller: Intel Corporation Device 0a03 (rev 09)
+00:16.0 Communication controller: Intel Corporation 8 Series HECI #0 (rev 04)
+00:19.0 Ethernet controller: Intel Corporation Ethernet Connection I218-V (rev 04)
+00:1b.0 Audio device: Intel Corporation 8 Series HD Audio Controller (rev 04)
+00:1c.0 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 1 (rev e4)
+00:1c.1 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 2 (rev e4)
+00:1c.3 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 4 (rev e4)
+00:1c.4 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 5 (rev e4)
+00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI #1 (rev 04)
+00:1f.0 ISA bridge: Intel Corporation 8 Series LPC Controller (rev 04)
+00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller 1 [AHCI mode] (rev 04)
+00:1f.3 SMBus: Intel Corporation 8 Series SMBus Controller (rev 04)
+00:1f.6 Signal processing controller: Intel Corporation 8 Series Thermal (rev 04)
+02:00.0 Unassigned class [ff00]: Alcor Micro AU6601 PCI-E Flash card reader controller
+03:00.0 Network controller: Intel Corporation Wireless 7260 (rev 6b)
+04:00.0 3D controller: NVIDIA Corporation GK208M [GeForce GT 730M] (rev a1)
+
+</code></pre>
+
+<p>There are no events in logs after inserting sd-card into slot. So, after a bit
+of searching here is the solution.</p>
+<p>Thanks to <a href="https://launchpad.net/~iacobs">Sabin Iacob</a> there is a <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601">driver</a> for the card reader
+and the only thing to do is to install it.</p>
+<p>Driver is packaged for Ubuntu and these are the steps I've done to install
+it on Arch:</p>
+<ul>
+<li>download appropriate <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb">deb-package</a> (i386 or amd64)
+  from <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages">packages</a> page</li>
+<li>install <code>debtap</code> package from AUR if not already installed</li>
+<li>initialize <code>debtap</code> database</li>
+<li>convert deb package to archlinux package using <code>debtap</code></li>
+<li>install generated package using <code>yaourt -U</code></li>
+<li>install kernel driver</li>
+<li>use card reader :)</li>
+</ul>
+<pre><code class="shell">
+$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+$ yaourt -S debtap
+$ sudo debtap -u
+$ debtap au6601-dkms_0.3-0-ppa7_amd64.deb
+$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ sudo modprobe au6601-pci
+$ udevil mount /dev/mmcblk0p1
+
+# profit!
+
+</code></pre>
+            <div class="content-last-modified"><small><em>Last modified: 2016-09-30 05:16:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2016/svg-snabbdom-loader/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Webpack loader to use svg icons as snabbdom VNode</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>

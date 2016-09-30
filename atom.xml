@@ -6,8 +6,76 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2016-09-22T09:35:42.239470Z</updated>
+    <updated>2016-09-30T06:27:26.091597Z</updated>
     <entry>
+        <title>Alcor Micro AU6601 PCI-E Flash card reader controller</title>
+        <link href="https://ysegorov.github.com/2016/au6601/" rel="alternate" />
+        <id>tag:ysegorov.github.com,2016-09-30:/2016/au6601/</id>
+        <updated>2016-09-30T05:16:00Z</updated>
+        <summary>None</summary>
+        <content type="html">
+            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux&lt;/h1&gt;
+&lt;p&gt;I&#39;m running &lt;a href=&#34;https://archlinux.org&#34;&gt;ArchLinux&lt;/a&gt; on this &lt;a href=&#34;https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/&#34;&gt;perfect ASUSPRO BU401LG notebook&lt;/a&gt;
+by ASUS and the only problem I faced recently was sd-card reader
+not working at all.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;lspci&lt;/code&gt;&lt;/strong&gt; shows the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;
+$ lspci
+00:00.0 Host bridge: Intel Corporation Haswell-ULT DRAM Controller (rev 09)
+00:02.0 VGA compatible controller: Intel Corporation Haswell-ULT Integrated Graphics Controller (rev 09)
+00:03.0 Audio device: Intel Corporation Haswell-ULT HD Audio Controller (rev 09)
+00:04.0 Signal processing controller: Intel Corporation Device 0a03 (rev 09)
+00:16.0 Communication controller: Intel Corporation 8 Series HECI #0 (rev 04)
+00:19.0 Ethernet controller: Intel Corporation Ethernet Connection I218-V (rev 04)
+00:1b.0 Audio device: Intel Corporation 8 Series HD Audio Controller (rev 04)
+00:1c.0 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 1 (rev e4)
+00:1c.1 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 2 (rev e4)
+00:1c.3 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 4 (rev e4)
+00:1c.4 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 5 (rev e4)
+00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI #1 (rev 04)
+00:1f.0 ISA bridge: Intel Corporation 8 Series LPC Controller (rev 04)
+00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller 1 [AHCI mode] (rev 04)
+00:1f.3 SMBus: Intel Corporation 8 Series SMBus Controller (rev 04)
+00:1f.6 Signal processing controller: Intel Corporation 8 Series Thermal (rev 04)
+02:00.0 Unassigned class [ff00]: Alcor Micro AU6601 PCI-E Flash card reader controller
+03:00.0 Network controller: Intel Corporation Wireless 7260 (rev 6b)
+04:00.0 3D controller: NVIDIA Corporation GK208M [GeForce GT 730M] (rev a1)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are no events in logs after inserting sd-card into slot. So, after a bit
+of searching here is the solution.&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;a href=&#34;https://launchpad.net/~iacobs&#34;&gt;Sabin Iacob&lt;/a&gt; there is a &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601&#34;&gt;driver&lt;/a&gt; for the card reader
+and the only thing to do is to install it.&lt;/p&gt;
+&lt;p&gt;Driver is packaged for Ubuntu and these are the steps I&#39;ve done to install
+it on Arch:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;download appropriate &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb&#34;&gt;deb-package&lt;/a&gt; (i386 or amd64)
+  from &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages&#34;&gt;packages&lt;/a&gt; page&lt;/li&gt;
+&lt;li&gt;install &lt;code&gt;debtap&lt;/code&gt; package from AUR if not already installed&lt;/li&gt;
+&lt;li&gt;initialize &lt;code&gt;debtap&lt;/code&gt; database&lt;/li&gt;
+&lt;li&gt;convert deb package to archlinux package using &lt;code&gt;debtap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;install generated package using &lt;code&gt;yaourt -U&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;install kernel driver&lt;/li&gt;
+&lt;li&gt;use card reader :)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;
+$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+$ yaourt -S debtap
+$ sudo debtap -u
+$ debtap au6601-dkms_0.3-0-ppa7_amd64.deb
+$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ sudo modprobe au6601-pci
+$ udevil mount /dev/mmcblk0p1
+
+# profit!
+
+&lt;/code&gt;&lt;/pre&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry><entry>
         <title>Webpack loader to use svg icons as snabbdom VNode</title>
         <link href="https://ysegorov.github.com/2016/svg-snabbdom-loader/" rel="alternate" />
         <id>tag:ysegorov.github.com,2016-07-04:/2016/svg-snabbdom-loader/</id>
