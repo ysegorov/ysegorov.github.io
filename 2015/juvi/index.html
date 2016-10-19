@@ -1,0 +1,163 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Meet Juvi</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="meet-juvi">Meet Juvi</h1>
+<p>While working on a pet project I've created a small client-side library
+responsible (mostly) for a View part in MV* patterns and have named it
+<a href="https://github.com/ysegorov/juvi">juvi</a> (without any specific reason, just to have short name being
+easy to remember).</p>
+<p>It is young and unstable but still looked pretty good for me.</p>
+<p><a href="https://github.com/ysegorov/juvi">Juvi</a> depends on another library - <a href="https://github.com/ysegorov/proto-js">proto-js</a> which is
+a modified fork of Axel Rauschmayer's <a href="https://github.com/rauschma/proto-js">code</a>.
+The <a href="http://www.2ality.com/2011/06/prototypes-as-classes.html">idea</a> behind
+of <strong>proto-js</strong> is very interesting and it's not clear to me why it's not as
+popular as it should be.
+Currently I'm thinking about embedding <strong>proto-js</strong> code to <strong>juvi</strong> due to the
+fact it's small and it will be easier to manage <strong>juvi</strong>.</p>
+<p>So, coming back to <strong>juvi</strong>.</p>
+<p>Originally plan was to create something simple and extendable and to have the
+following features included out-of-the-box:</p>
+<ul>
+<li>extendability (must be a way to extend view to keep code DRY and organized)</li>
+<li>unified way to render view</li>
+<li>unified way to attach event handlers to DOM</li>
+<li>unified way to declare, render and attach to DOM children views</li>
+<li>simple and reliable way to close view on its own and children views and
+  free resources</li>
+</ul>
+<p>There is almost no magic inside <a href="https://github.com/ysegorov/juvi/blob/develop/src/view.js">view.js</a>, just check the code (code can
+speak, certainly).</p>
+<p>Probably, the most interesting part is <strong>handleEvent</strong> method. Here is an
+<a href="http://www.thecssninja.com/javascript/handleevent">article</a> describing the
+technique.</p>
+<p>And one more note about children views.</p>
+<p>Children views must be described in view instance as:</p>
+<pre><code class="javascript">// code can be placed into init method
+
+this.children = {
+    $title: TitleView(somePropsObject),
+    $items: this.items.map(function (it) { return ItemView.new(it); })
+};
+
+</code></pre>
+
+<p>and DOM nodes as:</p>
+<pre><code class="javascript">// code should be placed into populateNodes method
+
+var el = this.el,
+    $ = this.$;         // NB. not a jQuery!
+
+this.nodes = {
+    $title: $('[data-title]', el),
+    $items: $('[data-items]', el)
+};
+
+</code></pre>
+
+<p>Having such a definitions view will automatically render all children views and
+attach them to the specified DOM nodes:</p>
+<ul>
+<li><strong>this.children.$title</strong> view will be attached to <strong>this.nodes.$title</strong> node</li>
+<li><strong>this.children.$items</strong> views will be attached to <strong>this.nodes.$items</strong> node
+  (keeping order)</li>
+</ul>
+<p>There is no way to emit or listen for events per view because I'm trying to
+keep events flow organized in a <strong>Flux</strong> way. Here is the <a href="https://github.com/ysegorov/juvi/blob/develop/src/dispatcher.js">dispatcher.js</a>
+- instance of <a href="https://github.com/ysegorov/juvi/blob/develop/src/pubsub.js">pubsub.js</a>.</p>
+<p>And I almost forgot about this dependency - <strong>Promise</strong>. It's up to you to
+pick the one and include it in your project.
+Currently I'm using some parts of <a href="https://github.com/zloirock/core-js">core.js</a>
+library. Here is <a href="https://github.com/jakearchibald/es6-promise">es6-promise</a>
+polyfill suitable for <strong>pubsub</strong> too.</p>
+<p>That's it.</p>
+<p>The mantra stays the same.</p>
+<p><strong>Become a creator, not a consumer.</strong></p>
+<hr>
+<p>NB. I'm thinking about rewriting <a href="https://github.com/ysegorov/jquery.dashboard">jquery.dashboard</a>
+and <a href="https://bitbucket.org/ysegorov/mg/src">mg</a> libraries using <a href="https://github.com/ysegorov/juvi">Juvi</a>.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2015-06-29 08:44:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2015/jukoro-0.1.2/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Jukoro 0.1.2 release</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    <a class="content-next-link" href="/2016/django-debug/">
+                        <span class="ib">Django project debugging</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>
