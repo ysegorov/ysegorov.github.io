@@ -12,7 +12,7 @@
         <meta http-equiv="Expires" content="0">
         
 
-        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        
         <!-- Place favicon.ico in the root directory -->
 
         
@@ -30,39 +30,30 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="micro-datetime-parsing-benchmark">Micro datetime parsing benchmark</h1>
+            <h1>Micro datetime parsing benchmark</h1>
 <p>Just a note for myself about datetime parsing in python.</p>
 <p>Let's assume we know ahead that we have a datetime string in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a>
 format and timezone is <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">UTC</a>.</p>
 <p>Here is a benchmark.</p>
-<pre><code class="python">In [1]: import arrow, re, datetime as dt
-
-In [2]: iso = arrow.utcnow().isoformat()
-
-In [3]: iso
-Out[3]: '2015-03-26T07:59:44.210642+00:00'
-
-In [4]: r = re.compile(r'[\-T:\.]')
-
-In [5]: arrow.get(iso)
-Out[5]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
-
-In [6]: arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
-Out[6]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
-
-In [7]: arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
-Out[7]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
-
-In [8]: %timeit arrow.get(iso)
-10000 loops, best of 3: 54.7 µs per loop
-
-In [9]: %timeit arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
-100000 loops, best of 3: 17.5 µs per loop
-
-In [10]: %timeit arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
+<p>```python
+In [1]: import arrow, re, datetime as dt</p>
+<p>In [2]: iso = arrow.utcnow().isoformat()</p>
+<p>In [3]: iso
+Out[3]: '2015-03-26T07:59:44.210642+00:00'</p>
+<p>In [4]: r = re.compile(r'[-T:.]')</p>
+<p>In [5]: arrow.get(iso)
+Out[5]: <Arrow [2015-03-26T07:59:44.210642+00:00]></p>
+<p>In [6]: arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
+Out[6]: <Arrow [2015-03-26T07:59:44.210642+00:00]></p>
+<p>In [7]: arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
+Out[7]: <Arrow [2015-03-26T07:59:44.210642+00:00]></p>
+<p>In [8]: %timeit arrow.get(iso)
+10000 loops, best of 3: 54.7 µs per loop</p>
+<p>In [9]: %timeit arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
+100000 loops, best of 3: 17.5 µs per loop</p>
+<p>In [10]: %timeit arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
 100000 loops, best of 3: 8.83 µs per loop
-</code></pre>
-
+```</p>
 <p>Unfortunatelly, the third way of parsing is wrong because it doesn't take into
 account microseconds zero-padded to the left.</p>
 <p><a href="https://github.com/crsmithdev/arrow">Arrow</a> library is just great and is certainly worth trying out.</p>

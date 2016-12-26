@@ -12,7 +12,7 @@
         <meta http-equiv="Expires" content="0">
         
 
-        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        
         <!-- Place favicon.ico in the root directory -->
 
         
@@ -30,8 +30,8 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="chtd">Chtd</h1>
-<h2 id="preface">Preface</h2>
+            <h1>Chtd</h1>
+<h2>Preface</h2>
 <p>I've started to work for <a href="http://chtd.ru">Chtd</a> in October 2011 and worked till
 February 2015.
 It was a good time and I want to say thank you to everyone who worked with.</p>
@@ -39,7 +39,7 @@ It was a good time and I want to say thank you to everyone who worked with.</p>
 and it had to shrink (four of the six developers were forced
 to leave the company).</p>
 <p>This is going to be a long post and probably I'll keep it as is.</p>
-<h2 id="context">Context</h2>
+<h2>Context</h2>
 <p>I'm going to sum up my experience working as a developer for <a href="http://chtd.ru">Chtd</a>
 talking about the some interesting points.</p>
 <p>The company has developed its own implementation of graph-oriented database
@@ -55,7 +55,7 @@ providing needed functionality.</p>
 in size and have automatic calculations according to calc rules
 specified by analysts.</p>
 <p>We have a specialized report builder and some other useful tools.</p>
-<h2 id="workflow">Workflow</h2>
+<h2>Workflow</h2>
 <p>This is rather important point to begin with it. Going back to 2011
 the company used
 selfhosted <strong>subversion</strong> as a version control system and actually there was no
@@ -74,8 +74,8 @@ Driessen</em>, for sharing your experience!</p>
 merged to <em>default</em> branches.</p>
 <p>From the very beginning we were using <strong>Redmine</strong> to track issues and manage
 projects and it's just great.</p>
-<h2 id="automation">Automation</h2>
-<h3 id="bitbucket-and-redmine">BitBucket and Redmine</h3>
+<h2>Automation</h2>
+<h3>BitBucket and Redmine</h3>
 <p>Using <strong>svn</strong> we had a post-commit hook configured to send email with diff to
 developers mailing list.</p>
 <p>After switching to [BitBucket][bitbucket] we wanted to keep these emails
@@ -98,7 +98,7 @@ it does the following:</p>
 </li>
 </ul>
 <p><strong>Bbhook</strong> works pretty well and we had just a few issues with it.</p>
-<h3 id="fabric">Fabric</h3>
+<h3>Fabric</h3>
 <p>Going back to 2011 and 2012 we were using makefile to prepare configuration files
 to deploy a web service (project built on <a href="http://chtd.ru/netdb">NetDB</a>).</p>
 <p>It was a working solution but I wasn't satisfied with it. We still had
@@ -124,7 +124,7 @@ service by issuing just one command in <strong>bash</strong>.</p>
 <p>The key win here was a way we specify service settings (server name, db
 parameters etc.) - in a command line instead of manually editing configuration
 file.</p>
-<h3 id="static-files">Static files</h3>
+<h3>Static files</h3>
 <p><em>Update</em>. Sometimes I'm still fighting with <strong>gulp</strong> spending too much time
 configuring it. The <a href="http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/">article by Keith Cirkel</a>
 helped a lot to start using <code>npm</code> as a build tool.</p>
@@ -154,10 +154,10 @@ decided to drop this dependency.</p>
 complex inside but works pretty well.</p>
 <p>There is a chance I'll write a post focusing on <strong>bundler</strong>.</p>
 <p>That's all for automation section.</p>
-<h2 id="python-javascript">Python, Javascript</h2>
+<h2>Python, Javascript</h2>
 <p>This can be a huge section but I'll focus only on some examples (without any
 specific order).</p>
-<h3 id="low-level-netdb-administration">Low-level NetDB administration</h3>
+<h3>Low-level NetDB administration</h3>
 <p>It was my first library written for <a href="http://chtd.ru">Chtd</a> and we called it
 <em>Object editor</em> (<em>oditor</em>).</p>
 <p>Due to <a href="http://chtd.ru/netdb">NetDB</a> specific internals there was a need for an
@@ -173,7 +173,7 @@ I am sure there is something with me, not with <a href="http://dojotoolkit.org/"
 <p>The second implementation was made using <strong>Backbone</strong> and <strong>Bootstrap</strong>
 (details on them follow) and it was a big step forward to better <strong>python</strong> and
 <strong>javascript</strong> code and to usability.</p>
-<h3 id="backbone-and-bootstrap">Backbone and Bootstrap</h3>
+<h3>Backbone and Bootstrap</h3>
 <p>Going back to 2011/2012 my javascript code was ugly.
 I was the beginner and I was trying to have code organized but I'm not sure
 I've managed it.</p>
@@ -189,7 +189,7 @@ for frontend.</p>
 <p>I think it was one of the most important steps during the history of
 <a href="http://chtd.ru">Chtd</a> because <a href="https://qubequ.com">QuBeQu</a> (<a href="http://chtd.ru/netdb">NetDB</a> SaaS solution)
 was built on top of this library.</p>
-<h3 id="user-permissions">User permissions</h3>
+<h3>User permissions</h3>
 <p>This is a story about refactoring <strong>python</strong> code.</p>
 <p>We had rather complicated permissions system developed back to 2012. Really
 complicated. The author of the system has left the company a year later.</p>
@@ -207,7 +207,7 @@ still - there is a huge codebase and my estimates were naive.</p>
 <p>Python descriptors are a great way of structuring your codebase.</p>
 <p>The result of the refactoring was awesome - page load time decreased to 1
 second (from more than a minute!).</p>
-<h3 id="digital-signature">Digital signature</h3>
+<h3>Digital signature</h3>
 <p>We had a couple of projects with the need for digital signature support.</p>
 <p>In general this is about integration with <a href="http://cryptopro.ru/">CryptoPro</a> software
 (Russia-only solution).</p>
@@ -220,14 +220,14 @@ to get all CRLs from.</p>
 from Internet).</p>
 <p>It was one more battle for speed to load certificates and CRLs within
 a reasonable time.</p>
-<h3 id="olap">OLAP</h3>
+<h3>OLAP</h3>
 <p>Mostly client-side library acting as an OLAP builder built on top of our
 <a href="http://backbonejs.org/">backbone</a>-based library.</p>
 <p>Most interesting part here was drag'n'drop to provide better user experience.</p>
 <p>I've created the first version of this library and later it was handed over to
 another developer.
 It is one of the most valuable libraries at <a href="https://qubequ.com">QuBeQu</a>.</p>
-<h3 id="jquery-dashboard">jQuery dashboard</h3>
+<h3>jQuery dashboard</h3>
 <p>One more client-side library created by me.</p>
 <p>~~I'm expecting it to be published by <a href="http://chtd.ru">Chtd</a> under the MIT license
 (we had such an agreement)~~. It is <a href="https://github.com/chtd/jquery.dashboard">published</a>
@@ -236,7 +236,7 @@ by <a href="http://chtd.ru">Chtd</a> under the MIT license.</p>
 dashboards.</p>
 <p>Drag'n'drop here too.</p>
 <p>There are more libraries and tasks I've done working for <a href="http://chtd.ru">Chtd</a>, a lot more.</p>
-<h2 id="jython">Jython</h2>
+<h2>Jython</h2>
 <p>This is one more subject I'd like to talk about.</p>
 <p>We had an import/export functionality providing support for <strong>Excel</strong> files
 (among other formats).</p>
@@ -258,7 +258,7 @@ configuration library providing a way to set parameters (we can read/write data
 from/to different sheets and cells within <strong>Excel</strong> documents).</p>
 <p><a href="http://poi.apache.org/">POI</a>-based solution worked great and we had pretty good performance for
 import/export operations.</p>
-<h2 id="summary">Summary</h2>
+<h2>Summary</h2>
 <p>It was a good time. There were moments I was not satisfied with myself or
 someone from colleagues but we are all human beings.</p>
 <p>We can and we must make mistakes - to be able to create something better.</p>

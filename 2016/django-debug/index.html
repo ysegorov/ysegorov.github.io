@@ -12,7 +12,7 @@
         <meta http-equiv="Expires" content="0">
         
 
-        <!-- link rel="apple-touch-icon" href="apple-touch-icon.png" -->
+        
         <!-- Place favicon.ico in the root directory -->
 
         
@@ -30,7 +30,7 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="django-project-debugging">Django project debugging</h1>
+            <h1>Django project debugging</h1>
 <p>Quite often there is a need to debug some code, to see what's going on and why
 there is so much time spent generating pretty simple web page.</p>
 <p>There are tools making this task easier, <a href="https://github.com/django-debug-toolbar/django-debug-toolbar">django-debug-toolbar</a> looks like
@@ -43,31 +43,23 @@ They can be used as decorators or as context managers (see below).</p>
 <p>To initialize these classes you will have to pass <code>prefix</code> as the only
 argument (needed to grep logging output).</p>
 <p>Here are some abstract usage examples:</p>
-<pre><code class="python">
-# -*- coding: utf-8 -*-
-
-from django.shortcuts import render
-
-from project.articles import get_articles, get_stats
-from project.debug import timer, debug_sql
-
-
-@debug_sql('index')
+<p>```python</p>
+<h1>-<em>- coding: utf-8 -</em>-</h1>
+<p>from django.shortcuts import render</p>
+<p>from project.articles import get_articles, get_stats
+from project.debug import timer, debug_sql</p>
+<p>@debug_sql('index')
 @timer('index')
 def index(request):
-    return render(request, 'index.html')
-
-
-def articles(request):
+    return render(request, 'index.html')</p>
+<p>def articles(request):
     with timer('articles'):
         articles = get_articles()
         with debug_sql('articles'):
             stats = get_stats(articles)
     return render(request, 'articles.html', context={'articles': articles,
-                                                     'stats': stats})
-
-</code></pre>
-
+                                                     'stats': stats})</p>
+<p>```</p>
 <p>It's pretty easy to use the helpers, there is no need for a project-wide
 configuration and you can focus on the code you are debugging to avoid logging
 noise.</p>
