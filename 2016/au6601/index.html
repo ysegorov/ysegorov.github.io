@@ -30,13 +30,13 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1>Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux</h1>
+            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux">Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux</h1>
 <p>I'm running <a href="https://archlinux.org">ArchLinux</a> on this <a href="https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/">perfect ASUSPRO BU401LG notebook</a>
 by ASUS and the only problem I faced recently was sd-card reader
 not working at all.</p>
 <p><strong><code>lspci</code></strong> shows the following:</p>
-<p>```shell</p>
-<p>$ lspci
+<pre><code class="shell">
+$ lspci
 00:00.0 Host bridge: Intel Corporation Haswell-ULT DRAM Controller (rev 09)
 00:02.0 VGA compatible controller: Intel Corporation Haswell-ULT Integrated Graphics Controller (rev 09)
 00:03.0 Audio device: Intel Corporation Haswell-ULT HD Audio Controller (rev 09)
@@ -55,8 +55,10 @@ not working at all.</p>
 00:1f.6 Signal processing controller: Intel Corporation 8 Series Thermal (rev 04)
 02:00.0 Unassigned class [ff00]: Alcor Micro AU6601 PCI-E Flash card reader controller
 03:00.0 Network controller: Intel Corporation Wireless 7260 (rev 6b)
-04:00.0 3D controller: NVIDIA Corporation GK208M [GeForce GT 730M] (rev a1)</p>
-<p>```</p>
+04:00.0 3D controller: NVIDIA Corporation GK208M [GeForce GT 730M] (rev a1)
+
+</code></pre>
+
 <p>There are no events in logs after inserting sd-card into slot. So, after a bit
 of searching here is the solution.</p>
 <p>Thanks to <a href="https://launchpad.net/~iacobs">Sabin Iacob</a> there is a <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601">driver</a> for the card reader
@@ -73,16 +75,18 @@ it on Arch:</p>
 <li>install kernel driver</li>
 <li>use card reader :)</li>
 </ul>
-<p>```shell</p>
-<p>$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+<pre><code class="shell">
+$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
 $ yaourt -S debtap
 $ sudo debtap -u
 $ debtap au6601-dkms_0.3-0-ppa7_amd64.deb
 $ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
 $ sudo modprobe au6601-pci
-$ udevil mount /dev/mmcblk0p1</p>
-<h1>profit!</h1>
-<p>```</p>
+$ udevil mount /dev/mmcblk0p1
+
+# profit!
+
+</code></pre>
             <div class="content-last-modified"><small><em>Last modified: 2016-09-30 05:16:00 UTC</em></small></div>
             
             <div class="content-prev-next">

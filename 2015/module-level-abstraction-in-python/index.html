@@ -30,20 +30,28 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1>Module-level abstraction in Python</h1>
+            <h1 id="module-level-abstraction-in-python">Module-level abstraction in Python</h1>
 <p>Sample code first.</p>
-<p>```python</p>
-<h1>-<em>- coding: utf-8 -</em>-</h1>
-<h1></h1>
-<h1>file: jukoro/pickle.py</h1>
-<p>import cPickle</p>
-<p>load = cPickle.load
-loads = cPickle.loads</p>
-<p>def dump(obj, f):
-    return cPickle.dump(obj, f, protocol=cPickle.HIGHEST_PROTOCOL)</p>
-<p>def dumps(obj):
-    return cPickle.dumps(obj, protocol=cPickle.HIGHEST_PROTOCOL)</p>
-<p>```</p>
+<pre><code class="python"># -*- coding: utf-8 -*-
+#
+# file: jukoro/pickle.py
+
+import cPickle
+
+
+load = cPickle.load
+loads = cPickle.loads
+
+
+def dump(obj, f):
+    return cPickle.dump(obj, f, protocol=cPickle.HIGHEST_PROTOCOL)
+
+
+def dumps(obj):
+    return cPickle.dumps(obj, protocol=cPickle.HIGHEST_PROTOCOL)
+
+</code></pre>
+
 <p>No magic inside - in our own project we've created <strong>pickle.py</strong> module,
 the one to be used in place of <strong>cPickle</strong> from standart library.</p>
 <p>As a result we've got an <a href="http://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)">abstraction</a>, which helps us to keep code DRY and

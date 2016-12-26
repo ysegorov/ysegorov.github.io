@@ -30,7 +30,7 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1>Meet Juvi</h1>
+            <h1 id="meet-juvi">Meet Juvi</h1>
 <p>While working on a pet project I've created a small client-side library
 responsible (mostly) for a View part in MV* patterns and have named it
 <a href="https://github.com/ysegorov/juvi">juvi</a> (without any specific reason, just to have short name being
@@ -61,23 +61,28 @@ speak, certainly).</p>
 technique.</p>
 <p>And one more note about children views.</p>
 <p>Children views must be described in view instance as:</p>
-<p>```javascript
-// code can be placed into init method</p>
-<p>this.children = {
+<pre><code class="javascript">// code can be placed into init method
+
+this.children = {
     $title: TitleView(somePropsObject),
     $items: this.items.map(function (it) { return ItemView.new(it); })
-};</p>
-<p>```</p>
+};
+
+</code></pre>
+
 <p>and DOM nodes as:</p>
-<p>```javascript
-// code should be placed into populateNodes method</p>
-<p>var el = this.el,
-    $ = this.$;         // NB. not a jQuery!</p>
-<p>this.nodes = {
+<pre><code class="javascript">// code should be placed into populateNodes method
+
+var el = this.el,
+    $ = this.$;         // NB. not a jQuery!
+
+this.nodes = {
     $title: $('[data-title]', el),
     $items: $('[data-items]', el)
-};</p>
-<p>```</p>
+};
+
+</code></pre>
+
 <p>Having such a definitions view will automatically render all children views and
 attach them to the specified DOM nodes:</p>
 <ul>

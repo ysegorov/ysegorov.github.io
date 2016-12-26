@@ -30,7 +30,7 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1>Webpack loader to use svg icons as snabbdom VNode</h1>
+            <h1 id="webpack-loader-to-use-svg-icons-as-snabbdom-vnode">Webpack loader to use svg icons as snabbdom VNode</h1>
 <p>I'm exploring FRP for frontend and it looks very interesting to me, especially
 for dataflow using streams.</p>
 <p>Unidirectional data flow, introduced as <strong>Flux</strong> by <strong>Facebook</strong> engineers, is
@@ -47,59 +47,63 @@ part was <strong>union types</strong>.</p>
 <p>Studying <a href="http://guide.elm-lang.org/architecture/index.html">The ELM Architecture</a> helped a lot in this.</p>
 <p>To dive deeper on the subject I've created a very simple implementation of
 union types which in it's core just tags values using specified tag name:</p>
-<p>```javascript
-// type.js</p>
-<p>var curryN = require('ramda/src/curryN');</p>
-<p>function Type(spec) {
+<pre><code class="javascript">// type.js
+
+var curryN = require('ramda/src/curryN');
+
+function Type(spec) {
     var o = {},
-        keys = Object.keys(spec);</p>
-<pre><code>keys.forEach(function (key) {
-    var fn = spec[key];
-    if (spec[key].length &gt; 2) {
-        o[key] = curryN(fn.length - 1, function () {
-            return {
-                value: [].slice.apply(arguments),
-                tag: key,
-                handler: fn
+        keys = Object.keys(spec);
+
+    keys.forEach(function (key) {
+        var fn = spec[key];
+        if (spec[key].length &gt; 2) {
+            o[key] = curryN(fn.length - 1, function () {
+                return {
+                    value: [].slice.apply(arguments),
+                    tag: key,
+                    handler: fn
+                };
+            });
+        } else {
+            o[key] = function (smth) {
+                return {
+                    value: smth,
+                    tag: key,
+                    handler: fn
+                };
             };
-        });
-    } else {
-        o[key] = function (smth) {
-            return {
-                value: smth,
-                tag: key,
-                handler: fn
-            };
-        };
+        }
+    });
+    function update(tagged, model) {
+        var tag = tagged.tag,
+            value = tagged.value,
+            fn = tagged.handler;
+        value = Array.isArray(value) ? value
+                                        : (value != null ? [value] : []);
+        value.push(model);
+        return fn.apply(null, value);
     }
-});
-function update(tagged, model) {
-    var tag = tagged.tag,
-        value = tagged.value,
-        fn = tagged.handler;
-    value = Array.isArray(value) ? value
-                                    : (value != null ? [value] : []);
-    value.push(model);
-    return fn.apply(null, value);
+    o.update = curryN(2, update);
+    return o;
 }
-o.update = curryN(2, update);
-return o;
 </code></pre>
-<p>}
-```</p>
+
 <p>Example of union type definition:</p>
-<p>```javascript
-// component.js</p>
-<p>var Type = require('./type');
-var R = require('ramda');</p>
-<p>var Msg = Type({
+<pre><code class="javascript">// component.js
+
+var Type = require('./type');
+var R = require('ramda');
+
+var Msg = Type({
     Click: function (evt, model) { return R.assoc('clicks', model.clicks + 1, model); },
     Remove: function (evt, model) { return R.assoc('_removed', true, model); },
     Tick: function (model) {
         return R.assoc('count', model.count &gt; 359 ? 0 : model.count + 1, model);
     }
 });
-```</p>
+</code></pre>
+
 <p>It is a bit simplier than <a href="https://github.com/paldepind/union-type">union-type</a>, doesn't have type checking and
 probably missing something in this implementation.</p>
 <p>Anyway, it helped me to understand the data flow.</p>
@@ -113,25 +117,29 @@ would be great to have <strong>svg</strong> icons available as <a href="https://
 <p>So, here is <a href="https://github.com/ysegorov/svg-snabbdom-loader">the webpack loader</a> for this (this is my first published
 <strong>npm</strong> module).</p>
 <p>Usage is pretty simple just like any webpack loader:</p>
-<p>```javascript
-// icons.js</p>
-<p>var home = require('./svg/home.svg'),
+<pre><code class="javascript">// icons.js
+
+var home = require('./svg/home.svg'),
     alert = require('./svg/alert.svg'),
-    ...</p>
-<p>module.exports = {
+    ...
+
+module.exports = {
     home: home,
     alert: alert,
     ...
 };
-```</p>
-<p>```javascript
-// alerts.js</p>
-<p>var icons = require('./icons'),
-    h = require('snabbdom/h');</p>
-<p>function view(model) {
+</code></pre>
+
+<pre><code class="javascript">// alerts.js
+
+var icons = require('./icons'),
+    h = require('snabbdom/h');
+
+function view(model) {
     return h('div.info', {}, [icons.alert, 'Some alert here']);
 }
-```</p>
+</code></pre>
+
 <p>The loader can be chained with <strong>svgo-loader</strong>, please check the docs for this.</p>
 <p>That's it for now.</p>
             <div class="content-last-modified"><small><em>Last modified: 2016-07-04 08:45:00 UTC</em></small></div>

@@ -30,34 +30,42 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1>Jukoro documentation using Sphinx</h1>
+            <h1 id="jukoro-documentation-using-sphinx">Jukoro documentation using Sphinx</h1>
 <p>Summary about creating python library documentation using <a href="http://sphinx-doc.org/">Sphinx</a> and
 publishing it to <a href="https://pages.github.com/">GitHub Pages</a> (based on <a href="http://raxcloud.blogspot.co.uk/2013/02/documenting-python-code-using-sphinx.html">this article</a>).</p>
-<p>```bash
-$ git clone git@github.com:ysegorov/jukoro.git
-$ cd jukoro</p>
-<p>$ mkdir docs
+<pre><code class="bash">$ git clone git@github.com:ysegorov/jukoro.git
+$ cd jukoro
+
+$ mkdir docs
 $ pip install sphinx
-$ sphinx-apidoc -A "Yuri Egorov" -F -o docs jukoro</p>
-<p>$ git add docs
-$ git commit -m "sphinx-apidoc generated docs folder contents"</p>
-<p>$ mkdir gh-pages
-$ vim docs/Makefile  ## change BUILDDIR to ../gh-pages</p>
-<p>$ /usr/share/git/workdir/git-new-workdir . gh-pages/html
-$ cd gh-pages/html</p>
-<p>$ git checkout --orphan gh-pages
-$ git rm -rf .</p>
-<p>$ cd ../../docs
+$ sphinx-apidoc -A &quot;Yuri Egorov&quot; -F -o docs jukoro
+
+$ git add docs
+$ git commit -m &quot;sphinx-apidoc generated docs folder contents&quot;
+
+$ mkdir gh-pages
+$ vim docs/Makefile  ## change BUILDDIR to ../gh-pages
+
+$ /usr/share/git/workdir/git-new-workdir . gh-pages/html
+$ cd gh-pages/html
+
+$ git checkout --orphan gh-pages
+$ git rm -rf .
+
+$ cd ../../docs
 $ make html
-$ cd -</p>
-<p>$ git add .
-$ git commit -m "sphinx generated docs"
-$ git push -u origin gh-pages</p>
-<p>$ touch .nojekyll  ## to skip Jekyll
+$ cd -
+
+$ git add .
+$ git commit -m &quot;sphinx generated docs&quot;
+$ git push -u origin gh-pages
+
+$ touch .nojekyll  ## to skip Jekyll
 $ git add .nojekyll
-$ git commit -m ".nojekyll"
+$ git commit -m &quot;.nojekyll&quot;
 $ git push
-```</p>
+</code></pre>
+
 <p>And now there is <a href="https://ysegorov.github.io/jukoro">jukoro's documentation</a> available online (still requires
 some attention).</p>
 <p>For some reason I've started <a href="/2015/markdown-live/">to use markdown</a> for <code>readme</code> and <code>changelog</code>
