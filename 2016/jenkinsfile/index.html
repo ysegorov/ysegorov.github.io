@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Pipeline As a Code With Jenkins</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="pipeline-as-a-code-with-jenkins">Pipeline as a code with Jenkins</h1>
+<p><a href="https://jenkins.io/">Jenkins</a> has a pretty nice <a href="https://jenkins.io/solutions/pipeline/">Pipeline</a> plugin to manage build, test and
+deploy steps in a single file named <code>Jenkinsfile</code>. This file should be stored
+alongside with the project code just like <code>python</code>, <code>javascript</code>, <code>html</code> or
+whatever files.</p>
+<p>The only problem with <code>Jenkinsfile</code> is that it must be written in <a href="http://www.groovy-lang.org/">Groovy</a>.
+To me this is the same problem as with <code>Vagrantfile</code> which must be written in
+<a href="https://www.ruby-lang.org/en/">Ruby</a>.
+There is something strange forcing users to study language in order to have
+proper configuration file.</p>
+<p>It took some time to prepare workable <code>Jenkinsfile</code> which works for
+<a href="https://jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/">Multibranch Workflows</a> so I decided to create a <a href="https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305">gist</a> with it.</p>
+<p>Here it is:</p>
+<script src="https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305.js"></script>
+
+<p>It works pretty good for me providing slack notifications to production or
+staging channels and having links to <a href="https://bitbucket.org">Bitbucket</a> diff page to see changes
+commited between builds.</p>
+<p>This <code>Jenkinsfile</code> is suitable for <code>python</code> or <code>nodejs</code> projects and requires
+just minimal tuning - to provide proper <em>repository name and url</em> and <em>build,
+test and deploy</em> commands for the project.
+Deployment happens only for <code>develop</code> (staging server) and <code>master</code> (production
+server) branches.</p>
+<p>Hope somebody will find this <a href="https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305">gist</a> usefull.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2016-12-27 10:45:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2016/do/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">DO</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+
+
+
+        
+        
+        
+    </body>
+</html>

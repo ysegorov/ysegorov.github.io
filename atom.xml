@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2016-12-26T14:04:46.307504Z</updated>
+    <updated>2016-12-27T11:58:41.995079Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1004,6 +1004,42 @@ definitely should &lt;a href=&#34;http://letterslive.com/letter/do/&#34;&gt;go t
   Much love to you both.&lt;/p&gt;
 &lt;p&gt;Sol&lt;/p&gt;
 &lt;/blockquote&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Pipeline As a Code With Jenkins</title>
+        <link href="https://ysegorov.github.com/2016/jenkinsfile/" rel="alternate" />
+        <id>tag:ysegorov.github.com,2016-12-27:/2016/jenkinsfile/</id>
+        <updated>2016-12-27T10:45:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;pipeline-as-a-code-with-jenkins&#34;&gt;Pipeline as a code with Jenkins&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://jenkins.io/&#34;&gt;Jenkins&lt;/a&gt; has a pretty nice &lt;a href=&#34;https://jenkins.io/solutions/pipeline/&#34;&gt;Pipeline&lt;/a&gt; plugin to manage build, test and
+deploy steps in a single file named &lt;code&gt;Jenkinsfile&lt;/code&gt;. This file should be stored
+alongside with the project code just like &lt;code&gt;python&lt;/code&gt;, &lt;code&gt;javascript&lt;/code&gt;, &lt;code&gt;html&lt;/code&gt; or
+whatever files.&lt;/p&gt;
+&lt;p&gt;The only problem with &lt;code&gt;Jenkinsfile&lt;/code&gt; is that it must be written in &lt;a href=&#34;http://www.groovy-lang.org/&#34;&gt;Groovy&lt;/a&gt;.
+To me this is the same problem as with &lt;code&gt;Vagrantfile&lt;/code&gt; which must be written in
+&lt;a href=&#34;https://www.ruby-lang.org/en/&#34;&gt;Ruby&lt;/a&gt;.
+There is something strange forcing users to study language in order to have
+proper configuration file.&lt;/p&gt;
+&lt;p&gt;It took some time to prepare workable &lt;code&gt;Jenkinsfile&lt;/code&gt; which works for
+&lt;a href=&#34;https://jenkins.io/blog/2015/12/03/pipeline-as-code-with-multibranch-workflows-in-jenkins/&#34;&gt;Multibranch Workflows&lt;/a&gt; so I decided to create a &lt;a href=&#34;https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305&#34;&gt;gist&lt;/a&gt; with it.&lt;/p&gt;
+&lt;p&gt;Here it is:&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;It works pretty good for me providing slack notifications to production or
+staging channels and having links to &lt;a href=&#34;https://bitbucket.org&#34;&gt;Bitbucket&lt;/a&gt; diff page to see changes
+commited between builds.&lt;/p&gt;
+&lt;p&gt;This &lt;code&gt;Jenkinsfile&lt;/code&gt; is suitable for &lt;code&gt;python&lt;/code&gt; or &lt;code&gt;nodejs&lt;/code&gt; projects and requires
+just minimal tuning - to provide proper &lt;em&gt;repository name and url&lt;/em&gt; and &lt;em&gt;build,
+test and deploy&lt;/em&gt; commands for the project.
+Deployment happens only for &lt;code&gt;develop&lt;/code&gt; (staging server) and &lt;code&gt;master&lt;/code&gt; (production
+server) branches.&lt;/p&gt;
+&lt;p&gt;Hope somebody will find this &lt;a href=&#34;https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305&#34;&gt;gist&lt;/a&gt; usefull.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
