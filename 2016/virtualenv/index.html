@@ -1,0 +1,218 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Self-made Virtualenv Wrapper</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="self-made-virtualenv-wrapper">Self-made Virtualenv Wrapper</h1>
+<p>Not long ago I've switched from <a href="https://pypi.python.org/pypi/virtualenvwrapper">virtualenvwrapper</a> to self-made solution
+based on <a href="https://gist.github.com/datagrok/2199506">this idea</a> by <a href="http://datagrok.org/">datagrok</a>.
+It works pretty well for me and I'd like to share it here.</p>
+<p>The idea is to have a <em>root</em> directory (<code>$HOME/_dev</code> in my case)
+for all projects and to have shell helper to easily jump into any project
+and to automatically activate it's <a href="https://github.com/pypa/virtualenv">virtualenv</a> if it exists.</p>
+<p>Here is how it looks in <code>bash</code>:</p>
+<pre><code class="bash">
+[local] [egorov@asus 11:33:19]:~  $ dev blog
+Virtual environment found in /home/egorov/_dev/blog/env, activated.
+(blog) [local] [egorov@asus 11:34:31]:~/_dev/blog git:master= $
+
+</code></pre>
+
+<p>Besides just jumping into directory I wanted to have <code>tab</code> autocompletion and
+easy way to create new projects <code>home</code> directory:</p>
+<pre><code class="bash">
+# autocompletion
+[local] [egorov@asus 11:43:01]:~  $ dev service-  # tab hitted twice
+service-account   service-feedback  service-products  service-workers
+
+# new project home
+[local] [egorov@asus 11:52:08]:~  $ dev rogue
+mkdir: created directory '/home/egorov/_dev/rogue'
+No virtual environment found, skipping activate.
+[local] [egorov@asus 11:52:25]:~/_dev/rogue  $
+
+</code></pre>
+
+<p>So, here are <code>bash</code> helpers which should be placed somewhere inside <code>~/.bashrc</code>
+or <code>~/.bash_profile</code> (mine lives <a href="https://github.com/ysegorov/dotfiles/blob/master/.bash.d/dev">there</a>).
+<code>_dev</code> function depends on <code>inve</code> shell script which must be available
+in <code>PATH</code> (I have <code>$HOME/bin</code> in <code>PATH</code> for this and <code>inve</code> lives <a href="https://github.com/ysegorov/dotfiles/blob/master/bin/inve">there</a>).</p>
+<pre><code class="bash">
+# dev
+DEV=${HOME}/_dev  # home for all projects
+
+_dev() {
+    local p=${DEV}/$1
+    [ ! -d $p ] &amp;&amp; mkdir $p
+    cd $p
+    inve  # binary file to be accessible in PATH
+    return 0
+}
+_dev_complete()
+{
+    local cur prev opts
+    local p=${DEV}
+    [ ! -d $p ] &amp;&amp; `which mkdir` $p
+    COMPREPLY=()
+    cur=&quot;${COMP_WORDS[COMP_CWORD]}&quot;
+    prev=&quot;${COMP_WORDS[COMP_CWORD-1]}&quot;
+    opts=`cd $p &amp;&amp; find -L . -maxdepth 1 -type d | sed 's|[\./]||g'`
+
+    COMPREPLY=( $(compgen -W &quot;${opts}&quot; -- ${cur}) )
+}
+alias dev=_dev
+complete -F _dev_complete dev
+
+</code></pre>
+
+<p><code>inve</code> executable content:</p>
+<pre><code class="bash">
+#!/usr/bin/env bash
+
+# tuned idea from: https://gist.github.com/datagrok/2199506
+#
+# inve
+#
+# For use with Ian Bicking's virtualenv tool. Attempts to find the root of
+# a virtual environment and activate it in subshell.
+
+# First, locate the root of the current virtualenv
+cwd=$PWD
+export DEV_ROOT=$cwd
+
+while [ &quot;$PWD&quot; != &quot;/&quot; ]; do
+    # Stop here if this the root of a virtualenv
+    # will look for virtualenv in `current dir` or in `env` subdirectory
+    if [ \
+        -x bin/python \
+        -a -e lib/python*/site.py \
+        -a -e include/python*/Python.h ]
+    then
+        export VIRTUAL_ENV=&quot;$PWD&quot;
+        break
+    elif [ \
+        -x env/bin/python \
+        -a -e env/lib/python*/site.py \
+        -a -e env/include/python*/Python.h ]
+    then
+        export VIRTUAL_ENV=&quot;$PWD/env&quot;
+        break
+    fi
+    cd ..
+done
+if [ &quot;$PWD&quot; = &quot;/&quot; ]; then
+    export PATH=&quot;$cwd/node_modules/.bin:$PATH&quot;
+    echo &quot;No virtual environment found, skipping activate.&quot; &gt;&amp;2
+    cd $cwd
+else
+    # Activate
+    export PATH=&quot;$VIRTUAL_ENV/bin:$cwd/node_modules/.bin:$PATH&quot;
+    unset PYTHONHOME
+    echo &quot;Virtual environment found in ${VIRTUAL_ENV}, activated.&quot; &gt;&amp;2
+fi
+exec &quot;$SHELL&quot;
+
+</code></pre>
+
+<p><code>inve</code> script looks for <code>virtualenv</code> in <code>env</code> subdirectory or attempts to
+find it somewhere upper in the filesystem tree. It modifies <code>PATH</code> prepending
+<code>$VIRTUALENV/bin</code> and <code>node_modules/.bin</code> directories and starts new shell.
+I like the idea of starting a new subshell in order to activate <code>virtualenv</code> as
+this way we can be sure there will be no problems with <code>PATH</code> within shell and
+it's pretty safe to exit this subshell and have parent shell clean as it should
+be.</p>
+<p>To easily navigate to some directories within activated <code>virtualenv</code> I have a
+couple of bash aliases defined:</p>
+<pre><code class="bash">
+alias cdsrc='cd ${VIRTUAL_ENV}/src'
+alias cdsitepackages='cd ${VIRTUAL_ENV}/lib/python*/site-packages/'
+alias cdproject='cd ${DEV_ROOT:-VIRTUAL_ENV}; if [ `basename ${PWD}` = &quot;env&quot; ]; then cd ..; fi'
+
+</code></pre>
+
+<p>This approach allows me to have virtual environments using <code>python2</code> or
+<code>python3</code> under single <em>root</em> directory and to have single tool to jump into
+project be it <code>python2</code>, <code>python3</code> or even <code>nodejs</code> project.</p>
+<p>Everything works pretty good for me.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2016-12-28 08:27:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2016/jenkinsfile/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Pipeline As a Code With Jenkins</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>

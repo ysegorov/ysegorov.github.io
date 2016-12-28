@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2016-12-27T11:58:41.995079Z</updated>
+    <updated>2016-12-28T09:44:34.368659Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1040,6 +1040,149 @@ test and deploy&lt;/em&gt; commands for the project.
 Deployment happens only for &lt;code&gt;develop&lt;/code&gt; (staging server) and &lt;code&gt;master&lt;/code&gt; (production
 server) branches.&lt;/p&gt;
 &lt;p&gt;Hope somebody will find this &lt;a href=&#34;https://gist.github.com/ysegorov/a23e7324e264b9afd932bd8b90862305&#34;&gt;gist&lt;/a&gt; usefull.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Self-made Virtualenv Wrapper</title>
+        <link href="https://ysegorov.github.com/2016/virtualenv/" rel="alternate" />
+        <id>tag:ysegorov.github.com,2016-12-28:/2016/virtualenv/</id>
+        <updated>2016-12-28T08:27:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;self-made-virtualenv-wrapper&#34;&gt;Self-made Virtualenv Wrapper&lt;/h1&gt;
+&lt;p&gt;Not long ago I&#39;ve switched from &lt;a href=&#34;https://pypi.python.org/pypi/virtualenvwrapper&#34;&gt;virtualenvwrapper&lt;/a&gt; to self-made solution
+based on &lt;a href=&#34;https://gist.github.com/datagrok/2199506&#34;&gt;this idea&lt;/a&gt; by &lt;a href=&#34;http://datagrok.org/&#34;&gt;datagrok&lt;/a&gt;.
+It works pretty well for me and I&#39;d like to share it here.&lt;/p&gt;
+&lt;p&gt;The idea is to have a &lt;em&gt;root&lt;/em&gt; directory (&lt;code&gt;$HOME/_dev&lt;/code&gt; in my case)
+for all projects and to have shell helper to easily jump into any project
+and to automatically activate it&#39;s &lt;a href=&#34;https://github.com/pypa/virtualenv&#34;&gt;virtualenv&lt;/a&gt; if it exists.&lt;/p&gt;
+&lt;p&gt;Here is how it looks in &lt;code&gt;bash&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;
+[local] [egorov@asus 11:33:19]:~  $ dev blog
+Virtual environment found in /home/egorov/_dev/blog/env, activated.
+(blog) [local] [egorov@asus 11:34:31]:~/_dev/blog git:master= $
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Besides just jumping into directory I wanted to have &lt;code&gt;tab&lt;/code&gt; autocompletion and
+easy way to create new projects &lt;code&gt;home&lt;/code&gt; directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;
+# autocompletion
+[local] [egorov@asus 11:43:01]:~  $ dev service-  # tab hitted twice
+service-account   service-feedback  service-products  service-workers
+
+# new project home
+[local] [egorov@asus 11:52:08]:~  $ dev rogue
+mkdir: created directory &#39;/home/egorov/_dev/rogue&#39;
+No virtual environment found, skipping activate.
+[local] [egorov@asus 11:52:25]:~/_dev/rogue  $
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, here are &lt;code&gt;bash&lt;/code&gt; helpers which should be placed somewhere inside &lt;code&gt;~/.bashrc&lt;/code&gt;
+or &lt;code&gt;~/.bash_profile&lt;/code&gt; (mine lives &lt;a href=&#34;https://github.com/ysegorov/dotfiles/blob/master/.bash.d/dev&#34;&gt;there&lt;/a&gt;).
+&lt;code&gt;_dev&lt;/code&gt; function depends on &lt;code&gt;inve&lt;/code&gt; shell script which must be available
+in &lt;code&gt;PATH&lt;/code&gt; (I have &lt;code&gt;$HOME/bin&lt;/code&gt; in &lt;code&gt;PATH&lt;/code&gt; for this and &lt;code&gt;inve&lt;/code&gt; lives &lt;a href=&#34;https://github.com/ysegorov/dotfiles/blob/master/bin/inve&#34;&gt;there&lt;/a&gt;).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;
+# dev
+DEV=${HOME}/_dev  # home for all projects
+
+_dev() {
+    local p=${DEV}/$1
+    [ ! -d $p ] &amp;amp;&amp;amp; mkdir $p
+    cd $p
+    inve  # binary file to be accessible in PATH
+    return 0
+}
+_dev_complete()
+{
+    local cur prev opts
+    local p=${DEV}
+    [ ! -d $p ] &amp;amp;&amp;amp; `which mkdir` $p
+    COMPREPLY=()
+    cur=&amp;quot;${COMP_WORDS[COMP_CWORD]}&amp;quot;
+    prev=&amp;quot;${COMP_WORDS[COMP_CWORD-1]}&amp;quot;
+    opts=`cd $p &amp;amp;&amp;amp; find -L . -maxdepth 1 -type d | sed &#39;s|[\./]||g&#39;`
+
+    COMPREPLY=( $(compgen -W &amp;quot;${opts}&amp;quot; -- ${cur}) )
+}
+alias dev=_dev
+complete -F _dev_complete dev
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;inve&lt;/code&gt; executable content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;
+#!/usr/bin/env bash
+
+# tuned idea from: https://gist.github.com/datagrok/2199506
+#
+# inve
+#
+# For use with Ian Bicking&#39;s virtualenv tool. Attempts to find the root of
+# a virtual environment and activate it in subshell.
+
+# First, locate the root of the current virtualenv
+cwd=$PWD
+export DEV_ROOT=$cwd
+
+while [ &amp;quot;$PWD&amp;quot; != &amp;quot;/&amp;quot; ]; do
+    # Stop here if this the root of a virtualenv
+    # will look for virtualenv in `current dir` or in `env` subdirectory
+    if [ \
+        -x bin/python \
+        -a -e lib/python*/site.py \
+        -a -e include/python*/Python.h ]
+    then
+        export VIRTUAL_ENV=&amp;quot;$PWD&amp;quot;
+        break
+    elif [ \
+        -x env/bin/python \
+        -a -e env/lib/python*/site.py \
+        -a -e env/include/python*/Python.h ]
+    then
+        export VIRTUAL_ENV=&amp;quot;$PWD/env&amp;quot;
+        break
+    fi
+    cd ..
+done
+if [ &amp;quot;$PWD&amp;quot; = &amp;quot;/&amp;quot; ]; then
+    export PATH=&amp;quot;$cwd/node_modules/.bin:$PATH&amp;quot;
+    echo &amp;quot;No virtual environment found, skipping activate.&amp;quot; &amp;gt;&amp;amp;2
+    cd $cwd
+else
+    # Activate
+    export PATH=&amp;quot;$VIRTUAL_ENV/bin:$cwd/node_modules/.bin:$PATH&amp;quot;
+    unset PYTHONHOME
+    echo &amp;quot;Virtual environment found in ${VIRTUAL_ENV}, activated.&amp;quot; &amp;gt;&amp;amp;2
+fi
+exec &amp;quot;$SHELL&amp;quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;inve&lt;/code&gt; script looks for &lt;code&gt;virtualenv&lt;/code&gt; in &lt;code&gt;env&lt;/code&gt; subdirectory or attempts to
+find it somewhere upper in the filesystem tree. It modifies &lt;code&gt;PATH&lt;/code&gt; prepending
+&lt;code&gt;$VIRTUALENV/bin&lt;/code&gt; and &lt;code&gt;node_modules/.bin&lt;/code&gt; directories and starts new shell.
+I like the idea of starting a new subshell in order to activate &lt;code&gt;virtualenv&lt;/code&gt; as
+this way we can be sure there will be no problems with &lt;code&gt;PATH&lt;/code&gt; within shell and
+it&#39;s pretty safe to exit this subshell and have parent shell clean as it should
+be.&lt;/p&gt;
+&lt;p&gt;To easily navigate to some directories within activated &lt;code&gt;virtualenv&lt;/code&gt; I have a
+couple of bash aliases defined:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;
+alias cdsrc=&#39;cd ${VIRTUAL_ENV}/src&#39;
+alias cdsitepackages=&#39;cd ${VIRTUAL_ENV}/lib/python*/site-packages/&#39;
+alias cdproject=&#39;cd ${DEV_ROOT:-VIRTUAL_ENV}; if [ `basename ${PWD}` = &amp;quot;env&amp;quot; ]; then cd ..; fi&#39;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This approach allows me to have virtual environments using &lt;code&gt;python2&lt;/code&gt; or
+&lt;code&gt;python3&lt;/code&gt; under single &lt;em&gt;root&lt;/em&gt; directory and to have single tool to jump into
+project be it &lt;code&gt;python2&lt;/code&gt;, &lt;code&gt;python3&lt;/code&gt; or even &lt;code&gt;nodejs&lt;/code&gt; project.&lt;/p&gt;
+&lt;p&gt;Everything works pretty good for me.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
