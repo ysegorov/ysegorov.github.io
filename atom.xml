@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2016-12-28T09:44:34.368659Z</updated>
+    <updated>2017-03-22T07:28:29.750852Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1183,6 +1183,55 @@ alias cdproject=&#39;cd ${DEV_ROOT:-VIRTUAL_ENV}; if [ `basename ${PWD}` = &amp;
 &lt;code&gt;python3&lt;/code&gt; under single &lt;em&gt;root&lt;/em&gt; directory and to have single tool to jump into
 project be it &lt;code&gt;python2&lt;/code&gt;, &lt;code&gt;python3&lt;/code&gt; or even &lt;code&gt;nodejs&lt;/code&gt; project.&lt;/p&gt;
 &lt;p&gt;Everything works pretty good for me.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Static blog generator</title>
+        <link href="https://ysegorov.github.com/2017/wt/" rel="alternate" />
+        <id>tag:ysegorov.github.com,2017-03-22:/2017/wt/</id>
+        <updated>2017-03-22T05:20:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;static-blog-generator&#34;&gt;Static Blog Generator&lt;/h1&gt;
+&lt;p&gt;This is a short introduction to &lt;a href=&#34;https://github.com/ysegorov/wt&#34;&gt;wt&lt;/a&gt; - library I&#39;ve made for my personal
+use.&lt;/p&gt;
+&lt;p&gt;It is pretty young and it lacks some features I&#39;d like it to have but it
+works pretty good for me.&lt;/p&gt;
+&lt;p&gt;So, this is &lt;a href=&#34;http://docs.getpelican.com/&#34;&gt;yet&lt;/a&gt; &lt;a href=&#34;https://grow.io/&#34;&gt;another&lt;/a&gt; &lt;a href=&#34;http://jekyllrb.com/&#34;&gt;static&lt;/a&gt; &lt;a href=&#34;https://hexo.io/&#34;&gt;site&lt;/a&gt;/&lt;a href=&#34;http://wintersmith.io/&#34;&gt;blog&lt;/a&gt;
+&lt;a href=&#34;http://gohugo.io/&#34;&gt;generator&lt;/a&gt;. Yes. One more.&lt;/p&gt;
+&lt;p&gt;Some time ago I thought it would be great to build something for my own use. I
+have several ideas and this is the first one named &lt;strong&gt;wt&lt;/strong&gt; (named after my blog
+actually). I know that &lt;strong&gt;wt&lt;/strong&gt; is a name for executable from &lt;a href=&#34;https://github.com/wiredtiger/wiredtiger&#34;&gt;WiredTiger&lt;/a&gt;
+distribution but I think it&#39;s ok. My library is not expected to be installed
+system-wide, it should be used within virtual environment. And the name was not
+taken on &lt;a href=&#34;https://pypi.python.org/pypi/wt&#34;&gt;pypi&lt;/a&gt; by the way.&lt;/p&gt;
+&lt;p&gt;The library requires &lt;strong&gt;python 3&lt;/strong&gt; and have the following features (citing from
+&lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/README.md&#34;&gt;readme&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://daringfireball.net/projects/markdown/&#34;&gt;markdown&lt;/a&gt; for content&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://yaml.org/&#34;&gt;yaml&lt;/a&gt; for configuration&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jinja.pocoo.org/&#34;&gt;jinja2&lt;/a&gt; for templating&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Atom_(standard)&#34;&gt;atom&lt;/a&gt; for feed&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://aiohttp.readthedocs.io/en/stable/&#34;&gt;aiohttp&lt;/a&gt; for development server&lt;/li&gt;
+&lt;li&gt;only two types of content - &lt;strong&gt;page&lt;/strong&gt; and &lt;strong&gt;post&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;content metadata lives in configuration file&lt;/li&gt;
+&lt;li&gt;have sensible defaults for content sources&lt;/li&gt;
+&lt;li&gt;no python coding needed to work with&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At the moment I&#39;ve used it in a couple of projects.&lt;/p&gt;
+&lt;p&gt;The first one is this blog (&lt;a href=&#34;https://github.com/ysegorov/blog&#34;&gt;blog source code&lt;/a&gt;) and another one
+is the &lt;a href=&#34;https://tolsha.ru/&#34;&gt;tolsha.ru site&lt;/a&gt; (in Russian) I&#39;ve created for my elder
+brother who makes &lt;a href=&#34;https://en.wikipedia.org/wiki/Pottery&#34;&gt;pottery&lt;/a&gt; and &lt;a href=&#34;https://tolsha.ru/util/&#34;&gt;they&lt;/a&gt; &lt;a href=&#34;https://tolsha.ru/milk/chasha_lebed/&#34;&gt;are&lt;/a&gt; &lt;a href=&#34;https://tolsha.ru/souvenirs/&#34;&gt;amazing&lt;/a&gt;
+(&lt;a href=&#34;https://github.com/ysegorov/tolsha.ru&#34;&gt;site source code&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;These two sites are pretty different in nature but &lt;a href=&#34;https://github.com/ysegorov/wt&#34;&gt;wt&lt;/a&gt; works very well for
+both.&lt;/p&gt;
+&lt;p&gt;I&#39;ll keep this library moving forward adding more features and refactoring
+some internals for a better code.&lt;/p&gt;
+&lt;p&gt;The next project I have plans for is &lt;strong&gt;rss reader&lt;/strong&gt; and there is a big chance
+I&#39;ll build it using &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&lt;/a&gt;/&lt;a href=&#34;http://www.phoenixframework.org/&#34;&gt;Phoenix&lt;/a&gt;.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
