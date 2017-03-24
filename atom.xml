@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2017-03-24T07:48:55.884277Z</updated>
+    <updated>2017-03-24T07:55:46.460978Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1343,7 +1343,7 @@ class SocketHandler(logging.Handler):
 
     def get_sock_state(self, s):
         # see http://stackoverflow.com/a/18189190
-        fmt = &#39;B&#39; * 7 + &#39;I&#39; * 21
+        fmt = &#39;B&#39; * 7 + &#39;I&#39; * 24
         sz = struct.calcsize(fmt)
         x = struct.unpack(
             fmt, s.getsockopt(socket.IPPROTO_TCP, socket.TCP_INFO, sz))
