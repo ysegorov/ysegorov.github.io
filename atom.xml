@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2017-03-22T07:28:29.750852Z</updated>
+    <updated>2017-03-24T07:48:55.884277Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1232,6 +1232,190 @@ both.&lt;/p&gt;
 some internals for a better code.&lt;/p&gt;
 &lt;p&gt;The next project I have plans for is &lt;strong&gt;rss reader&lt;/strong&gt; and there is a big chance
 I&#39;ll build it using &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&lt;/a&gt;/&lt;a href=&#34;http://www.phoenixframework.org/&#34;&gt;Phoenix&lt;/a&gt;.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Logging service using epoll</title>
+        <link href="https://ysegorov.github.com/2017/logger/" rel="alternate" />
+        <id>tag:ysegorov.github.com,2017-03-24:/2017/logger/</id>
+        <updated>2017-03-24T06:45:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;logging-service-using-epoll&#34;&gt;Logging service using epoll&lt;/h1&gt;
+&lt;p&gt;Suppose we have a number of microservices and we need some way to easily handle
+logging from all of them.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.graylog.org/&#34;&gt;Graylog&lt;/a&gt; might be a good choice but in case you don&#39;t
+need such a full-featured solution self-made logging service can serve you well.&lt;/p&gt;
+&lt;p&gt;Python&#39;s &lt;a href=&#34;https://docs.python.org/2/library/logging.html&#34;&gt;logging&lt;/a&gt; facility has almost everything we need for this providing
+&lt;a href=&#34;https://docs.python.org/2/library/logging.handlers.html#sockethandler&#34;&gt;SocketHandler&lt;/a&gt; to send log records to a network socket. The missed part is
+actual logging service which will be able to receive and save those records.
+&lt;a href=&#34;https://docs.python.org/2/howto/logging-cookbook.html&#34;&gt;Logging Cookbook&lt;/a&gt; contains &lt;a href=&#34;https://docs.python.org/2/howto/logging-cookbook.html#sending-and-receiving-logging-events-across-a-network&#34;&gt;basic implementation&lt;/a&gt; of such a service
+which is good for a quick start.&lt;/p&gt;
+&lt;p&gt;I was experimenting with &lt;a href=&#34;https://github.com/dabeaz/curio&#34;&gt;curio&lt;/a&gt; as an engine for such a service and it
+worked pretty well and certainly might be a good choice for this task. The only
+thing forced me to look for another solution was it&#39;s Python 3 dependency. All
+microservices I need logging service for are using Python 2 and I&#39;d like
+it to use the very same python.&lt;/p&gt;
+&lt;p&gt;So, after a bit more experiments I came up with &lt;strong&gt;edge-triggered epoll-based&lt;/strong&gt;
+solution which is compatible with Python 2 and Python 3.
+The code for the service is available &lt;a href=&#34;https://gist.github.com/ysegorov/8947d99a016aa00ace51d9ab4d89c428&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It took some time to understand &lt;a href=&#34;http://man7.org/linux/man-pages/man7/epoll.7.html&#34;&gt;epoll&lt;/a&gt; mechanics and &lt;a href=&#34;http://scotdoyle.com/python-epoll-howto.html&#34;&gt;this article&lt;/a&gt;
+by Scot Doyle helped a lot. My local test confirms service is pretty stable and
+properly handle incoming logging records.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/ysegorov/8947d99a016aa00ace51d9ab4d89c428&#34;&gt;Code in gist&lt;/a&gt; is rather generic and I&#39;m going to add some features, but
+they won&#39;t be published there, sorry for that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;use some &lt;em&gt;magic&lt;/em&gt; number in message header as a simple measure to prevent
+  unknown clients from spamming (even though the service will listen on
+  localhost)&lt;/li&gt;
+&lt;li&gt;enforce message size limits&lt;/li&gt;
+&lt;li&gt;store logging records in database&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Another part of this story is &lt;a href=&#34;https://docs.python.org/2/library/logging.handlers.html#sockethandler&#34;&gt;SocketHandler&lt;/a&gt; which has a feature I&#39;d like
+to remove - &lt;a href=&#34;https://docs.python.org/2/library/logging.handlers.html#logging.handlers.SocketHandler.createSocket&#34;&gt;createSocket&lt;/a&gt; method implemets exponential back-off algorithm
+which I just don&#39;t need. During my tests intentionally broken (just for tests)
+connection to logging service leads to logging records being missed.&lt;/p&gt;
+&lt;p&gt;To be clear with the problem. Suppose we have a server and a microservice.
+Everything works as expected and is in good shape. Some time later we need to
+update the code for logging service and restart it. Using &lt;a href=&#34;https://docs.python.org/2/library/logging.handlers.html#sockethandler&#34;&gt;SocketHandler&lt;/a&gt;
+from python&#39;s standard library will force us to restart our microservice
+because without this step we will be missing at least one or two logging
+records from it (due to the way this handler works).&lt;/p&gt;
+&lt;p&gt;I wanted a way to automatically handle such a situation without user
+intervention. So, below is a modified version of &lt;a href=&#34;https://docs.python.org/2/library/logging.handlers.html#sockethandler&#34;&gt;SocketHandler&lt;/a&gt;. Every time
+it needs to handle a record it will try to connect to logging service to
+guarantee message delivery. It uses &lt;a href=&#34;http://stackoverflow.com/a/18189190&#34;&gt;small trick&lt;/a&gt; to detect socket state and
+to re-establish connection when needed.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+
+import logging
+import socket
+import struct
+import traceback
+try:
+    import cPickle as pickle
+except ImportError:  # pragma: no cover
+    import pickle
+
+
+class SocketHandler(logging.Handler):
+    &amp;quot;&amp;quot;&amp;quot;
+    [!] modified version of python&#39;s logging.handlers.SocketHandler
+
+    &amp;quot;&amp;quot;&amp;quot;
+
+    def __init__(self, host, port):
+        logging.Handler.__init__(self)
+        self.host = host
+        self.port = port
+        self._sock = None
+        self.closeOnError = 1
+        self.retry_count = 3
+
+    def makeSocket(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.connect((self.host, self.port))
+        except socket.error:
+            # TODO sentry
+            traceback.print_exc()
+            s = None
+        else:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        return s
+
+    def _get_sock(self):
+        if self._sock is None:
+            self._sock = self.makeSocket()
+        return self._sock
+
+    def _set_sock(self, value):
+        if value is None and self._sock:
+            self._sock.close()
+        self._sock = value
+
+    sock = property(_get_sock, _set_sock)
+
+    def get_sock_state(self, s):
+        # see http://stackoverflow.com/a/18189190
+        fmt = &#39;B&#39; * 7 + &#39;I&#39; * 21
+        sz = struct.calcsize(fmt)
+        x = struct.unpack(
+            fmt, s.getsockopt(socket.IPPROTO_TCP, socket.TCP_INFO, sz))
+        return x
+
+    def send(self, s):
+        retries = self.retry_count
+        while retries &amp;gt; 0:
+            sock = self.sock
+            retries -= 1
+            if sock:
+                state = self.get_sock_state(sock)
+                # check tcp_info.tcpi_state value is TCP_ESTABLISHED
+                if state[0] != 1:
+                    self.sock = None
+                    continue
+                try:
+                    if hasattr(sock, &#39;sendall&#39;):
+                        sock.sendall(s)
+                    else:
+                        sentsofar = 0
+                        left = len(s)
+                        while left &amp;gt; 0:
+                            sent = sock.send(s[sentsofar:])
+                            sentsofar = sentsofar + sent
+                            left = left - sent
+                    break
+                except socket.error:
+                    self.sock = None
+
+    def makePickle(self, record):
+        ei = record.exc_info
+        if ei:
+            dummy = self.format(record)  # noqa
+            record.exc_info = None  # to avoid Unpickleable error
+        d = dict(record.__dict__)
+        d[&#39;msg&#39;] = record.getMessage()
+        d[&#39;args&#39;] = None
+        s = pickle.dumps(d, pickle.HIGHEST_PROTOCOL)
+        if ei:
+            record.exc_info = ei  # for next handler
+        slen = struct.pack(&#39;&amp;gt;L&#39;, len(s))
+        return slen + s
+
+    def handleError(self, record):
+        if self.closeOnError and self.sock:
+            self.sock = None
+        else:
+            logging.Handler.handleError(self, record)
+
+    def emit(self, record):
+        try:
+            s = self.makePickle(record)
+            self.send(s)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            # TODO sentry
+            traceback.print_exc()
+            self.handleError(record)
+
+    def close(self):
+        self.acquire()
+        try:
+            if self.sock:
+                self.sock = None
+        finally:
+            self.release()
+        logging.Handler.close(self)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;ll put logging service and this handler in production next month. Stay tuned.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
