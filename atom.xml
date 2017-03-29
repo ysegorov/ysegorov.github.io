@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.com/" rel="alternative" />
     <link href="https://ysegorov.github.com/atom.xml" rel="self" />
     <id>tag:ysegorov.github.com</id>
-    <updated>2017-03-26T14:04:53.303554Z</updated>
+    <updated>2017-03-29T17:13:51.980036Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
@@ -1203,11 +1203,11 @@ works pretty good for me.&lt;/p&gt;
 &lt;p&gt;So, this is &lt;a href=&#34;http://docs.getpelican.com/&#34;&gt;yet&lt;/a&gt; &lt;a href=&#34;https://grow.io/&#34;&gt;another&lt;/a&gt; &lt;a href=&#34;http://jekyllrb.com/&#34;&gt;static&lt;/a&gt; &lt;a href=&#34;https://hexo.io/&#34;&gt;site&lt;/a&gt;/&lt;a href=&#34;http://wintersmith.io/&#34;&gt;blog&lt;/a&gt;
 &lt;a href=&#34;http://gohugo.io/&#34;&gt;generator&lt;/a&gt;. Yes. One more.&lt;/p&gt;
 &lt;p&gt;Some time ago I thought it would be great to build something for my own use. I
-have several ideas and this is the first one named &lt;strong&gt;wt&lt;/strong&gt; (named after my blog
-actually). I know that &lt;strong&gt;wt&lt;/strong&gt; is a name for executable from &lt;a href=&#34;https://github.com/wiredtiger/wiredtiger&#34;&gt;WiredTiger&lt;/a&gt;
-distribution but I think it&#39;s ok. My library is not expected to be installed
-system-wide, it should be used within virtual environment. And the name was not
-taken on &lt;a href=&#34;https://pypi.python.org/pypi/wt&#34;&gt;pypi&lt;/a&gt; by the way.&lt;/p&gt;
+have several ideas and this is the first one named &lt;strong&gt;wt&lt;/strong&gt;.
+I know that &lt;strong&gt;wt&lt;/strong&gt; is a name for executable from &lt;a href=&#34;https://github.com/wiredtiger/wiredtiger&#34;&gt;WiredTiger&lt;/a&gt;
+distribution but I think it&#39;s ok. This library is not expected to be installed
+system-wide, it should be used within virtual environment.
+And luckily the name was free on &lt;a href=&#34;https://pypi.python.org/pypi/wt&#34;&gt;pypi&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The library requires &lt;strong&gt;python 3&lt;/strong&gt; and have the following features (citing from
 &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/README.md&#34;&gt;readme&lt;/a&gt;):&lt;/p&gt;
 &lt;ul&gt;
