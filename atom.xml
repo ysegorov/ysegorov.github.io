@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
     <title>Words And Thoughts</title>
     <subtitle>Yet another web developer blog</subtitle>
-    <link href="https://ysegorov.github.com/" rel="alternative" />
-    <link href="https://ysegorov.github.com/atom.xml" rel="self" />
-    <id>tag:ysegorov.github.com</id>
-    <updated>2017-03-30T19:38:16.015507Z</updated>
+    <link href="https://ysegorov.github.io/" rel="alternative" />
+    <link href="https://ysegorov.github.io/atom.xml" rel="self" />
+    <id>tag:ysegorov.github.io</id>
+    <updated>2017-04-11T06:29:29.060587Z</updated>
     <entry>
         <title>Initial commit</title>
-        <link href="https://ysegorov.github.com/2015/initial-commit/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-01-30:/2015/initial-commit/</id>
+        <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-01-30:/2015/initial-commit/</id>
         <updated>2015-01-30T16:42:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -25,8 +25,8 @@ named &lt;strong&gt;wt&lt;/strong&gt;.&lt;br&gt;
     </entry>
     <entry>
         <title>Module level abstraction in python</title>
-        <link href="https://ysegorov.github.com/2015/module-level-abstraction-in-python/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-01-30:/2015/module-level-abstraction-in-python/</id>
+        <link href="https://ysegorov.github.io/2015/module-level-abstraction-in-python/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-01-30:/2015/module-level-abstraction-in-python/</id>
         <updated>2015-01-30T17:40:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -64,8 +64,8 @@ improves code manageability.&lt;/p&gt;
     </entry>
     <entry>
         <title>Grief</title>
-        <link href="https://ysegorov.github.com/2015/grief/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-03-01:/2015/grief/</id>
+        <link href="https://ysegorov.github.io/2015/grief/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-03-01:/2015/grief/</id>
         <updated>2015-03-01T06:15:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -79,8 +79,8 @@ improves code manageability.&lt;/p&gt;
     </entry>
     <entry>
         <title>Micro datetime parsing benchmark</title>
-        <link href="https://ysegorov.github.com/2015/micro-datetime-parsing-benchmark/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-03-26:/2015/micro-datetime-parsing-benchmark/</id>
+        <link href="https://ysegorov.github.io/2015/micro-datetime-parsing-benchmark/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-03-26:/2015/micro-datetime-parsing-benchmark/</id>
         <updated>2015-03-26T07:05:00Z</updated>
         <summary>Notes on datetime parsing in python2 to remember</summary>
         <content type="html">
@@ -127,8 +127,8 @@ account microseconds zero-padded to the left.&lt;/p&gt;
     </entry>
     <entry>
         <title>Chtd</title>
-        <link href="https://ysegorov.github.com/2015/chtd/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-03-28:/2015/chtd/</id>
+        <link href="https://ysegorov.github.io/2015/chtd/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-03-28:/2015/chtd/</id>
         <updated>2015-03-28T04:25:00Z</updated>
         <summary>Working for Chtd</summary>
         <content type="html">
@@ -378,8 +378,8 @@ need to provide a solution in time.&lt;/p&gt;
     </entry>
     <entry>
         <title>Markdown preview</title>
-        <link href="https://ysegorov.github.com/2015/markdown-live/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-03-31:/2015/markdown-live/</id>
+        <link href="https://ysegorov.github.io/2015/markdown-live/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-03-31:/2015/markdown-live/</id>
         <updated>2015-03-31T12:02:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -415,8 +415,8 @@ Just great.&lt;/p&gt;
     </entry>
     <entry>
         <title>Jukoro documentation using Sphinx</title>
-        <link href="https://ysegorov.github.com/2015/jukoro-docs-using-sphinx/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-04-01:/2015/jukoro-docs-using-sphinx/</id>
+        <link href="https://ysegorov.github.io/2015/jukoro-docs-using-sphinx/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-04-01:/2015/jukoro-docs-using-sphinx/</id>
         <updated>2015-04-01T10:40:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -469,8 +469,8 @@ documentation (which is not finished yet).&lt;/p&gt;
     </entry>
     <entry>
         <title>Excellent article</title>
-        <link href="https://ysegorov.github.com/2015/excellent-article/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-04-06:/2015/excellent-article/</id>
+        <link href="https://ysegorov.github.io/2015/excellent-article/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-04-06:/2015/excellent-article/</id>
         <updated>2015-04-06T16:58:00Z</updated>
         <summary>Excellent article about programming</summary>
         <content type="html">
@@ -504,8 +504,8 @@ your own. Make mistakes. Fix them. Explore and share your knowledge.&lt;/p&gt;
     </entry>
     <entry>
         <title>Jukoro 0.1.2 release</title>
-        <link href="https://ysegorov.github.com/2015/jukoro-0.1.2/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-04-06:/2015/jukoro-0.1.2/</id>
+        <link href="https://ysegorov.github.io/2015/jukoro-0.1.2/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-04-06:/2015/jukoro-0.1.2/</id>
         <updated>2015-04-06T17:01:00Z</updated>
         <summary>Jukoro promo</summary>
         <content type="html">
@@ -567,8 +567,8 @@ your own. Make mistakes. Fix them. Explore and share your knowledge.&lt;/p&gt;
     </entry>
     <entry>
         <title>Meet Juvi</title>
-        <link href="https://ysegorov.github.com/2015/juvi/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2015-06-29:/2015/juvi/</id>
+        <link href="https://ysegorov.github.io/2015/juvi/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2015-06-29:/2015/juvi/</id>
         <updated>2015-06-29T08:44:00Z</updated>
         <summary>Introduction to Juvi - small client-side library</summary>
         <content type="html">
@@ -653,8 +653,8 @@ and &lt;a href=&#34;https://bitbucket.org/ysegorov/mg/src&#34;&gt;mg&lt;/a&gt; l
     </entry>
     <entry>
         <title>Django project debugging</title>
-        <link href="https://ysegorov.github.com/2016/django-debug/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-01-17:/2016/django-debug/</id>
+        <link href="https://ysegorov.github.io/2016/django-debug/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-01-17:/2016/django-debug/</id>
         <updated>2016-01-17T12:32:00Z</updated>
         <summary>Simple tools to debug complex code</summary>
         <content type="html">
@@ -706,8 +706,8 @@ noise.&lt;/p&gt;
     </entry>
     <entry>
         <title>Webpack loader to use svg icons as snabbdom VNode</title>
-        <link href="https://ysegorov.github.com/2016/svg-snabbdom-loader/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-07-04:/2016/svg-snabbdom-loader/</id>
+        <link href="https://ysegorov.github.io/2016/svg-snabbdom-loader/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-07-04:/2016/svg-snabbdom-loader/</id>
         <updated>2016-07-04T08:45:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -830,8 +830,8 @@ function view(model) {
     </entry>
     <entry>
         <title>Alcor Micro AU6601 PCI-E Flash card reader controller</title>
-        <link href="https://ysegorov.github.com/2016/au6601/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-09-30:/2016/au6601/</id>
+        <link href="https://ysegorov.github.io/2016/au6601/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-09-30:/2016/au6601/</id>
         <updated>2016-09-30T05:16:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -899,8 +899,8 @@ $ udevil mount /dev/mmcblk0p1
     </entry>
     <entry>
         <title>DO</title>
-        <link href="https://ysegorov.github.com/2016/do/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-10-11:/2016/do/</id>
+        <link href="https://ysegorov.github.io/2016/do/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-10-11:/2016/do/</id>
         <updated>2016-10-11T07:55:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1011,8 +1011,8 @@ definitely should &lt;a href=&#34;http://letterslive.com/letter/do/&#34;&gt;go t
     </entry>
     <entry>
         <title>Pipeline As a Code With Jenkins</title>
-        <link href="https://ysegorov.github.com/2016/jenkinsfile/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-12-27:/2016/jenkinsfile/</id>
+        <link href="https://ysegorov.github.io/2016/jenkinsfile/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-12-27:/2016/jenkinsfile/</id>
         <updated>2016-12-27T10:45:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1047,8 +1047,8 @@ server) branches.&lt;/p&gt;
     </entry>
     <entry>
         <title>Self-made Virtualenv Wrapper</title>
-        <link href="https://ysegorov.github.com/2016/virtualenv/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2016-12-28:/2016/virtualenv/</id>
+        <link href="https://ysegorov.github.io/2016/virtualenv/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2016-12-28:/2016/virtualenv/</id>
         <updated>2016-12-28T08:27:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1190,8 +1190,8 @@ project be it &lt;code&gt;python2&lt;/code&gt;, &lt;code&gt;python3&lt;/code&gt;
     </entry>
     <entry>
         <title>Static blog generator</title>
-        <link href="https://ysegorov.github.com/2017/wt/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2017-03-22:/2017/wt/</id>
+        <link href="https://ysegorov.github.io/2017/wt/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-03-22:/2017/wt/</id>
         <updated>2017-03-22T05:20:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1239,8 +1239,8 @@ I&#39;ll build it using &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&l
     </entry>
     <entry>
         <title>Logger service using epoll - Part 1</title>
-        <link href="https://ysegorov.github.com/2017/logger/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2017-03-24:/2017/logger/</id>
+        <link href="https://ysegorov.github.io/2017/logger/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-03-24:/2017/logger/</id>
         <updated>2017-03-24T06:45:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1426,8 +1426,8 @@ class SocketHandler(logging.Handler):
     </entry>
     <entry>
         <title>The finger pointing at the moon is not the moon</title>
-        <link href="https://ysegorov.github.com/2017/moon/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2017-03-26:/2017/moon/</id>
+        <link href="https://ysegorov.github.io/2017/moon/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-03-26:/2017/moon/</id>
         <updated>2017-03-26T12:51:00Z</updated>
         <summary></summary>
         <content type="html">
@@ -1506,8 +1506,8 @@ class SocketHandler(logging.Handler):
     </entry>
     <entry>
         <title>Logger service using epoll - Part 2</title>
-        <link href="https://ysegorov.github.com/2017/logger-2/" rel="alternate" />
-        <id>tag:ysegorov.github.com,2017-03-30:/2017/logger-2/</id>
+        <link href="https://ysegorov.github.io/2017/logger-2/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-03-30:/2017/logger-2/</id>
         <updated>2017-03-30T16:45:00Z</updated>
         <summary></summary>
         <content type="html">
