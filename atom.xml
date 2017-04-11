@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2017-04-11T06:29:29.060587Z</updated>
+    <updated>2017-04-11T06:52:36.107144Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1634,6 +1634,31 @@ regular basis and to flush receiving buffer on it.&lt;/p&gt;
 &lt;li&gt;the code looks ugly&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Last feature will be fixed soon. Stay tuned.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>WT documentation</title>
+        <link href="https://ysegorov.github.io/2017/wt-docs/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-04-11:/2017/wt-docs/</id>
+        <updated>2017-04-11T05:30:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;wt-documentation&#34;&gt;WT documentation&lt;/h1&gt;
+&lt;p&gt;This is just a few words about &lt;a href=&#34;https://github.com/ysegorov/wt/&#34;&gt;wt&lt;/a&gt; documentation.&lt;/p&gt;
+&lt;p&gt;It&#39;s available &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;online&lt;/a&gt; and covers almost all &lt;strong&gt;&lt;code&gt;wt&lt;/code&gt;&lt;/strong&gt; features.&lt;/p&gt;
+&lt;p&gt;And it was built using &lt;a href=&#34;https://github.com/ysegorov/wt/&#34;&gt;wt&lt;/a&gt;. Documentation sources are available on
+&lt;a href=&#34;https://github.com/ysegorov/wt-docs/&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;There was &lt;a href=&#34;https://github.com/ysegorov/wt/issues/28&#34;&gt;minor issue&lt;/a&gt; with deployment though.&lt;/p&gt;
+&lt;p&gt;The documentation is hosted using &lt;a href=&#34;https://help.github.com/articles/user-organization-and-project-pages/#project-pages&#34;&gt;GitHub pages for projects&lt;/a&gt; and it&#39;s
+served under &lt;em&gt;baseurl&lt;/em&gt; (&lt;strong&gt;&lt;code&gt;/wt-docs/&lt;/code&gt;&lt;/strong&gt; in my case). I was not aware of this
+requirement while developing &lt;a href=&#34;https://github.com/ysegorov/wt/&#34;&gt;wt&lt;/a&gt; so internally it&#39;s not supported. This
+means there is a difference between local links in &lt;em&gt;development&lt;/em&gt; mode and in
+&lt;em&gt;build&lt;/em&gt; mode which can lead to broken local links in &lt;em&gt;build&lt;/em&gt; mode.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/ysegorov/wt-docs/commit/c85f6b1aa39aaa2fd7cebcf239171b78b8b8cdd9&#34;&gt;This commit&lt;/a&gt; solves the problem but I&#39;m not sure I like the
+solution. There must be a better way to handle &lt;em&gt;baseurl&lt;/em&gt;.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
