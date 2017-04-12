@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2017-04-11T06:52:36.107144Z</updated>
+    <updated>2017-04-12T18:21:51.459642Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1659,6 +1659,105 @@ means there is a difference between local links in &lt;em&gt;development&lt;/em&
 &lt;em&gt;build&lt;/em&gt; mode which can lead to broken local links in &lt;em&gt;build&lt;/em&gt; mode.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/ysegorov/wt-docs/commit/c85f6b1aa39aaa2fd7cebcf239171b78b8b8cdd9&#34;&gt;This commit&lt;/a&gt; solves the problem but I&#39;m not sure I like the
 solution. There must be a better way to handle &lt;em&gt;baseurl&lt;/em&gt;.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Reloadable decorator</title>
+        <link href="https://ysegorov.github.io/2017/reloadable/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-04-12:/2017/reloadable/</id>
+        <updated>2017-04-12T16:12:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;reloadable-decorator&#34;&gt;Reloadable decorator&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; has a feature I&#39;d like to share here. It was one of the first features
+of &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; I think.&lt;/p&gt;
+&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;Suppose I have an idea for some post, just like this one.&lt;/p&gt;
+&lt;p&gt;I&#39;ve opened terminal, started &lt;strong&gt;wt&lt;/strong&gt; in &lt;em&gt;development&lt;/em&gt; mode using
+&lt;strong&gt;&lt;code&gt;wt develop&lt;/code&gt;&lt;/strong&gt; command and started &lt;strong&gt;vim&lt;/strong&gt; for authoring.&lt;/p&gt;
+&lt;p&gt;I&#39;m typing for some time...&lt;/p&gt;
+&lt;p&gt;Ok, now I&#39;d like to check it in browser and I&#39;m adding some metadata for
+this post to configuration - &lt;strong&gt;&lt;code&gt;wt.yaml&lt;/code&gt;&lt;/strong&gt; file.&lt;/p&gt;
+&lt;p&gt;After this step I&#39;m expecting refreshed page in the browser to contain updated
+data from configuration.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Internally &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; has a so called &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22&#34;&gt;engine&lt;/a&gt; to handle
+incoming requests. It depends on &lt;strong&gt;&lt;code&gt;wt.yaml&lt;/code&gt;&lt;/strong&gt; configuration and reads it on
+initialization.&lt;/p&gt;
+&lt;p&gt;It is quite possible for the &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22&#34;&gt;engine&lt;/a&gt; to contain logic to reload
+configuration when needed but I thought this task shouldn&#39;t be implemented
+there.&lt;/p&gt;
+&lt;p&gt;It would be better to have the possibility to easily turn this feature off when
+needed (not while &lt;em&gt;authoring&lt;/em&gt; but while &lt;em&gt;developing&lt;/em&gt; the library) or even just
+throw away.&lt;/p&gt;
+&lt;p&gt;So, here comes &lt;strong&gt;reloadable&lt;/strong&gt; decorator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+import logging
+import os
+
+
+class reloadable(object):
+
+    def __init__(self, message):
+        self._message = message
+        self._values = {}
+        self._lastmods = {}
+        self.logger = logging.getLogger(&#39;wt.reloadable&#39;)
+
+    def __call__(self, fn):
+
+        def inner(filename):
+            v = self._values.get(filename)
+            m = self._lastmods.get(filename)
+            try:
+                modified = os.stat(filename).st_mtime
+            except FileNotFoundError:
+                self.logger.warn(
+                    &#39;File not found &amp;quot;%s&amp;quot;, skipping stat&#39;, filename)
+                pass
+            else:
+                if m is None or modified &amp;gt; m:
+                    self.logger.debug(
+                        &#39;File &amp;quot;%s&amp;quot; modified, %s&#39;, filename, self._message)
+                    self._lastmods[filename] = modified
+                    v = None
+
+            if v is None:
+                self._values[filename] = v = fn(filename)
+            return v
+        return inner
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It keeps last modified times for files and caches results of function calls. In
+case file was modified cached value will be automatically updated. Pretty
+simple yet very useful.&lt;/p&gt;
+&lt;p&gt;Real life usage example looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+from .decorators import reloadable
+from .engine import WT
+
+
+@reloadable(&#39;(re)loading configuration...&#39;)
+def engine(fn):
+    return WT(fn)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Currently &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; uses &lt;a href=&#34;http://aiohttp.readthedocs.io/en/stable/&#34;&gt;aiohttp&lt;/a&gt; as http backend.&lt;/p&gt;
+&lt;p&gt;It&#39;s only configured handler calls &lt;strong&gt;&lt;code&gt;engine&lt;/code&gt;&lt;/strong&gt; function to get rendering
+&lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22&#34;&gt;engine&lt;/a&gt; instance (you can check &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/server.py&#34;&gt;server module&lt;/a&gt; sources
+for details).&lt;/p&gt;
+&lt;p&gt;In case configuration file was updated this call will create new fresh instance
+of &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22&#34;&gt;engine&lt;/a&gt; ready to render pages and posts.
+This instance will be cached within &lt;strong&gt;reloadable&lt;/strong&gt; decorator cache so any
+subsequent calls to &lt;strong&gt;&lt;code&gt;engine&lt;/code&gt;&lt;/strong&gt; function will just have the very same
+instance in return (till configuration was updated again).&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;That&#39;s it for &lt;strong&gt;reloadable&lt;/strong&gt; decorator. Stay tuned.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>

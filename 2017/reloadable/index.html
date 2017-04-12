@@ -1,0 +1,174 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Reloadable decorator</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="reloadable-decorator">Reloadable decorator</h1>
+<p><a href="https://ysegorov.github.io/wt-docs/">wt</a> has a feature I'd like to share here. It was one of the first features
+of <a href="https://ysegorov.github.io/wt-docs/">wt</a> I think.</p>
+<h2 id="problem">Problem</h2>
+<p>Suppose I have an idea for some post, just like this one.</p>
+<p>I've opened terminal, started <strong>wt</strong> in <em>development</em> mode using
+<strong><code>wt develop</code></strong> command and started <strong>vim</strong> for authoring.</p>
+<p>I'm typing for some time...</p>
+<p>Ok, now I'd like to check it in browser and I'm adding some metadata for
+this post to configuration - <strong><code>wt.yaml</code></strong> file.</p>
+<p>After this step I'm expecting refreshed page in the browser to contain updated
+data from configuration.</p>
+<h2 id="solution">Solution</h2>
+<p>Internally <a href="https://ysegorov.github.io/wt-docs/">wt</a> has a so called <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> to handle
+incoming requests. It depends on <strong><code>wt.yaml</code></strong> configuration and reads it on
+initialization.</p>
+<p>It is quite possible for the <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> to contain logic to reload
+configuration when needed but I thought this task shouldn't be implemented
+there.</p>
+<p>It would be better to have the possibility to easily turn this feature off when
+needed (not while <em>authoring</em> but while <em>developing</em> the library) or even just
+throw away.</p>
+<p>So, here comes <strong>reloadable</strong> decorator:</p>
+<pre><code class="python"># -*- coding: utf-8 -*-
+
+import logging
+import os
+
+
+class reloadable(object):
+
+    def __init__(self, message):
+        self._message = message
+        self._values = {}
+        self._lastmods = {}
+        self.logger = logging.getLogger('wt.reloadable')
+
+    def __call__(self, fn):
+
+        def inner(filename):
+            v = self._values.get(filename)
+            m = self._lastmods.get(filename)
+            try:
+                modified = os.stat(filename).st_mtime
+            except FileNotFoundError:
+                self.logger.warn(
+                    'File not found &quot;%s&quot;, skipping stat', filename)
+                pass
+            else:
+                if m is None or modified &gt; m:
+                    self.logger.debug(
+                        'File &quot;%s&quot; modified, %s', filename, self._message)
+                    self._lastmods[filename] = modified
+                    v = None
+
+            if v is None:
+                self._values[filename] = v = fn(filename)
+            return v
+        return inner
+</code></pre>
+
+<p>It keeps last modified times for files and caches results of function calls. In
+case file was modified cached value will be automatically updated. Pretty
+simple yet very useful.</p>
+<p>Real life usage example looks like this:</p>
+<pre><code class="python"># -*- coding: utf-8 -*-
+
+from .decorators import reloadable
+from .engine import WT
+
+
+@reloadable('(re)loading configuration...')
+def engine(fn):
+    return WT(fn)
+</code></pre>
+
+<p>Currently <a href="https://ysegorov.github.io/wt-docs/">wt</a> uses <a href="http://aiohttp.readthedocs.io/en/stable/">aiohttp</a> as http backend.</p>
+<p>It's only configured handler calls <strong><code>engine</code></strong> function to get rendering
+<a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> instance (you can check <a href="https://github.com/ysegorov/wt/blob/master/wt/server.py">server module</a> sources
+for details).</p>
+<p>In case configuration file was updated this call will create new fresh instance
+of <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> ready to render pages and posts.
+This instance will be cached within <strong>reloadable</strong> decorator cache so any
+subsequent calls to <strong><code>engine</code></strong> function will just have the very same
+instance in return (till configuration was updated again).</p>
+<hr>
+<p>That's it for <strong>reloadable</strong> decorator. Stay tuned.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2017-04-12 16:12:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2017/wt-docs/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">WT documentation</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>
