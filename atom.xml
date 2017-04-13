@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2017-04-12T18:39:50.778226Z</updated>
+    <updated>2017-04-13T18:39:55.496360Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1758,6 +1758,141 @@ subsequent calls to &lt;strong&gt;&lt;code&gt;engine&lt;/code&gt;&lt;/strong&gt;
 instance in return (till configuration was updated again).&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;That&#39;s it for &lt;strong&gt;reloadable&lt;/strong&gt; decorator. Stay tuned.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Dotenv</title>
+        <link href="https://ysegorov.github.io/2017/dotenv/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2017-04-13:/2017/dotenv/</id>
+        <updated>2017-04-13T16:40:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;dotenv&#34;&gt;Dotenv&lt;/h1&gt;
+&lt;p&gt;I&#39;ve got used to &lt;a href=&#34;https://github.com/theskumar/python-dotenv&#34;&gt;python-dotenv&lt;/a&gt; library to customize some
+project&#39;s settings on per-deployment basis. But there is one thing which I
+can&#39;t say I like.&lt;/p&gt;
+&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;The problem is the way this library makes values from &lt;code&gt;.env&lt;/code&gt; available to
+project - by using &lt;code&gt;os.environ.setdefault&lt;/code&gt; which actually pollutes project&#39;s
+environment.&lt;/p&gt;
+&lt;p&gt;By occasion this can lead to some sensitive information like api keys to leak.
+Let&#39;s fix it.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;My first attempt was to check the library&#39;s API and find a way to load values
+without polluting &lt;code&gt;os.environ&lt;/code&gt;. This is possible and here is the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+import os
+
+from dotenv.main import dotenv_values
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DOTFILE = os.environ.get(&#39;DOTFILE&#39;, &#39;.env&#39;)
+
+dotenv = {}
+dotenv_path = os.path.join(BASE_DIR, DOTFILE)
+if os.path.isfile(dotenv_path):
+    dotenv = dotenv_values(dotenv_path)
+
+def env(key, default=None):
+    return os.environ.get(key, dotenv.get(key, default))
+
+API_KEY = env(&#39;API_KEY&#39;, &#39;test-key&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This solution works and looks pretty, well, reasonable. At the same time
+&lt;code&gt;dotenv_values&lt;/code&gt; function is not documented and there is a chance API can be
+changed.&lt;/p&gt;
+&lt;p&gt;Besides &lt;a href=&#34;https://github.com/theskumar/python-dotenv&#34;&gt;python-dotenv&lt;/a&gt; has features I don&#39;t need, like
+command-line interface or automatic &lt;code&gt;.env&lt;/code&gt; file location up the directory tree
+(I always know where &lt;code&gt;.env&lt;/code&gt; file should be).&lt;/p&gt;
+&lt;p&gt;So, I&#39;ve rolled my own solution which has fewer lines of code and is very easy
+to reason about:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+
+import os
+import codecs
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
+def load_dotenv(filename, encoding=&#39;utf-8&#39;):
+
+    decoder = codecs.getdecoder(&#39;unicode_escape&#39;)
+
+    def decode(v):
+        if v and v[0] == v[-1] and v[0] in (&#39;&amp;quot;&#39;, &#39;\&#39;&#39;):
+            v = decoder(v[1:-1])[0]
+        return v
+
+    with codecs.open(filename, &#39;rb&#39;, encoding=encoding) as f:
+        lines = (x.strip() for x in f if x.strip())
+        lines = (x for x in lines if not x.startswith(&#39;#&#39;) and &#39;=&#39; in x)
+        lines = (x.split(&#39;=&#39;, 1) for x in lines)
+        lines = ((x.strip(), y.strip()) for x, y in lines)
+        lines = ((x.upper(), decode(y)) for x, y in lines)
+        for line in lines:
+            yield line
+
+
+class dotenv(object):
+
+    def __init__(self, filename=&#39;.env&#39;, encoding=&#39;utf-8&#39;):
+        fn = filename
+        if not os.path.isabs(filename):
+            filename = os.path.abspath(os.path.join(os.curdir, filename))
+        if not os.path.exists(filename):
+            logger.warning(&#39;dotenv file &amp;quot;%s&amp;quot; not found&#39;, fn)
+            filename = None
+        self.filename = filename
+        self.encoding = encoding
+        self._data = None
+
+    @property
+    def data(self):
+        if self._data is None and self.filename is not None:
+            self._data = dict(
+                load_dotenv(self.filename, encoding=self.encoding))
+        return self._data
+
+    def get(self, key, default=None):
+        data = self.data or {}
+        return os.environ.get(key, data.get(key, default))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It can be used like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
+
+import os
+
+from .dotenv import dotenv
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DOTFILE = os.environ.get(&#39;DOTFILE&#39;, &#39;.env&#39;)
+
+env = dotenv(filename=os.path.join(BASE_DIR, DOTFILE))
+
+API_KEY = env(&#39;API_KEY&#39;, &#39;test-key&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is very easy to extend &lt;code&gt;dotenv&lt;/code&gt; class with methods like &lt;code&gt;get_bool&lt;/code&gt;,
+&lt;code&gt;get_int&lt;/code&gt;, &lt;code&gt;get_list&lt;/code&gt; or whatever you need and provide some logic to verify
+settings values as needed.&lt;/p&gt;
+&lt;p&gt;Value coming from &lt;code&gt;os.environ&lt;/code&gt; takes precedence over &lt;code&gt;.env&lt;/code&gt; value when
+specified (this is useful while running &lt;em&gt;jenkins&lt;/em&gt; jobs).&lt;/p&gt;
+&lt;p&gt;By implementing self-made solution we can simplify
+our project&#39;s dependency tree and be sure everything works as we need.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;That&#39;s it for &lt;strong&gt;dotenv&lt;/strong&gt;. Stay tuned.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
