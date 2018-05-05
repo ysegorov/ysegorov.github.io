@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2018-05-05T13:04:39.547706Z</updated>
+    <updated>2018-05-05T13:11:25.647512Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -836,6 +836,8 @@ function view(model) {
         <summary></summary>
         <content type="html">
             &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;. Please check &lt;a href=&#34;/2018/au6601-2/&#34;&gt;this post&lt;/a&gt; for installation instructions for
+Linux kernel 4.16+.&lt;/p&gt;
 &lt;p&gt;I&#39;m running &lt;a href=&#34;https://archlinux.org&#34;&gt;ArchLinux&lt;/a&gt; on this &lt;a href=&#34;https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/&#34;&gt;perfect ASUSPRO BU401LG notebook&lt;/a&gt;
 by ASUS and the only problem I faced recently was sd-card reader
 not working at all.&lt;/p&gt;
