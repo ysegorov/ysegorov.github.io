@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2018-03-20T06:26:44.439731Z</updated>
+    <updated>2018-05-05T13:04:39.547706Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1893,6 +1893,126 @@ specified (this is useful while running &lt;em&gt;jenkins&lt;/em&gt; jobs).&lt;/
 our project&#39;s dependency tree and be sure everything works as we need.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;That&#39;s it for &lt;strong&gt;dotenv&lt;/strong&gt;. Stay tuned.&lt;/p&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>AU6601 PCI-E Flash card reader and Linux kernel 4.16</title>
+        <link href="https://ysegorov.github.io/2018/au6601-2/" rel="alternate" />
+        <id>tag:ysegorov.github.io,2018-05-05:/2018/au6601-2/</id>
+        <updated>2018-05-05T07:12:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16&lt;/h1&gt;
+&lt;p&gt;I&#39;ve got email from &lt;em&gt;Justin Faber&lt;/em&gt; today saying the procedure, described
+&lt;a href=&#34;/2016/au6601/&#34;&gt;here&lt;/a&gt;, doesn&#39;t work for Linux kernel 4.16.6-1 in ArchLinux - build
+fails with the following log:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;make -C /lib/modules/4.16.6-1-ARCH/build/ SUBDIRS=/var/lib/dkms/au6601/0.3/build modules
+make[1]: warning: jobserver unavailable: using -j1.  Add &#39;+&#39; to parent make rule.
+make[1]: Entering directory &#39;/usr/lib/modules/4.16.6-1-ARCH/build&#39;
+  CC [M]  /var/lib/dkms/au6601/0.3/build/au6601.o
+/var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_pci_probe’:
+/var/lib/dkms/au6601/0.3/build/au6601.c:1187:2: error: implicit declaration of function ‘setup_timer’; did you mean ‘setup_irq’? [-Werror=implicit-function-declaration]
+  setup_timer(&amp;amp;host-&amp;gt;timer, au6601_timeout_timer, (unsigned long)host);
+  ^~~~~~~~~~~
+  setup_irq
+/var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_send_cmd’:
+/var/lib/dkms/au6601/0.3/build/au6601.c:619:5: warning: ‘ctrl’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  u8 ctrl; /* some mysterious flags and control */
+     ^~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:325: /var/lib/dkms/au6601/0.3/build/au6601.o] Error 1
+make[1]: *** [Makefile:1562: _module_/var/lib/dkms/au6601/0.3/build] Error 2
+make[1]: Leaving directory &#39;/usr/lib/modules/4.16.6-1-ARCH/build&#39;
+make: *** [Makefile:33: default] Error 2 
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://duckduckgo.com/&#34;&gt;DuckDuckGo&lt;/a&gt; (my default search engine, by the way) &lt;a href=&#34;https://duckduckgo.com/?q=linux+setup_timer+timer_setup+site%3Agithub.com&#34;&gt;helped&lt;/a&gt;
+to localize &lt;a href=&#34;https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a&#34;&gt;the issue&lt;/a&gt; - changes in Linux kernel timers API.&lt;/p&gt;
+&lt;p&gt;I&#39;ve followed instructions from the &lt;a href=&#34;https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a&#34;&gt;commit comments&lt;/a&gt; and prepared
+the patch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;diff&#34;&gt;diff -crB left/usr/src/au6601-0.3/au6601.c right/usr/src/au6601-0.3/au6601.c
+*** left/usr/src/au6601-0.3/au6601.c    2015-07-27 17:26:53.000000000 +0300
+--- right/usr/src/au6601-0.3/au6601.c   2018-05-05 13:38:05.741958562 +0300
+***************
+*** 1015,1025 ****
+    mmc_request_done(host-&amp;gt;mmc, mrq);
+  }
+
+! static void au6601_timeout_timer(unsigned long data)
+  {
+!   struct au6601_host *host;
+!
+!   host = (struct au6601_host *)data;
+
+    mutex_lock(&amp;amp;host-&amp;gt;cmd_mutex);
+
+--- 1015,1023 ----
+    mmc_request_done(host-&amp;gt;mmc, mrq);
+  }
+
+! static void au6601_timeout_timer(struct timer_list *t)
+  {
+!   struct au6601_host *host = from_timer(host, t, timer);
+
+    mutex_lock(&amp;amp;host-&amp;gt;cmd_mutex);
+
+***************
+*** 1184,1190 ****
+    /*
+     * Init tasklets.
+     */
+!   setup_timer(&amp;amp;host-&amp;gt;timer, au6601_timeout_timer, (unsigned long)host);
+
+    au6601_init_mmc(host);
+    au6601_hw_init(host);
+--- 1182,1188 ----
+    /*
+     * Init tasklets.
+     */
+!   timer_setup(&amp;amp;host-&amp;gt;timer, au6601_timeout_timer, 0);
+
+    au6601_init_mmc(host);
+    au6601_hw_init(host);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is an updated version of steps to install the driver for Linux kernel 4.16:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; save prepared patch as &lt;code&gt;au6601.patch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;download appropriate &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb&#34;&gt;deb-package&lt;/a&gt; (i386 or amd64)
+  from &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages&#34;&gt;packages&lt;/a&gt; page&lt;/li&gt;
+&lt;li&gt;install &lt;code&gt;debtap&lt;/code&gt; package from AUR if not already installed&lt;/li&gt;
+&lt;li&gt;initialize &lt;code&gt;debtap&lt;/code&gt; database&lt;/li&gt;
+&lt;li&gt;convert deb package to archlinux package using &lt;code&gt;debtap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; unpack archlinux package using &lt;code&gt;tar&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; patch sources using &lt;code&gt;patch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; pack archlinux package back using &lt;code&gt;tar&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;install generated package using &lt;code&gt;yaourt -U&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;install kernel driver&lt;/li&gt;
+&lt;li&gt;use card reader :)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;
+$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+$ yaourt -S debtap
+$ sudo debtap -u
+$ debtap au6601-dkms_0.3-0~ppa7_amd64.deb
+$ mkdir src &amp;amp;&amp;amp; cd src
+$ tar xvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ rm ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ patch -p1 -i ../au6601.patch
+$ tar cvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz usr/ .PKGINFO .INSTALL .MTREE
+$ cd ..
+$ rm -r src/
+$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ sudo modprobe au6601-pci
+$ udevil mount /dev/mmcblk0p1
+
+# profit!
+
+&lt;/code&gt;&lt;/pre&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>

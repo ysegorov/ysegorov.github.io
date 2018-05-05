@@ -1,0 +1,195 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>AU6601 PCI-E Flash card reader and Linux kernel 4.16</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416">Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16</h1>
+<p>I've got email from <em>Justin Faber</em> today saying the procedure, described
+<a href="/2016/au6601/">here</a>, doesn't work for Linux kernel 4.16.6-1 in ArchLinux - build
+fails with the following log:</p>
+<pre><code class="shell">make -C /lib/modules/4.16.6-1-ARCH/build/ SUBDIRS=/var/lib/dkms/au6601/0.3/build modules
+make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+make[1]: Entering directory '/usr/lib/modules/4.16.6-1-ARCH/build'
+  CC [M]  /var/lib/dkms/au6601/0.3/build/au6601.o
+/var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_pci_probe’:
+/var/lib/dkms/au6601/0.3/build/au6601.c:1187:2: error: implicit declaration of function ‘setup_timer’; did you mean ‘setup_irq’? [-Werror=implicit-function-declaration]
+  setup_timer(&amp;host-&gt;timer, au6601_timeout_timer, (unsigned long)host);
+  ^~~~~~~~~~~
+  setup_irq
+/var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_send_cmd’:
+/var/lib/dkms/au6601/0.3/build/au6601.c:619:5: warning: ‘ctrl’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  u8 ctrl; /* some mysterious flags and control */
+     ^~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:325: /var/lib/dkms/au6601/0.3/build/au6601.o] Error 1
+make[1]: *** [Makefile:1562: _module_/var/lib/dkms/au6601/0.3/build] Error 2
+make[1]: Leaving directory '/usr/lib/modules/4.16.6-1-ARCH/build'
+make: *** [Makefile:33: default] Error 2 
+
+</code></pre>
+
+<p><a href="https://duckduckgo.com/">DuckDuckGo</a> (my default search engine, by the way) <a href="https://duckduckgo.com/?q=linux+setup_timer+timer_setup+site%3Agithub.com">helped</a>
+to localize <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">the issue</a> - changes in Linux kernel timers API.</p>
+<p>I've followed instructions from the <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">commit comments</a> and prepared
+the patch:</p>
+<pre><code class="diff">diff -crB left/usr/src/au6601-0.3/au6601.c right/usr/src/au6601-0.3/au6601.c
+*** left/usr/src/au6601-0.3/au6601.c    2015-07-27 17:26:53.000000000 +0300
+--- right/usr/src/au6601-0.3/au6601.c   2018-05-05 13:38:05.741958562 +0300
+***************
+*** 1015,1025 ****
+    mmc_request_done(host-&gt;mmc, mrq);
+  }
+
+! static void au6601_timeout_timer(unsigned long data)
+  {
+!   struct au6601_host *host;
+!
+!   host = (struct au6601_host *)data;
+
+    mutex_lock(&amp;host-&gt;cmd_mutex);
+
+--- 1015,1023 ----
+    mmc_request_done(host-&gt;mmc, mrq);
+  }
+
+! static void au6601_timeout_timer(struct timer_list *t)
+  {
+!   struct au6601_host *host = from_timer(host, t, timer);
+
+    mutex_lock(&amp;host-&gt;cmd_mutex);
+
+***************
+*** 1184,1190 ****
+    /*
+     * Init tasklets.
+     */
+!   setup_timer(&amp;host-&gt;timer, au6601_timeout_timer, (unsigned long)host);
+
+    au6601_init_mmc(host);
+    au6601_hw_init(host);
+--- 1182,1188 ----
+    /*
+     * Init tasklets.
+     */
+!   timer_setup(&amp;host-&gt;timer, au6601_timeout_timer, 0);
+
+    au6601_init_mmc(host);
+    au6601_hw_init(host);
+</code></pre>
+
+<p>Here is an updated version of steps to install the driver for Linux kernel 4.16:</p>
+<ul>
+<li><em>(added)</em> save prepared patch as <code>au6601.patch</code></li>
+<li>download appropriate <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb">deb-package</a> (i386 or amd64)
+  from <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages">packages</a> page</li>
+<li>install <code>debtap</code> package from AUR if not already installed</li>
+<li>initialize <code>debtap</code> database</li>
+<li>convert deb package to archlinux package using <code>debtap</code></li>
+<li><em>(added)</em> unpack archlinux package using <code>tar</code></li>
+<li><em>(added)</em> patch sources using <code>patch</code></li>
+<li><em>(added)</em> pack archlinux package back using <code>tar</code></li>
+<li>install generated package using <code>yaourt -U</code></li>
+<li>install kernel driver</li>
+<li>use card reader :)</li>
+</ul>
+<pre><code class="shell">
+$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+$ yaourt -S debtap
+$ sudo debtap -u
+$ debtap au6601-dkms_0.3-0~ppa7_amd64.deb
+$ mkdir src &amp;&amp; cd src
+$ tar xvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ rm ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ patch -p1 -i ../au6601.patch
+$ tar cvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz usr/ .PKGINFO .INSTALL .MTREE
+$ cd ..
+$ rm -r src/
+$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ sudo modprobe au6601-pci
+$ udevil mount /dev/mmcblk0p1
+
+# profit!
+
+</code></pre>
+            <div class="content-last-modified"><small><em>Last modified: 2018-05-05 07:12:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2017/dotenv/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Dotenv</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>
