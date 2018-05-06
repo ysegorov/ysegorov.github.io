@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2018-05-06T06:27:30.161431Z</updated>
+    <updated>2018-05-06T06:29:37.205764Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1941,7 +1941,7 @@ and prepared the &lt;em&gt;patch&lt;/em&gt; and &lt;em&gt;PKGBUILD&lt;/em&gt; to
 &lt;p&gt;&lt;strong&gt;Please use this procedure and generated package at your own risk as I&#39;m not
 a Linux kernel driver developer&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Here is an updated version of steps to install the driver for &lt;strong&gt;amd64&lt;/strong&gt;
-architechture and Linux kernel 4.16+:&lt;/p&gt;
+architecture and Linux kernel 4.16+:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;create temporary directory somewhere and &lt;code&gt;cd&lt;/code&gt; into it&lt;/li&gt;
 &lt;li&gt;download &lt;a href=&#34;https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2&#34;&gt;patch and PKGBUILD&lt;/a&gt; (ensure &lt;code&gt;PKGBUILD&lt;/code&gt; and
