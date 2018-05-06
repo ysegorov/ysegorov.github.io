@@ -57,81 +57,28 @@ make: *** [Makefile:33: default] Error 2
 
 <p><a href="https://duckduckgo.com/">DuckDuckGo</a> (my default search engine, by the way) <a href="https://duckduckgo.com/?q=linux+setup_timer+timer_setup+site%3Agithub.com">helped</a>
 to localize <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">the issue</a> - changes in Linux kernel timers API.</p>
-<p>I've followed instructions from the <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">commit comments</a> and prepared
-the patch:</p>
-<pre><code class="diff">diff -crB left/usr/src/au6601-0.3/au6601.c right/usr/src/au6601-0.3/au6601.c
-*** left/usr/src/au6601-0.3/au6601.c    2015-07-27 17:26:53.000000000 +0300
---- right/usr/src/au6601-0.3/au6601.c   2018-05-05 13:38:05.741958562 +0300
-***************
-*** 1015,1025 ****
-    mmc_request_done(host-&gt;mmc, mrq);
-  }
+<p>I've followed instructions from the <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">commit comments</a>
+and prepared the <em>patch</em> and <em>PKGBUILD</em> to simplify installation:</p>
+<script src="https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2.js"></script>
 
-! static void au6601_timeout_timer(unsigned long data)
-  {
-!   struct au6601_host *host;
-!
-!   host = (struct au6601_host *)data;
-
-    mutex_lock(&amp;host-&gt;cmd_mutex);
-
---- 1015,1023 ----
-    mmc_request_done(host-&gt;mmc, mrq);
-  }
-
-! static void au6601_timeout_timer(struct timer_list *t)
-  {
-!   struct au6601_host *host = from_timer(host, t, timer);
-
-    mutex_lock(&amp;host-&gt;cmd_mutex);
-
-***************
-*** 1184,1190 ****
-    /*
-     * Init tasklets.
-     */
-!   setup_timer(&amp;host-&gt;timer, au6601_timeout_timer, (unsigned long)host);
-
-    au6601_init_mmc(host);
-    au6601_hw_init(host);
---- 1182,1188 ----
-    /*
-     * Init tasklets.
-     */
-!   timer_setup(&amp;host-&gt;timer, au6601_timeout_timer, 0);
-
-    au6601_init_mmc(host);
-    au6601_hw_init(host);
-</code></pre>
-
-<p>Here is an updated version of steps to install the driver for Linux kernel 4.16:</p>
+<p><strong>Please use this procedure and generated package at your own risk as I'm not
+a Linux kernel driver developer</strong>.</p>
+<p>Here is an updated version of steps to install the driver for <strong>amd64</strong>
+architechture and Linux kernel 4.16+:</p>
 <ul>
-<li><em>(added)</em> save prepared patch as <code>au6601.patch</code></li>
-<li>download appropriate <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb">deb-package</a> (i386 or amd64)
-  from <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages">packages</a> page</li>
-<li>install <code>debtap</code> package from AUR if not already installed</li>
-<li>initialize <code>debtap</code> database</li>
-<li>convert deb package to archlinux package using <code>debtap</code></li>
-<li><em>(added)</em> unpack archlinux package using <code>tar</code></li>
-<li><em>(added)</em> patch sources using <code>patch</code></li>
-<li><em>(added)</em> pack archlinux package back using <code>tar</code></li>
-<li>install generated package using <code>yaourt -U</code></li>
+<li>create temporary directory somewhere and <code>cd</code> into it</li>
+<li>download <a href="https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2">patch and PKGBUILD</a> (ensure <code>PKGBUILD</code> and
+    <code>au6601-timers.diff</code> are located in the root of previously created
+    temporary directory)</li>
+<li>build and install package using <code>makepkg</code></li>
 <li>install kernel driver</li>
 <li>use card reader :)</li>
 </ul>
 <pre><code class="shell">
-$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
-$ yaourt -S debtap
-$ sudo debtap -u
-$ debtap au6601-dkms_0.3-0~ppa7_amd64.deb
-$ mkdir src &amp;&amp; cd src
-$ tar xvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
-$ rm ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
-$ patch -p1 -i ../au6601.patch
-$ tar cvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz usr/ .PKGINFO .INSTALL .MTREE
-$ cd ..
-$ rm -r src/
-$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ mkdir au6601-dkms &amp;&amp; cd au6601-dkms
+$ wget -O au6601-pkgbuild.zip https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2/archive/517a45d819d920c0903cba2153e17a86e66507ad.zip
+$ unzip -j au6601-pkgbuild.zip
+$ makepkg -si
 $ sudo modprobe au6601-pci
 $ udevil mount /dev/mmcblk0p1
 

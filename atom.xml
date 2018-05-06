@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2018-05-05T13:11:25.647512Z</updated>
+    <updated>2018-05-06T06:27:30.161431Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1934,81 +1934,28 @@ make: *** [Makefile:33: default] Error 2
 
 &lt;p&gt;&lt;a href=&#34;https://duckduckgo.com/&#34;&gt;DuckDuckGo&lt;/a&gt; (my default search engine, by the way) &lt;a href=&#34;https://duckduckgo.com/?q=linux+setup_timer+timer_setup+site%3Agithub.com&#34;&gt;helped&lt;/a&gt;
 to localize &lt;a href=&#34;https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a&#34;&gt;the issue&lt;/a&gt; - changes in Linux kernel timers API.&lt;/p&gt;
-&lt;p&gt;I&#39;ve followed instructions from the &lt;a href=&#34;https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a&#34;&gt;commit comments&lt;/a&gt; and prepared
-the patch:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;diff&#34;&gt;diff -crB left/usr/src/au6601-0.3/au6601.c right/usr/src/au6601-0.3/au6601.c
-*** left/usr/src/au6601-0.3/au6601.c    2015-07-27 17:26:53.000000000 +0300
---- right/usr/src/au6601-0.3/au6601.c   2018-05-05 13:38:05.741958562 +0300
-***************
-*** 1015,1025 ****
-    mmc_request_done(host-&amp;gt;mmc, mrq);
-  }
+&lt;p&gt;I&#39;ve followed instructions from the &lt;a href=&#34;https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a&#34;&gt;commit comments&lt;/a&gt;
+and prepared the &lt;em&gt;patch&lt;/em&gt; and &lt;em&gt;PKGBUILD&lt;/em&gt; to simplify installation:&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2.js&#34;&gt;&lt;/script&gt;
 
-! static void au6601_timeout_timer(unsigned long data)
-  {
-!   struct au6601_host *host;
-!
-!   host = (struct au6601_host *)data;
-
-    mutex_lock(&amp;amp;host-&amp;gt;cmd_mutex);
-
---- 1015,1023 ----
-    mmc_request_done(host-&amp;gt;mmc, mrq);
-  }
-
-! static void au6601_timeout_timer(struct timer_list *t)
-  {
-!   struct au6601_host *host = from_timer(host, t, timer);
-
-    mutex_lock(&amp;amp;host-&amp;gt;cmd_mutex);
-
-***************
-*** 1184,1190 ****
-    /*
-     * Init tasklets.
-     */
-!   setup_timer(&amp;amp;host-&amp;gt;timer, au6601_timeout_timer, (unsigned long)host);
-
-    au6601_init_mmc(host);
-    au6601_hw_init(host);
---- 1182,1188 ----
-    /*
-     * Init tasklets.
-     */
-!   timer_setup(&amp;amp;host-&amp;gt;timer, au6601_timeout_timer, 0);
-
-    au6601_init_mmc(host);
-    au6601_hw_init(host);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here is an updated version of steps to install the driver for Linux kernel 4.16:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Please use this procedure and generated package at your own risk as I&#39;m not
+a Linux kernel driver developer&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Here is an updated version of steps to install the driver for &lt;strong&gt;amd64&lt;/strong&gt;
+architechture and Linux kernel 4.16+:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; save prepared patch as &lt;code&gt;au6601.patch&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;download appropriate &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb&#34;&gt;deb-package&lt;/a&gt; (i386 or amd64)
-  from &lt;a href=&#34;https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages&#34;&gt;packages&lt;/a&gt; page&lt;/li&gt;
-&lt;li&gt;install &lt;code&gt;debtap&lt;/code&gt; package from AUR if not already installed&lt;/li&gt;
-&lt;li&gt;initialize &lt;code&gt;debtap&lt;/code&gt; database&lt;/li&gt;
-&lt;li&gt;convert deb package to archlinux package using &lt;code&gt;debtap&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; unpack archlinux package using &lt;code&gt;tar&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; patch sources using &lt;code&gt;patch&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;(added)&lt;/em&gt; pack archlinux package back using &lt;code&gt;tar&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;install generated package using &lt;code&gt;yaourt -U&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;create temporary directory somewhere and &lt;code&gt;cd&lt;/code&gt; into it&lt;/li&gt;
+&lt;li&gt;download &lt;a href=&#34;https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2&#34;&gt;patch and PKGBUILD&lt;/a&gt; (ensure &lt;code&gt;PKGBUILD&lt;/code&gt; and
+    &lt;code&gt;au6601-timers.diff&lt;/code&gt; are located in the root of previously created
+    temporary directory)&lt;/li&gt;
+&lt;li&gt;build and install package using &lt;code&gt;makepkg&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;install kernel driver&lt;/li&gt;
 &lt;li&gt;use card reader :)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;
-$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
-$ yaourt -S debtap
-$ sudo debtap -u
-$ debtap au6601-dkms_0.3-0~ppa7_amd64.deb
-$ mkdir src &amp;amp;&amp;amp; cd src
-$ tar xvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
-$ rm ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz
-$ patch -p1 -i ../au6601.patch
-$ tar cvJf ../au6601-dkms-0.3-1-x86_64.pkg.tar.xz usr/ .PKGINFO .INSTALL .MTREE
-$ cd ..
-$ rm -r src/
-$ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
+$ mkdir au6601-dkms &amp;amp;&amp;amp; cd au6601-dkms
+$ wget -O au6601-pkgbuild.zip https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2/archive/517a45d819d920c0903cba2153e17a86e66507ad.zip
+$ unzip -j au6601-pkgbuild.zip
+$ makepkg -si
 $ sudo modprobe au6601-pci
 $ udevil mount /dev/mmcblk0p1
 
