@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>tag:ysegorov.github.io</id>
-    <updated>2018-05-06T06:29:37.205764Z</updated>
+    <updated>2018-05-07T05:22:29.380154Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1953,7 +1953,7 @@ architecture and Linux kernel 4.16+:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;
 $ mkdir au6601-dkms &amp;amp;&amp;amp; cd au6601-dkms
-$ wget -O au6601-pkgbuild.zip https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2/archive/517a45d819d920c0903cba2153e17a86e66507ad.zip
+$ wget -O au6601-pkgbuild.zip https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2/archive/master.zip
 $ unzip -j au6601-pkgbuild.zip
 $ makepkg -si
 $ sudo modprobe au6601-pci
