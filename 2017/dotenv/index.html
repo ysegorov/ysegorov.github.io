@@ -16,7 +16,7 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -30,17 +30,17 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="dotenv">Dotenv</h1>
+            <h1 id="dotenv">Dotenv<a class="headerlink" href="#dotenv" title="Permanent link">&para;</a></h1>
 <p>I've got used to <a href="https://github.com/theskumar/python-dotenv">python-dotenv</a> library to customize some
 project's settings on per-deployment basis. But there is one thing which I
 can't say I like.</p>
-<h2 id="problem">Problem</h2>
+<h2 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h2>
 <p>The problem is the way this library makes values from <code>.env</code> available to
 project - by using <code>os.environ.setdefault</code> which actually pollutes project's
 environment.</p>
 <p>By occasion this can lead to some sensitive information like api keys to leak.
 Let's fix it.</p>
-<h2 id="solution">Solution</h2>
+<h2 id="solution">Solution<a class="headerlink" href="#solution" title="Permanent link">&para;</a></h2>
 <p>My first attempt was to check the library's API and find a way to load values
 without polluting <code>os.environ</code>. This is possible and here is the code:</p>
 <pre><code class="python"># -*- coding: utf-8 -*-

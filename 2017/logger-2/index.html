@@ -16,7 +16,7 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -30,7 +30,7 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="logger-service-using-epoll-part-2">Logger service using epoll - Part 2</h1>
+            <h1 id="logger-service-using-epoll-part-2">Logger service using epoll - Part 2<a class="headerlink" href="#logger-service-using-epoll-part-2" title="Permanent link">&para;</a></h1>
 <div class="note">
 <p>This is a follow-up for <a href="/2017/logger/">part 1</a> post about logger service.</p>
 </div>
@@ -125,15 +125,15 @@ Single action to be performed by a process is the following:</p>
 </ul>
 <p>We will be running 1000 of such actions which means we will send about 500k
 messages to our service (this is just an approximation).</p>
-<h3 id="step-1-logging-to-a-file-only">Step 1 - logging to a file (only)</h3>
+<h3 id="step-1-logging-to-a-file-only">Step 1 - logging to a file (only)<a class="headerlink" href="#step-1-logging-to-a-file-only" title="Permanent link">&para;</a></h3>
 <p>It was not interesting at all as I've got about <strong>8700 records per second</strong> -
 very impressive. But we need all records to be stored in database - to do
 a query later. Let's see.</p>
-<h3 id="step-2-logging-to-a-file-and-to-postgresql-using-logging-handler">Step 2 - logging to a file and to PostgreSQL using logging handler</h3>
+<h3 id="step-2-logging-to-a-file-and-to-postgresql-using-logging-handler">Step 2 - logging to a file and to PostgreSQL using logging handler<a class="headerlink" href="#step-2-logging-to-a-file-and-to-postgresql-using-logging-handler" title="Permanent link">&para;</a></h3>
 <p>The code for PostgreSQL logging handler is available <a href="https://gist.github.com/ysegorov/8947d99a016aa00ace51d9ab4d89c428#file-pghandler-py">here</a>. This
 time results were disappointing - about <strong>200 records per second</strong> (at the same
 time there was no data loss which is good).</p>
-<h3 id="step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler">Step 3 - logging to a file and to PostgreSQL using self-made handler</h3>
+<h3 id="step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler">Step 3 - logging to a file and to PostgreSQL using self-made handler<a class="headerlink" href="#step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler" title="Permanent link">&para;</a></h3>
 <p>It was clear that our service everytime runs the same query inserting just one
 record to database. So, the trick is to employ buffering and to insert records
 in bulk using, for example, <a href="http://initd.org/psycopg/docs/extras.html#psycopg2.extras.execute_values"><code>psycopg2.extras.execute_values</code></a>.

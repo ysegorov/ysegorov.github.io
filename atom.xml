@@ -4,16 +4,16 @@
     <subtitle>Yet another web developer blog</subtitle>
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
-    <id>tag:ysegorov.github.io</id>
-    <updated>2018-08-11T13:32:09.240667Z</updated>
+    <id>https://ysegorov.github.io</id>
+    <updated>2018-12-01T08:27:29.196245Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-01-30:/2015/initial-commit/</id>
+        <id>https://ysegorov.github.io/2015/initial-commit/</id>
         <updated>2015-01-30T16:42:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;initial-commit&#34;&gt;Initial commit&lt;/h1&gt;
+            &lt;h1 id=&#34;initial-commit&#34;&gt;Initial commit&lt;a class=&#34;headerlink&#34; href=&#34;#initial-commit&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;This is just a very first record in the blog.&lt;/p&gt;
 &lt;p&gt;It will be powered by &lt;del&gt;&lt;a href=&#34;http://blog.getpelican.com/&#34;&gt;Pelican&lt;/a&gt;&lt;/del&gt; self-made python library
 named &lt;strong&gt;wt&lt;/strong&gt;.&lt;br&gt;
@@ -26,11 +26,11 @@ named &lt;strong&gt;wt&lt;/strong&gt;.&lt;br&gt;
     <entry>
         <title>Module level abstraction in python</title>
         <link href="https://ysegorov.github.io/2015/module-level-abstraction-in-python/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-01-30:/2015/module-level-abstraction-in-python/</id>
+        <id>https://ysegorov.github.io/2015/module-level-abstraction-in-python/</id>
         <updated>2015-01-30T17:40:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;module-level-abstraction-in-python&#34;&gt;Module-level abstraction in Python&lt;/h1&gt;
+            &lt;h1 id=&#34;module-level-abstraction-in-python&#34;&gt;Module-level abstraction in Python&lt;a class=&#34;headerlink&#34; href=&#34;#module-level-abstraction-in-python&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Sample code first.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
 #
@@ -65,11 +65,11 @@ improves code manageability.&lt;/p&gt;
     <entry>
         <title>Grief</title>
         <link href="https://ysegorov.github.io/2015/grief/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-03-01:/2015/grief/</id>
+        <id>https://ysegorov.github.io/2015/grief/</id>
         <updated>2015-03-01T06:15:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;grief&#34;&gt;Grief&lt;/h1&gt;
+            &lt;h1 id=&#34;grief&#34;&gt;Grief&lt;a class=&#34;headerlink&#34; href=&#34;#grief&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Boris Nemtsov.&lt;/p&gt;
 &lt;p&gt;Terrible pain. Emptiness inside. Impossible to comprehend.&lt;/p&gt;
         </content>
@@ -80,11 +80,11 @@ improves code manageability.&lt;/p&gt;
     <entry>
         <title>Micro datetime parsing benchmark</title>
         <link href="https://ysegorov.github.io/2015/micro-datetime-parsing-benchmark/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-03-26:/2015/micro-datetime-parsing-benchmark/</id>
+        <id>https://ysegorov.github.io/2015/micro-datetime-parsing-benchmark/</id>
         <updated>2015-03-26T07:05:00Z</updated>
         <summary>Notes on datetime parsing in python2 to remember</summary>
         <content type="html">
-            &lt;h1 id=&#34;micro-datetime-parsing-benchmark&#34;&gt;Micro datetime parsing benchmark&lt;/h1&gt;
+            &lt;h1 id=&#34;micro-datetime-parsing-benchmark&#34;&gt;Micro datetime parsing benchmark&lt;a class=&#34;headerlink&#34; href=&#34;#micro-datetime-parsing-benchmark&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Just a note for myself about datetime parsing in python.&lt;/p&gt;
 &lt;p&gt;Let&#39;s assume we know ahead that we have a datetime string in &lt;a href=&#34;http://en.wikipedia.org/wiki/ISO_8601&#34;&gt;ISO 8601&lt;/a&gt;
 format and timezone is &lt;a href=&#34;https://en.wikipedia.org/wiki/Coordinated_Universal_Time&#34;&gt;UTC&lt;/a&gt;.&lt;/p&gt;
@@ -128,12 +128,12 @@ account microseconds zero-padded to the left.&lt;/p&gt;
     <entry>
         <title>Chtd</title>
         <link href="https://ysegorov.github.io/2015/chtd/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-03-28:/2015/chtd/</id>
+        <id>https://ysegorov.github.io/2015/chtd/</id>
         <updated>2015-03-28T04:25:00Z</updated>
         <summary>Working for Chtd</summary>
         <content type="html">
-            &lt;h1 id=&#34;chtd&#34;&gt;Chtd&lt;/h1&gt;
-&lt;h2 id=&#34;preface&#34;&gt;Preface&lt;/h2&gt;
+            &lt;h1 id=&#34;chtd&#34;&gt;Chtd&lt;a class=&#34;headerlink&#34; href=&#34;#chtd&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;preface&#34;&gt;Preface&lt;a class=&#34;headerlink&#34; href=&#34;#preface&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;I&#39;ve started to work for &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt; in October 2011 and worked till
 February 2015.
 It was a good time and I want to say thank you to everyone who worked with.&lt;/p&gt;
@@ -141,7 +141,7 @@ It was a good time and I want to say thank you to everyone who worked with.&lt;/
 and it had to shrink (four of the six developers were forced
 to leave the company).&lt;/p&gt;
 &lt;p&gt;This is going to be a long post and probably I&#39;ll keep it as is.&lt;/p&gt;
-&lt;h2 id=&#34;context&#34;&gt;Context&lt;/h2&gt;
+&lt;h2 id=&#34;context&#34;&gt;Context&lt;a class=&#34;headerlink&#34; href=&#34;#context&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;I&#39;m going to sum up my experience working as a developer for &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt;
 talking about the some interesting points.&lt;/p&gt;
 &lt;p&gt;The company has developed its own implementation of graph-oriented database
@@ -157,7 +157,7 @@ providing needed functionality.&lt;/p&gt;
 in size and have automatic calculations according to calc rules
 specified by analysts.&lt;/p&gt;
 &lt;p&gt;We have a specialized report builder and some other useful tools.&lt;/p&gt;
-&lt;h2 id=&#34;workflow&#34;&gt;Workflow&lt;/h2&gt;
+&lt;h2 id=&#34;workflow&#34;&gt;Workflow&lt;a class=&#34;headerlink&#34; href=&#34;#workflow&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;This is rather important point to begin with it. Going back to 2011
 the company used
 selfhosted &lt;strong&gt;subversion&lt;/strong&gt; as a version control system and actually there was no
@@ -176,8 +176,8 @@ Driessen&lt;/em&gt;, for sharing your experience!&lt;/p&gt;
 merged to &lt;em&gt;default&lt;/em&gt; branches.&lt;/p&gt;
 &lt;p&gt;From the very beginning we were using &lt;strong&gt;Redmine&lt;/strong&gt; to track issues and manage
 projects and it&#39;s just great.&lt;/p&gt;
-&lt;h2 id=&#34;automation&#34;&gt;Automation&lt;/h2&gt;
-&lt;h3 id=&#34;bitbucket-and-redmine&#34;&gt;BitBucket and Redmine&lt;/h3&gt;
+&lt;h2 id=&#34;automation&#34;&gt;Automation&lt;a class=&#34;headerlink&#34; href=&#34;#automation&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;bitbucket-and-redmine&#34;&gt;BitBucket and Redmine&lt;a class=&#34;headerlink&#34; href=&#34;#bitbucket-and-redmine&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Using &lt;strong&gt;svn&lt;/strong&gt; we had a post-commit hook configured to send email with diff to
 developers mailing list.&lt;/p&gt;
 &lt;p&gt;After switching to [BitBucket][bitbucket] we wanted to keep these emails
@@ -200,7 +200,7 @@ it does the following:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Bbhook&lt;/strong&gt; works pretty well and we had just a few issues with it.&lt;/p&gt;
-&lt;h3 id=&#34;fabric&#34;&gt;Fabric&lt;/h3&gt;
+&lt;h3 id=&#34;fabric&#34;&gt;Fabric&lt;a class=&#34;headerlink&#34; href=&#34;#fabric&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Going back to 2011 and 2012 we were using makefile to prepare configuration files
 to deploy a web service (project built on &lt;a href=&#34;http://chtd.ru/netdb&#34;&gt;NetDB&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;It was a working solution but I wasn&#39;t satisfied with it. We still had
@@ -226,7 +226,7 @@ service by issuing just one command in &lt;strong&gt;bash&lt;/strong&gt;.&lt;/p&
 &lt;p&gt;The key win here was a way we specify service settings (server name, db
 parameters etc.) - in a command line instead of manually editing configuration
 file.&lt;/p&gt;
-&lt;h3 id=&#34;static-files&#34;&gt;Static files&lt;/h3&gt;
+&lt;h3 id=&#34;static-files&#34;&gt;Static files&lt;a class=&#34;headerlink&#34; href=&#34;#static-files&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Update&lt;/em&gt;. Sometimes I&#39;m still fighting with &lt;strong&gt;gulp&lt;/strong&gt; spending too much time
 configuring it. The &lt;a href=&#34;http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/&#34;&gt;article by Keith Cirkel&lt;/a&gt;
 helped a lot to start using &lt;code&gt;npm&lt;/code&gt; as a build tool.&lt;/p&gt;
@@ -256,10 +256,10 @@ decided to drop this dependency.&lt;/p&gt;
 complex inside but works pretty well.&lt;/p&gt;
 &lt;p&gt;There is a chance I&#39;ll write a post focusing on &lt;strong&gt;bundler&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;That&#39;s all for automation section.&lt;/p&gt;
-&lt;h2 id=&#34;python-javascript&#34;&gt;Python, Javascript&lt;/h2&gt;
+&lt;h2 id=&#34;python-javascript&#34;&gt;Python, Javascript&lt;a class=&#34;headerlink&#34; href=&#34;#python-javascript&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;This can be a huge section but I&#39;ll focus only on some examples (without any
 specific order).&lt;/p&gt;
-&lt;h3 id=&#34;low-level-netdb-administration&#34;&gt;Low-level NetDB administration&lt;/h3&gt;
+&lt;h3 id=&#34;low-level-netdb-administration&#34;&gt;Low-level NetDB administration&lt;a class=&#34;headerlink&#34; href=&#34;#low-level-netdb-administration&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;It was my first library written for &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt; and we called it
 &lt;em&gt;Object editor&lt;/em&gt; (&lt;em&gt;oditor&lt;/em&gt;).&lt;/p&gt;
 &lt;p&gt;Due to &lt;a href=&#34;http://chtd.ru/netdb&#34;&gt;NetDB&lt;/a&gt; specific internals there was a need for an
@@ -275,7 +275,7 @@ I am sure there is something with me, not with &lt;a href=&#34;http://dojotoolki
 &lt;p&gt;The second implementation was made using &lt;strong&gt;Backbone&lt;/strong&gt; and &lt;strong&gt;Bootstrap&lt;/strong&gt;
 (details on them follow) and it was a big step forward to better &lt;strong&gt;python&lt;/strong&gt; and
 &lt;strong&gt;javascript&lt;/strong&gt; code and to usability.&lt;/p&gt;
-&lt;h3 id=&#34;backbone-and-bootstrap&#34;&gt;Backbone and Bootstrap&lt;/h3&gt;
+&lt;h3 id=&#34;backbone-and-bootstrap&#34;&gt;Backbone and Bootstrap&lt;a class=&#34;headerlink&#34; href=&#34;#backbone-and-bootstrap&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Going back to 2011/2012 my javascript code was ugly.
 I was the beginner and I was trying to have code organized but I&#39;m not sure
 I&#39;ve managed it.&lt;/p&gt;
@@ -291,7 +291,7 @@ for frontend.&lt;/p&gt;
 &lt;p&gt;I think it was one of the most important steps during the history of
 &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt; because &lt;a href=&#34;https://qubequ.com&#34;&gt;QuBeQu&lt;/a&gt; (&lt;a href=&#34;http://chtd.ru/netdb&#34;&gt;NetDB&lt;/a&gt; SaaS solution)
 was built on top of this library.&lt;/p&gt;
-&lt;h3 id=&#34;user-permissions&#34;&gt;User permissions&lt;/h3&gt;
+&lt;h3 id=&#34;user-permissions&#34;&gt;User permissions&lt;a class=&#34;headerlink&#34; href=&#34;#user-permissions&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;This is a story about refactoring &lt;strong&gt;python&lt;/strong&gt; code.&lt;/p&gt;
 &lt;p&gt;We had rather complicated permissions system developed back to 2012. Really
 complicated. The author of the system has left the company a year later.&lt;/p&gt;
@@ -309,7 +309,7 @@ still - there is a huge codebase and my estimates were naive.&lt;/p&gt;
 &lt;p&gt;Python descriptors are a great way of structuring your codebase.&lt;/p&gt;
 &lt;p&gt;The result of the refactoring was awesome - page load time decreased to 1
 second (from more than a minute!).&lt;/p&gt;
-&lt;h3 id=&#34;digital-signature&#34;&gt;Digital signature&lt;/h3&gt;
+&lt;h3 id=&#34;digital-signature&#34;&gt;Digital signature&lt;a class=&#34;headerlink&#34; href=&#34;#digital-signature&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;We had a couple of projects with the need for digital signature support.&lt;/p&gt;
 &lt;p&gt;In general this is about integration with &lt;a href=&#34;http://cryptopro.ru/&#34;&gt;CryptoPro&lt;/a&gt; software
 (Russia-only solution).&lt;/p&gt;
@@ -322,14 +322,14 @@ to get all CRLs from.&lt;/p&gt;
 from Internet).&lt;/p&gt;
 &lt;p&gt;It was one more battle for speed to load certificates and CRLs within
 a reasonable time.&lt;/p&gt;
-&lt;h3 id=&#34;olap&#34;&gt;OLAP&lt;/h3&gt;
+&lt;h3 id=&#34;olap&#34;&gt;OLAP&lt;a class=&#34;headerlink&#34; href=&#34;#olap&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Mostly client-side library acting as an OLAP builder built on top of our
 &lt;a href=&#34;http://backbonejs.org/&#34;&gt;backbone&lt;/a&gt;-based library.&lt;/p&gt;
 &lt;p&gt;Most interesting part here was drag&#39;n&#39;drop to provide better user experience.&lt;/p&gt;
 &lt;p&gt;I&#39;ve created the first version of this library and later it was handed over to
 another developer.
 It is one of the most valuable libraries at &lt;a href=&#34;https://qubequ.com&#34;&gt;QuBeQu&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;jquery-dashboard&#34;&gt;jQuery dashboard&lt;/h3&gt;
+&lt;h3 id=&#34;jquery-dashboard&#34;&gt;jQuery dashboard&lt;a class=&#34;headerlink&#34; href=&#34;#jquery-dashboard&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;One more client-side library created by me.&lt;/p&gt;
 &lt;p&gt;~~I&#39;m expecting it to be published by &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt; under the MIT license
 (we had such an agreement)~~. It is &lt;a href=&#34;https://github.com/chtd/jquery.dashboard&#34;&gt;published&lt;/a&gt;
@@ -338,7 +338,7 @@ by &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt; under the MIT license.&
 dashboards.&lt;/p&gt;
 &lt;p&gt;Drag&#39;n&#39;drop here too.&lt;/p&gt;
 &lt;p&gt;There are more libraries and tasks I&#39;ve done working for &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt;, a lot more.&lt;/p&gt;
-&lt;h2 id=&#34;jython&#34;&gt;Jython&lt;/h2&gt;
+&lt;h2 id=&#34;jython&#34;&gt;Jython&lt;a class=&#34;headerlink&#34; href=&#34;#jython&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;This is one more subject I&#39;d like to talk about.&lt;/p&gt;
 &lt;p&gt;We had an import/export functionality providing support for &lt;strong&gt;Excel&lt;/strong&gt; files
 (among other formats).&lt;/p&gt;
@@ -360,7 +360,7 @@ configuration library providing a way to set parameters (we can read/write data
 from/to different sheets and cells within &lt;strong&gt;Excel&lt;/strong&gt; documents).&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://poi.apache.org/&#34;&gt;POI&lt;/a&gt;-based solution worked great and we had pretty good performance for
 import/export operations.&lt;/p&gt;
-&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;a class=&#34;headerlink&#34; href=&#34;#summary&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;It was a good time. There were moments I was not satisfied with myself or
 someone from colleagues but we are all human beings.&lt;/p&gt;
 &lt;p&gt;We can and we must make mistakes - to be able to create something better.&lt;/p&gt;
@@ -379,11 +379,11 @@ need to provide a solution in time.&lt;/p&gt;
     <entry>
         <title>Markdown preview</title>
         <link href="https://ysegorov.github.io/2015/markdown-live/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-03-31:/2015/markdown-live/</id>
+        <id>https://ysegorov.github.io/2015/markdown-live/</id>
         <updated>2015-03-31T12:02:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;markdown-preview&#34;&gt;Markdown preview&lt;/h1&gt;
+            &lt;h1 id=&#34;markdown-preview&#34;&gt;Markdown preview&lt;a class=&#34;headerlink&#34; href=&#34;#markdown-preview&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;em&gt;Update&lt;/em&gt;. For &lt;a href=&#34;http://docutils.sourceforge.net/rst.html&#34;&gt;reStructuredText&lt;/a&gt; there is an excellent &lt;a href=&#34;https://mg.pov.lt/restview/&#34;&gt;restview&lt;/a&gt;
 library which works out-of-the-box.&lt;/p&gt;
 &lt;p&gt;It took half-a-workday time to find suitable solution to be able to somehow
@@ -416,11 +416,11 @@ Just great.&lt;/p&gt;
     <entry>
         <title>Jukoro documentation using Sphinx</title>
         <link href="https://ysegorov.github.io/2015/jukoro-docs-using-sphinx/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-04-01:/2015/jukoro-docs-using-sphinx/</id>
+        <id>https://ysegorov.github.io/2015/jukoro-docs-using-sphinx/</id>
         <updated>2015-04-01T10:40:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;jukoro-documentation-using-sphinx&#34;&gt;Jukoro documentation using Sphinx&lt;/h1&gt;
+            &lt;h1 id=&#34;jukoro-documentation-using-sphinx&#34;&gt;Jukoro documentation using Sphinx&lt;a class=&#34;headerlink&#34; href=&#34;#jukoro-documentation-using-sphinx&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Summary about creating python library documentation using &lt;a href=&#34;http://sphinx-doc.org/&#34;&gt;Sphinx&lt;/a&gt; and
 publishing it to &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt; (based on &lt;a href=&#34;http://raxcloud.blogspot.co.uk/2013/02/documenting-python-code-using-sphinx.html&#34;&gt;this article&lt;/a&gt;).&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;$ git clone git@github.com:ysegorov/jukoro.git
@@ -470,11 +470,11 @@ documentation (which is not finished yet).&lt;/p&gt;
     <entry>
         <title>Excellent article</title>
         <link href="https://ysegorov.github.io/2015/excellent-article/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-04-06:/2015/excellent-article/</id>
+        <id>https://ysegorov.github.io/2015/excellent-article/</id>
         <updated>2015-04-06T16:58:00Z</updated>
         <summary>Excellent article about programming</summary>
         <content type="html">
-            &lt;h1 id=&#34;excellent-article&#34;&gt;Excellent article&lt;/h1&gt;
+            &lt;h1 id=&#34;excellent-article&#34;&gt;Excellent article&lt;a class=&#34;headerlink&#34; href=&#34;#excellent-article&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Really excellent &lt;a href=&#34;http://kukuruku.co/hub/programming/do-not-learn-frameworks-learn-the-architecture&#34;&gt;article&lt;/a&gt; (&lt;a href=&#34;http://habrahabr.ru/post/253297/&#34;&gt;original&lt;/a&gt; in Russian).&lt;/p&gt;
 &lt;p&gt;Yesterday I&#39;ve summed up &lt;a href=&#34;/2015/chtd/&#34;&gt;my experience&lt;/a&gt; working for &lt;a href=&#34;http://chtd.ru&#34;&gt;Chtd&lt;/a&gt;
 and I have one more thought to share.&lt;/p&gt;
@@ -505,15 +505,15 @@ your own. Make mistakes. Fix them. Explore and share your knowledge.&lt;/p&gt;
     <entry>
         <title>Jukoro 0.1.2 release</title>
         <link href="https://ysegorov.github.io/2015/jukoro-0.1.2/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-04-06:/2015/jukoro-0.1.2/</id>
+        <id>https://ysegorov.github.io/2015/jukoro-0.1.2/</id>
         <updated>2015-04-06T17:01:00Z</updated>
         <summary>Jukoro promo</summary>
         <content type="html">
-            &lt;h1 id=&#34;jukoro-012-release&#34;&gt;Jukoro 0.1.2 release&lt;/h1&gt;
+            &lt;h1 id=&#34;jukoro-012-release&#34;&gt;Jukoro 0.1.2 release&lt;a class=&#34;headerlink&#34; href=&#34;#jukoro-012-release&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;It happened - first public release of &lt;a href=&#34;https://github.com/ysegorov/jukoro.git&#34;&gt;Jukoro&lt;/a&gt; (not on PyPi but still).&lt;/p&gt;
 &lt;p&gt;Documentation is &lt;a href=&#34;https://ysegorov.github.io/jukoro&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;It is an experiment and I&#39;ll do my best working on it.&lt;/p&gt;
-&lt;h2 id=&#34;features-highlight-postgresql-focused&#34;&gt;Features highlight (PostgreSQL-focused)&lt;/h2&gt;
+&lt;h2 id=&#34;features-highlight-postgresql-focused&#34;&gt;Features highlight (PostgreSQL-focused)&lt;a class=&#34;headerlink&#34; href=&#34;#features-highlight-postgresql-focused&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;unified tables structure in PostgreSQL storing data in a single per
   table &lt;a href=&#34;http://www.postgresql.org/docs/9.4/static/datatype-json.html&#34;&gt;jsonb&lt;/a&gt; field&lt;/li&gt;
@@ -534,7 +534,7 @@ your own. Make mistakes. Fix them. Explore and share your knowledge.&lt;/p&gt;
   to introspect database,
   to create customized sql queries)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;packages-and-modules&#34;&gt;Packages and modules&lt;/h2&gt;
+&lt;h2 id=&#34;packages-and-modules&#34;&gt;Packages and modules&lt;a class=&#34;headerlink&#34; href=&#34;#packages-and-modules&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://ysegorov.github.io/jukoro/jukoro.pg.html&#34;&gt;jukoro.pg&lt;/a&gt; -
   package to work with PostgreSQL built on top of
@@ -568,11 +568,11 @@ your own. Make mistakes. Fix them. Explore and share your knowledge.&lt;/p&gt;
     <entry>
         <title>Meet Juvi</title>
         <link href="https://ysegorov.github.io/2015/juvi/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2015-06-29:/2015/juvi/</id>
+        <id>https://ysegorov.github.io/2015/juvi/</id>
         <updated>2015-06-29T08:44:00Z</updated>
         <summary>Introduction to Juvi - small client-side library</summary>
         <content type="html">
-            &lt;h1 id=&#34;meet-juvi&#34;&gt;Meet Juvi&lt;/h1&gt;
+            &lt;h1 id=&#34;meet-juvi&#34;&gt;Meet Juvi&lt;a class=&#34;headerlink&#34; href=&#34;#meet-juvi&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;While working on a pet project I&#39;ve created a small client-side library
 responsible (mostly) for a View part in MV* patterns and have named it
 &lt;a href=&#34;https://github.com/ysegorov/juvi&#34;&gt;juvi&lt;/a&gt; (without any specific reason, just to have short name being
@@ -654,11 +654,11 @@ and &lt;a href=&#34;https://bitbucket.org/ysegorov/mg/src&#34;&gt;mg&lt;/a&gt; l
     <entry>
         <title>Django project debugging</title>
         <link href="https://ysegorov.github.io/2016/django-debug/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-01-17:/2016/django-debug/</id>
+        <id>https://ysegorov.github.io/2016/django-debug/</id>
         <updated>2016-01-17T12:32:00Z</updated>
         <summary>Simple tools to debug complex code</summary>
         <content type="html">
-            &lt;h1 id=&#34;django-project-debugging&#34;&gt;Django project debugging&lt;/h1&gt;
+            &lt;h1 id=&#34;django-project-debugging&#34;&gt;Django project debugging&lt;a class=&#34;headerlink&#34; href=&#34;#django-project-debugging&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Quite often there is a need to debug some code, to see what&#39;s going on and why
 there is so much time spent generating pretty simple web page.&lt;/p&gt;
 &lt;p&gt;There are tools making this task easier, &lt;a href=&#34;https://github.com/django-debug-toolbar/django-debug-toolbar&#34;&gt;django-debug-toolbar&lt;/a&gt; looks like
@@ -707,11 +707,11 @@ noise.&lt;/p&gt;
     <entry>
         <title>Webpack loader to use svg icons as snabbdom VNode</title>
         <link href="https://ysegorov.github.io/2016/svg-snabbdom-loader/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-07-04:/2016/svg-snabbdom-loader/</id>
+        <id>https://ysegorov.github.io/2016/svg-snabbdom-loader/</id>
         <updated>2016-07-04T08:45:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;webpack-loader-to-use-svg-icons-as-snabbdom-vnode&#34;&gt;Webpack loader to use svg icons as snabbdom VNode&lt;/h1&gt;
+            &lt;h1 id=&#34;webpack-loader-to-use-svg-icons-as-snabbdom-vnode&#34;&gt;Webpack loader to use svg icons as snabbdom VNode&lt;a class=&#34;headerlink&#34; href=&#34;#webpack-loader-to-use-svg-icons-as-snabbdom-vnode&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;I&#39;m exploring FRP for frontend and it looks very interesting to me, especially
 for dataflow using streams.&lt;/p&gt;
 &lt;p&gt;Unidirectional data flow, introduced as &lt;strong&gt;Flux&lt;/strong&gt; by &lt;strong&gt;Facebook&lt;/strong&gt; engineers, is
@@ -831,11 +831,11 @@ function view(model) {
     <entry>
         <title>Alcor Micro AU6601 PCI-E Flash card reader controller</title>
         <link href="https://ysegorov.github.io/2016/au6601/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-09-30:/2016/au6601/</id>
+        <id>https://ysegorov.github.io/2016/au6601/</id>
         <updated>2016-09-30T05:16:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux&lt;/h1&gt;
+            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux&lt;a class=&#34;headerlink&#34; href=&#34;#alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;em&gt;Update&lt;/em&gt;. Please check &lt;a href=&#34;/2018/au6601-2/&#34;&gt;this post&lt;/a&gt; for installation instructions for
 Linux kernel 4.16+.&lt;/p&gt;
 &lt;p&gt;I&#39;m running &lt;a href=&#34;https://archlinux.org&#34;&gt;ArchLinux&lt;/a&gt; on this &lt;a href=&#34;https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/&#34;&gt;perfect ASUSPRO BU401LG notebook&lt;/a&gt;
@@ -902,18 +902,18 @@ $ udevil mount /dev/mmcblk0p1
     <entry>
         <title>DO</title>
         <link href="https://ysegorov.github.io/2016/do/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-10-11:/2016/do/</id>
+        <id>https://ysegorov.github.io/2016/do/</id>
         <updated>2016-10-11T07:55:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;do&#34;&gt;DO&lt;/h1&gt;
+            &lt;h1 id=&#34;do&#34;&gt;DO&lt;a class=&#34;headerlink&#34; href=&#34;#do&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Not long ago reading some news I&#39;ve read about &lt;a href=&#34;http://letterslive.com/&#34;&gt;Letters Live&lt;/a&gt;
 project and looking through the letters I&#39;ve came to a brilliant one.&lt;/p&gt;
 &lt;p&gt;Certainly, this letter is very impressive and powerfull and I want to keep it
 here.&lt;/p&gt;
 &lt;p&gt;Text is taken from correspondent &lt;a href=&#34;http://letterslive.com/&#34;&gt;Letters Live&lt;/a&gt; page and you
 definitely should &lt;a href=&#34;http://letterslive.com/letter/do/&#34;&gt;go there&lt;/a&gt; to watch the video.&lt;/p&gt;
-&lt;h2 id=&#34;letter-from-sol-lewitt-to-eva-hesse-april-14-1965&#34;&gt;Letter from Sol LeWitt to Eva Hesse, April 14, 1965&lt;/h2&gt;
+&lt;h2 id=&#34;letter-from-sol-lewitt-to-eva-hesse-april-14-1965&#34;&gt;Letter from Sol LeWitt to Eva Hesse, April 14, 1965&lt;a class=&#34;headerlink&#34; href=&#34;#letter-from-sol-lewitt-to-eva-hesse-april-14-1965&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Dear Eva,&lt;/p&gt;
 &lt;p&gt;It will be almost a month since you wrote to me and you have possibly 
@@ -1014,11 +1014,11 @@ definitely should &lt;a href=&#34;http://letterslive.com/letter/do/&#34;&gt;go t
     <entry>
         <title>Pipeline As a Code With Jenkins</title>
         <link href="https://ysegorov.github.io/2016/jenkinsfile/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-12-27:/2016/jenkinsfile/</id>
+        <id>https://ysegorov.github.io/2016/jenkinsfile/</id>
         <updated>2016-12-27T10:45:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;pipeline-as-a-code-with-jenkins&#34;&gt;Pipeline as a code with Jenkins&lt;/h1&gt;
+            &lt;h1 id=&#34;pipeline-as-a-code-with-jenkins&#34;&gt;Pipeline as a code with Jenkins&lt;a class=&#34;headerlink&#34; href=&#34;#pipeline-as-a-code-with-jenkins&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://jenkins.io/&#34;&gt;Jenkins&lt;/a&gt; has a pretty nice &lt;a href=&#34;https://jenkins.io/solutions/pipeline/&#34;&gt;Pipeline&lt;/a&gt; plugin to manage build, test and
 deploy steps in a single file named &lt;code&gt;Jenkinsfile&lt;/code&gt;. This file should be stored
 alongside with the project code just like &lt;code&gt;python&lt;/code&gt;, &lt;code&gt;javascript&lt;/code&gt;, &lt;code&gt;html&lt;/code&gt; or
@@ -1050,11 +1050,11 @@ server) branches.&lt;/p&gt;
     <entry>
         <title>Self-made Virtualenv Wrapper</title>
         <link href="https://ysegorov.github.io/2016/virtualenv/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2016-12-28:/2016/virtualenv/</id>
+        <id>https://ysegorov.github.io/2016/virtualenv/</id>
         <updated>2016-12-28T08:27:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;self-made-virtualenv-wrapper&#34;&gt;Self-made Virtualenv Wrapper&lt;/h1&gt;
+            &lt;h1 id=&#34;self-made-virtualenv-wrapper&#34;&gt;Self-made Virtualenv Wrapper&lt;a class=&#34;headerlink&#34; href=&#34;#self-made-virtualenv-wrapper&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Not long ago I&#39;ve switched from &lt;a href=&#34;https://pypi.python.org/pypi/virtualenvwrapper&#34;&gt;virtualenvwrapper&lt;/a&gt; to self-made solution
 based on &lt;a href=&#34;https://gist.github.com/datagrok/2199506&#34;&gt;this idea&lt;/a&gt; by &lt;a href=&#34;http://datagrok.org/&#34;&gt;datagrok&lt;/a&gt;.
 It works pretty well for me and I&#39;d like to share it here.&lt;/p&gt;
@@ -1193,11 +1193,11 @@ project be it &lt;code&gt;python2&lt;/code&gt;, &lt;code&gt;python3&lt;/code&gt;
     <entry>
         <title>Static blog generator</title>
         <link href="https://ysegorov.github.io/2017/wt/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-03-22:/2017/wt/</id>
+        <id>https://ysegorov.github.io/2017/wt/</id>
         <updated>2017-03-22T05:20:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;static-blog-generator&#34;&gt;Static Blog Generator&lt;/h1&gt;
+            &lt;h1 id=&#34;static-blog-generator&#34;&gt;Static Blog Generator&lt;a class=&#34;headerlink&#34; href=&#34;#static-blog-generator&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;This is a short introduction to &lt;a href=&#34;https://github.com/ysegorov/wt&#34;&gt;wt&lt;/a&gt; - library I&#39;ve made for my personal
 use.&lt;/p&gt;
 &lt;p&gt;It is pretty young and it lacks some features I&#39;d like it to have but it
@@ -1242,11 +1242,11 @@ I&#39;ll build it using &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&l
     <entry>
         <title>Logger service using epoll - Part 1</title>
         <link href="https://ysegorov.github.io/2017/logger/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-03-24:/2017/logger/</id>
+        <id>https://ysegorov.github.io/2017/logger/</id>
         <updated>2017-03-24T06:45:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;logger-service-using-epoll-part-1&#34;&gt;Logger service using epoll - Part 1&lt;/h1&gt;
+            &lt;h1 id=&#34;logger-service-using-epoll-part-1&#34;&gt;Logger service using epoll - Part 1&lt;a class=&#34;headerlink&#34; href=&#34;#logger-service-using-epoll-part-1&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;div class=&#34;note&#34;&gt;
 &lt;p&gt;There is a &lt;a href=&#34;/2017/logger-2/&#34;&gt;continuation&lt;/a&gt; of this post.&lt;/p&gt;
 &lt;/div&gt;
@@ -1429,11 +1429,11 @@ class SocketHandler(logging.Handler):
     <entry>
         <title>The finger pointing at the moon is not the moon</title>
         <link href="https://ysegorov.github.io/2017/moon/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-03-26:/2017/moon/</id>
+        <id>https://ysegorov.github.io/2017/moon/</id>
         <updated>2017-03-26T12:51:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;the-finger-pointing-at-the-moon-is-not-the-moon&#34;&gt;The finger pointing at the moon is not the moon&lt;/h1&gt;
+            &lt;h1 id=&#34;the-finger-pointing-at-the-moon-is-not-the-moon&#34;&gt;The finger pointing at the moon is not the moon&lt;a class=&#34;headerlink&#34; href=&#34;#the-finger-pointing-at-the-moon-is-not-the-moon&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;14 precepts by &lt;a href=&#34;http://www.seaox.com/thich.html&#34;&gt;&lt;strong&gt;Thich Nhat Hanh&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Do not be idolatrous about or bound to any doctrine, theory, or ideology,
@@ -1509,11 +1509,11 @@ class SocketHandler(logging.Handler):
     <entry>
         <title>Logger service using epoll - Part 2</title>
         <link href="https://ysegorov.github.io/2017/logger-2/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-03-30:/2017/logger-2/</id>
+        <id>https://ysegorov.github.io/2017/logger-2/</id>
         <updated>2017-03-30T16:45:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;logger-service-using-epoll-part-2&#34;&gt;Logger service using epoll - Part 2&lt;/h1&gt;
+            &lt;h1 id=&#34;logger-service-using-epoll-part-2&#34;&gt;Logger service using epoll - Part 2&lt;a class=&#34;headerlink&#34; href=&#34;#logger-service-using-epoll-part-2&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;div class=&#34;note&#34;&gt;
 &lt;p&gt;This is a follow-up for &lt;a href=&#34;/2017/logger/&#34;&gt;part 1&lt;/a&gt; post about logger service.&lt;/p&gt;
 &lt;/div&gt;
@@ -1608,15 +1608,15 @@ Single action to be performed by a process is the following:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;We will be running 1000 of such actions which means we will send about 500k
 messages to our service (this is just an approximation).&lt;/p&gt;
-&lt;h3 id=&#34;step-1-logging-to-a-file-only&#34;&gt;Step 1 - logging to a file (only)&lt;/h3&gt;
+&lt;h3 id=&#34;step-1-logging-to-a-file-only&#34;&gt;Step 1 - logging to a file (only)&lt;a class=&#34;headerlink&#34; href=&#34;#step-1-logging-to-a-file-only&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;It was not interesting at all as I&#39;ve got about &lt;strong&gt;8700 records per second&lt;/strong&gt; -
 very impressive. But we need all records to be stored in database - to do
 a query later. Let&#39;s see.&lt;/p&gt;
-&lt;h3 id=&#34;step-2-logging-to-a-file-and-to-postgresql-using-logging-handler&#34;&gt;Step 2 - logging to a file and to PostgreSQL using logging handler&lt;/h3&gt;
+&lt;h3 id=&#34;step-2-logging-to-a-file-and-to-postgresql-using-logging-handler&#34;&gt;Step 2 - logging to a file and to PostgreSQL using logging handler&lt;a class=&#34;headerlink&#34; href=&#34;#step-2-logging-to-a-file-and-to-postgresql-using-logging-handler&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;The code for PostgreSQL logging handler is available &lt;a href=&#34;https://gist.github.com/ysegorov/8947d99a016aa00ace51d9ab4d89c428#file-pghandler-py&#34;&gt;here&lt;/a&gt;. This
 time results were disappointing - about &lt;strong&gt;200 records per second&lt;/strong&gt; (at the same
 time there was no data loss which is good).&lt;/p&gt;
-&lt;h3 id=&#34;step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler&#34;&gt;Step 3 - logging to a file and to PostgreSQL using self-made handler&lt;/h3&gt;
+&lt;h3 id=&#34;step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler&#34;&gt;Step 3 - logging to a file and to PostgreSQL using self-made handler&lt;a class=&#34;headerlink&#34; href=&#34;#step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;It was clear that our service everytime runs the same query inserting just one
 record to database. So, the trick is to employ buffering and to insert records
 in bulk using, for example, &lt;a href=&#34;http://initd.org/psycopg/docs/extras.html#psycopg2.extras.execute_values&#34;&gt;&lt;code&gt;psycopg2.extras.execute_values&lt;/code&gt;&lt;/a&gt;.
@@ -1644,11 +1644,11 @@ regular basis and to flush receiving buffer on it.&lt;/p&gt;
     <entry>
         <title>WT documentation</title>
         <link href="https://ysegorov.github.io/2017/wt-docs/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-04-11:/2017/wt-docs/</id>
+        <id>https://ysegorov.github.io/2017/wt-docs/</id>
         <updated>2017-04-11T05:30:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;wt-documentation&#34;&gt;WT documentation&lt;/h1&gt;
+            &lt;h1 id=&#34;wt-documentation&#34;&gt;WT documentation&lt;a class=&#34;headerlink&#34; href=&#34;#wt-documentation&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;This is just a few words about &lt;a href=&#34;https://github.com/ysegorov/wt/&#34;&gt;wt&lt;/a&gt; documentation.&lt;/p&gt;
 &lt;p&gt;It&#39;s available &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;online&lt;/a&gt; and covers almost all &lt;strong&gt;&lt;code&gt;wt&lt;/code&gt;&lt;/strong&gt; features.&lt;/p&gt;
 &lt;p&gt;And it was built using &lt;a href=&#34;https://github.com/ysegorov/wt/&#34;&gt;wt&lt;/a&gt;. Documentation sources are available on
@@ -1669,14 +1669,14 @@ solution. There must be a better way to handle &lt;em&gt;baseurl&lt;/em&gt;.&lt;
     <entry>
         <title>Reloadable decorator</title>
         <link href="https://ysegorov.github.io/2017/reloadable/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-04-12:/2017/reloadable/</id>
+        <id>https://ysegorov.github.io/2017/reloadable/</id>
         <updated>2017-04-12T16:12:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;reloadable-decorator&#34;&gt;Reloadable decorator&lt;/h1&gt;
+            &lt;h1 id=&#34;reloadable-decorator&#34;&gt;Reloadable decorator&lt;a class=&#34;headerlink&#34; href=&#34;#reloadable-decorator&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; has a feature I&#39;d like to share here. It was one of the first features
 of &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; I think.&lt;/p&gt;
-&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;/h2&gt;
+&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;a class=&#34;headerlink&#34; href=&#34;#problem&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Suppose I have an idea for some post, just like this one.&lt;/p&gt;
 &lt;p&gt;I&#39;ve opened terminal, started &lt;strong&gt;wt&lt;/strong&gt; in &lt;em&gt;development&lt;/em&gt; mode using
 &lt;strong&gt;&lt;code&gt;wt develop&lt;/code&gt;&lt;/strong&gt; command and started &lt;strong&gt;vim&lt;/strong&gt; for authoring.&lt;/p&gt;
@@ -1685,7 +1685,7 @@ of &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; I th
 this post to configuration - &lt;strong&gt;&lt;code&gt;wt.yaml&lt;/code&gt;&lt;/strong&gt; file.&lt;/p&gt;
 &lt;p&gt;After this step I&#39;m expecting refreshed page in the browser to contain updated
 data from configuration.&lt;/p&gt;
-&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;a class=&#34;headerlink&#34; href=&#34;#solution&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Internally &lt;a href=&#34;https://ysegorov.github.io/wt-docs/&#34;&gt;wt&lt;/a&gt; has a so called &lt;a href=&#34;https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22&#34;&gt;engine&lt;/a&gt; to handle
 incoming requests. It depends on &lt;strong&gt;&lt;code&gt;wt.yaml&lt;/code&gt;&lt;/strong&gt; configuration and reads it on
 initialization.&lt;/p&gt;
@@ -1768,21 +1768,21 @@ instance in return (till configuration was updated again).&lt;/p&gt;
     <entry>
         <title>Dotenv</title>
         <link href="https://ysegorov.github.io/2017/dotenv/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2017-04-13:/2017/dotenv/</id>
+        <id>https://ysegorov.github.io/2017/dotenv/</id>
         <updated>2017-04-13T16:40:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;dotenv&#34;&gt;Dotenv&lt;/h1&gt;
+            &lt;h1 id=&#34;dotenv&#34;&gt;Dotenv&lt;a class=&#34;headerlink&#34; href=&#34;#dotenv&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;I&#39;ve got used to &lt;a href=&#34;https://github.com/theskumar/python-dotenv&#34;&gt;python-dotenv&lt;/a&gt; library to customize some
 project&#39;s settings on per-deployment basis. But there is one thing which I
 can&#39;t say I like.&lt;/p&gt;
-&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;/h2&gt;
+&lt;h2 id=&#34;problem&#34;&gt;Problem&lt;a class=&#34;headerlink&#34; href=&#34;#problem&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The problem is the way this library makes values from &lt;code&gt;.env&lt;/code&gt; available to
 project - by using &lt;code&gt;os.environ.setdefault&lt;/code&gt; which actually pollutes project&#39;s
 environment.&lt;/p&gt;
 &lt;p&gt;By occasion this can lead to some sensitive information like api keys to leak.
 Let&#39;s fix it.&lt;/p&gt;
-&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;a class=&#34;headerlink&#34; href=&#34;#solution&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;My first attempt was to check the library&#39;s API and find a way to load values
 without polluting &lt;code&gt;os.environ&lt;/code&gt;. This is possible and here is the code:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;python&#34;&gt;# -*- coding: utf-8 -*-
@@ -1903,11 +1903,11 @@ our project&#39;s dependency tree and be sure everything works as we need.&lt;/p
     <entry>
         <title>AU6601 PCI-E Flash card reader and Linux kernel 4.16</title>
         <link href="https://ysegorov.github.io/2018/au6601-2/" rel="alternate" />
-        <id>tag:ysegorov.github.io,2018-05-05:/2018/au6601-2/</id>
+        <id>https://ysegorov.github.io/2018/au6601-2/</id>
         <updated>2018-05-05T07:12:00Z</updated>
         <summary></summary>
         <content type="html">
-            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16&lt;/h1&gt;
+            &lt;h1 id=&#34;alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416&#34;&gt;Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16&lt;a class=&#34;headerlink&#34; href=&#34;#alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;I&#39;ve got email from &lt;em&gt;Justin Faber&lt;/em&gt; today saying the procedure, described
 &lt;a href=&#34;/2016/au6601/&#34;&gt;here&lt;/a&gt;, doesn&#39;t work for Linux kernel 4.16.6-1 in ArchLinux - build
 fails with the following log:&lt;/p&gt;
