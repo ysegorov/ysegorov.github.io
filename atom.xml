@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2018-12-01T08:27:29.196245Z</updated>
+    <updated>2019-10-10T08:15:34.965078Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1882,7 +1882,7 @@ DOTFILE = os.environ.get(&#39;DOTFILE&#39;, &#39;.env&#39;)
 
 env = dotenv(filename=os.path.join(BASE_DIR, DOTFILE))
 
-API_KEY = env(&#39;API_KEY&#39;, &#39;test-key&#39;)
+API_KEY = env.get(&#39;API_KEY&#39;, &#39;test-key&#39;)
 
 &lt;/code&gt;&lt;/pre&gt;
 
