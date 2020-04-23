@@ -1,0 +1,331 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Wireguard and Linux network namespaces - perfect fit</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="wireguard-and-linux-network-namespaces-perfect-fit">Wireguard and Linux network namespaces - perfect fit<a class="headerlink" href="#wireguard-and-linux-network-namespaces-perfect-fit" title="Permanent link">&para;</a></h1>
+<p>I'm using two browsers usually - Firefox (switched to IceCat recently) and
+Chromium.</p>
+<p>Firefox/IceCat is my workhorse, which is configured to route all
+traffic through SOCKS5 proxy (<a href="https://www.linode.com">Linode</a> instance actually).</p>
+<p>I would definitely stay solely with it but some sites don't like requests
+coming from VPS servers so I have to use Chromium for such cases (and it always
+run in private mode to keep it clean).</p>
+<p>SOCKS5 proxy works pretty good for me but I was curious if it's possible to
+use <a href="https://www.wireguard.com">wireguard</a> for my usecase - to route Firefox/IceCat traffic
+through VPN keeping all other traffic as is.</p>
+<p>For domain name resolution I'm using locally installed <a href="https://nlnetlabs.nl/projects/unbound/about/">Unbound</a>
+server which is bound to localhost. My <code>/etc/resolv.conf</code> file looks like this:</p>
+<pre><code>nameserver 127.0.0.1
+</code></pre>
+
+<p>It is configured to forward requests to <a href="https://www.quad9.net">Quad9</a> resolver (no Google, no
+Cloudfront, right) but I'm planning to turn forwarding off and just use
+<a href="https://nlnetlabs.nl/projects/unbound/about/">Unbound</a> on its own.</p>
+<p>There are numerous posts in the Internet covering <a href="https://www.wireguard.com">wireguard</a>
+configuration so I'll just show my server/client configuration with some notes.</p>
+<p>For some reason I've missed the fact that <code>wg-quick</code> helper uses advanced
+version of <code>wg</code> configuration file syntax which means <code>wg-quick</code> configuration
+file can't be used with <code>wg</code>. I've lost some time while battling this issue.</p>
+<p>Summary of the settings:</p>
+<ul>
+<li><code>10.10.10.0/24</code> - VPN network</li>
+<li><code>10.10.10.1/32</code> - VPN server address</li>
+<li><code>10.10.10.10/32</code> - VPN client address</li>
+<li><code>55000</code> - VPN server port wireguard will be listening on</li>
+<li>VPN server will route all traffic coming from client to the outside world</li>
+</ul>
+<h2 id="server">Server<a class="headerlink" href="#server" title="Permanent link">&para;</a></h2>
+<p>My server configuration file looks like this:</p>
+<pre><code class="ini"># /etc/wireguard/wg0.conf on server
+
+[Interface]
+PrivateKey = &lt;private key of the server&gt;
+ListenPort = 55000
+
+[Peer]
+PublicKey = &lt;public key of the client&gt;
+PresharedKey = &lt;preshared key&gt;
+AllowedIPs = 10.10.10.10/32
+</code></pre>
+
+<p>I use <a href="https://www.alpinelinux.org">Alpine Linux</a> on the server for my experiments with wireguard
+and my <code>wg0</code> interface is defined like this:</p>
+<pre><code># excerpt from /etc/network/interfaces
+
+auto wg0
+iface wg0 inet static
+  address 10.10.10.1
+  netmask 255.255.255.0
+  pre-up ip link add dev wg0 type wireguard
+  pre-up wg setconf wg0 /etc/wireguard/wg0.conf
+  pre-down ip link delete dev wg0
+</code></pre>
+
+<p>One more player here is firewall (<code>iptables</code> in my case). It must be configured
+to allow traffic coming from <code>wg0</code> interface to be forwarded to outside world.</p>
+<p>Something like this should help you to get started:</p>
+<pre><code class="shell">$ sudo iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
+$ sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+$ sudo iptables -t nat -A POSTROUTING -o eth0 -s 10.10.10.0/24 -j MASQUERADE
+</code></pre>
+
+<p>Don't forget to make these rules permanent and allow forwarding on the server
+using <code>sysctl</code>:</p>
+<pre><code>net.ipv4.ip_forward=1
+</code></pre>
+
+<p>That's it for the server.</p>
+<h2 id="client">Client<a class="headerlink" href="#client" title="Permanent link">&para;</a></h2>
+<p>Client configuration file looks like this:</p>
+<pre><code class="ini"># /etc/wireguard/wg0.conf on the client
+
+[Interface]
+PrivateKey = &lt;private key of the client&gt;
+
+[Peer]
+PublicKey = &lt;public key of the server&gt;
+PresharedKey = &lt;preshared key&gt;
+Endpoint = &lt;server public ip&gt;:55000
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+</code></pre>
+
+<p>I've faced another issue while configuring the client - something absolutely
+unexpected when pinging any host, even VPN server endpoint:</p>
+<pre><code class="shell">$ ping 10.10.10.1
+PING 10.10.10.1 (10.10.10.1) 56(84) bytes of data.
+From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=3 Destination Host Unreachable
+ping: sendmsg: Required key not available
+^C
+--- 10.10.10.1 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2028ms
+</code></pre>
+
+<p>The same for pinging Google DNS:</p>
+<pre><code class="shell">$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=3 Destination Host Unreachable
+ping: sendmsg: Required key not available
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2037ms
+</code></pre>
+
+<p>The reason for this was <code>AllowedIPs</code> misconfiguration:</p>
+<pre><code class="ini"># This is wrong setting
+AllowedIPs = 0.0.0.0
+</code></pre>
+
+<p>I've somehow lost CIDR part from the address which means address will look like
+<code>0.0.0.0/32</code> which is absolutely wrong.</p>
+<p>Pay attention to <code>wg</code> output, to <code>allowed ips</code> value especially:</p>
+<pre><code class="shell">$ sudo wg
+interface: wg0
+  public key: &lt;client public key&gt;
+  private key: (hidden)
+  listening port: 52312
+
+peer: &lt;server public key&gt;
+  preshared key: (hidden)
+  endpoint: &lt;server ip address&gt;:55000
+  allowed ips: 0.0.0.0/32
+  latest handshake: 1 minute, 12 seconds ago
+  transfer: 644 B received, 2.23 KiB sent
+  persistent keepalive: every 25 seconds
+</code></pre>
+
+<p>So, correct value for <code>AllowedIPs</code> should look like this:</p>
+<pre><code class="ini"># This is correct setting
+AllowedIPs = 0.0.0.0/0
+</code></pre>
+
+<p>And now we've come to the most interesting part of the show - to client-side
+network configuration.</p>
+<p>The solution for my usecase was <a href="https://www.wireguard.com/netns/#sample-script">here</a> - simple
+script by (probably) <a href="https://www.wireguard.com">wireguard</a> author. Thank you, Jason!</p>
+<p>After some experiments I've taken an opposite approach from the original -
+prepared <code>wg0</code> interface is moved to <code>vpn</code> namespace and is configured to be
+the default route within this namespace.</p>
+<p>We can check what interfaces our new <code>vpn</code> namespace has and how routing table
+looks like:</p>
+<pre><code class="shell">$ vpn up
+...
+$ vpn exec ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+10: wg0: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/none
+...
+$ vpn exec ip route
+default dev wg0 scope link
+10.10.10.0/24 dev wg0 proto kernel scope link src 10.10.10.10
+</code></pre>
+
+<p>Pretty good, right?</p>
+<p>One more minor issue was the lack of domain name resolution for programs
+running within <code>vpn</code> namespace. I was not expecting this so it took some time
+to understand the reason.</p>
+<p>Citing <a href="http://manpages.ubuntu.com/manpages/trusty/man8/ip-netns.8.html">ip-netns</a> manual:</p>
+<blockquote>
+<p>A network namespace is logically another copy of the network stack, with
+its own routes, firewall rules, and network devices.</p>
+</blockquote>
+<p>This means nobody is listening on <code>127.0.0.1:53</code> within <code>vpn</code> namespace. We can
+easily solve this issue by starting another copy of <a href="https://nlnetlabs.nl/projects/unbound/about/">unbound</a> within
+<code>vpn</code> namespace (I've decided to use separate copy of <code>unbound.conf</code> for this
+named <code>unbound.vpn.conf</code>, YMMV).</p>
+<p>Here is the script I'm using to manage VPN:</p>
+<pre><code class="bash">#!/usr/bin/env bash
+
+set -ex
+
+[[ $UID != 0 ]] &amp;&amp; exec sudo -E &quot;$(readlink -f &quot;$0&quot;)&quot; &quot;$@&quot;
+
+NS=&quot;vpn&quot;
+WGIF=&quot;wg0&quot;
+WGCONF=&quot;/etc/wireguard/$WGIF.conf&quot;
+WGADDRIPV4=&quot;10.10.10.10/24&quot;
+UNBOUNDCONF=&quot;/etc/unbound/unbound.$NS.conf&quot;
+UNBOUNDPID=&quot;/run/unbound.$NS.pid&quot;
+
+up() {
+    ip netns add $NS
+    ip link add $WGIF type wireguard
+    wg setconf $WGIF $WGCONF
+    ip link set $WGIF netns $NS
+    ip -n $NS addr add $WGADDRIPV4 dev $WGIF
+    ip -n $NS link set lo up
+    ip -n $NS link set $WGIF up
+    ip -n $NS route add default dev $WGIF
+    ip netns exec $NS unbound -c $UNBOUNDCONF
+}
+
+down() {
+    UPID=`cat $UNBOUNDPID`
+    kill $UPID || true
+    ip -n $NS link set $WGIF down
+    ip -n $NS link del $WGIF
+    ip netns del $NS
+}
+
+status() {
+    exec ip netns exec $NS wg
+}
+
+execi() {
+    exec ip netns exec $NS sudo -E -u \#${SUDO_UID:-$(id -u)} -g \#${SUDO_GID:-$(id -g)} -- &quot;$@&quot;
+}
+
+command=&quot;$1&quot;
+shift
+
+case &quot;$command&quot; in
+    up) up &quot;$@&quot; ;;
+    down) down &quot;$@&quot; ;;
+    exec) execi &quot;$@&quot; ;;
+    status) status &quot;$@&quot; ;;
+    *) echo &quot;Usage: $0 up|down|exec&quot; &gt;&amp;2; exit 1 ;;
+esac
+</code></pre>
+
+<p>Now I can start Firefox/IceCat within <code>vpn</code> namespace and be sure all traffic
+is routed through VPN:</p>
+<pre><code class="shell">$ vpn exec icecat
+</code></pre>
+
+<p>I'm using <code>netctl</code> to manage my network interfaces and the plan is to use
+<a href="https://wiki.archlinux.org/index.php/Netctl#Using_hooks">netctl hooks</a> to bring VPN interface up or down as needed.</p>
+<p><a href="https://www.wireguard.com">wireguard</a> looks quite good (one more time - thank you, Jason A.
+Donenfeld!) and I'm planning to use it for some time to decide if I can switch
+from SOCKS5 proxy to VPN.</p>
+            <div class="content-last-modified"><small><em>Last modified: 2020-04-22 17:35:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2018/au6601-2/">
+                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">AU6601 PCI-E Flash card reader and Linux kernel 4.16</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words And Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
+        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+        
+        
+        
+    </body>
+</html>

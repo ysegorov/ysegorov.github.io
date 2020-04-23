@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2019-10-10T08:15:34.965078Z</updated>
+    <updated>2020-04-23T17:47:36.671050Z</updated>
     <entry>
         <title>Initial commit</title>
         <link href="https://ysegorov.github.io/2015/initial-commit/" rel="alternate" />
@@ -1962,6 +1962,262 @@ $ udevil mount /dev/mmcblk0p1
 # profit!
 
 &lt;/code&gt;&lt;/pre&gt;
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Wireguard and Linux network namespaces - perfect fit</title>
+        <link href="https://ysegorov.github.io/2020/wireguard/" rel="alternate" />
+        <id>https://ysegorov.github.io/2020/wireguard/</id>
+        <updated>2020-04-22T17:35:00Z</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;wireguard-and-linux-network-namespaces-perfect-fit&#34;&gt;Wireguard and Linux network namespaces - perfect fit&lt;a class=&#34;headerlink&#34; href=&#34;#wireguard-and-linux-network-namespaces-perfect-fit&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;I&#39;m using two browsers usually - Firefox (switched to IceCat recently) and
+Chromium.&lt;/p&gt;
+&lt;p&gt;Firefox/IceCat is my workhorse, which is configured to route all
+traffic through SOCKS5 proxy (&lt;a href=&#34;https://www.linode.com&#34;&gt;Linode&lt;/a&gt; instance actually).&lt;/p&gt;
+&lt;p&gt;I would definitely stay solely with it but some sites don&#39;t like requests
+coming from VPS servers so I have to use Chromium for such cases (and it always
+run in private mode to keep it clean).&lt;/p&gt;
+&lt;p&gt;SOCKS5 proxy works pretty good for me but I was curious if it&#39;s possible to
+use &lt;a href=&#34;https://www.wireguard.com&#34;&gt;wireguard&lt;/a&gt; for my usecase - to route Firefox/IceCat traffic
+through VPN keeping all other traffic as is.&lt;/p&gt;
+&lt;p&gt;For domain name resolution I&#39;m using locally installed &lt;a href=&#34;https://nlnetlabs.nl/projects/unbound/about/&#34;&gt;Unbound&lt;/a&gt;
+server which is bound to localhost. My &lt;code&gt;/etc/resolv.conf&lt;/code&gt; file looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nameserver 127.0.0.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is configured to forward requests to &lt;a href=&#34;https://www.quad9.net&#34;&gt;Quad9&lt;/a&gt; resolver (no Google, no
+Cloudfront, right) but I&#39;m planning to turn forwarding off and just use
+&lt;a href=&#34;https://nlnetlabs.nl/projects/unbound/about/&#34;&gt;Unbound&lt;/a&gt; on its own.&lt;/p&gt;
+&lt;p&gt;There are numerous posts in the Internet covering &lt;a href=&#34;https://www.wireguard.com&#34;&gt;wireguard&lt;/a&gt;
+configuration so I&#39;ll just show my server/client configuration with some notes.&lt;/p&gt;
+&lt;p&gt;For some reason I&#39;ve missed the fact that &lt;code&gt;wg-quick&lt;/code&gt; helper uses advanced
+version of &lt;code&gt;wg&lt;/code&gt; configuration file syntax which means &lt;code&gt;wg-quick&lt;/code&gt; configuration
+file can&#39;t be used with &lt;code&gt;wg&lt;/code&gt;. I&#39;ve lost some time while battling this issue.&lt;/p&gt;
+&lt;p&gt;Summary of the settings:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;10.10.10.0/24&lt;/code&gt; - VPN network&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;10.10.10.1/32&lt;/code&gt; - VPN server address&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;10.10.10.10/32&lt;/code&gt; - VPN client address&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;55000&lt;/code&gt; - VPN server port wireguard will be listening on&lt;/li&gt;
+&lt;li&gt;VPN server will route all traffic coming from client to the outside world&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;server&#34;&gt;Server&lt;a class=&#34;headerlink&#34; href=&#34;#server&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;My server configuration file looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;ini&#34;&gt;# /etc/wireguard/wg0.conf on server
+
+[Interface]
+PrivateKey = &amp;lt;private key of the server&amp;gt;
+ListenPort = 55000
+
+[Peer]
+PublicKey = &amp;lt;public key of the client&amp;gt;
+PresharedKey = &amp;lt;preshared key&amp;gt;
+AllowedIPs = 10.10.10.10/32
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I use &lt;a href=&#34;https://www.alpinelinux.org&#34;&gt;Alpine Linux&lt;/a&gt; on the server for my experiments with wireguard
+and my &lt;code&gt;wg0&lt;/code&gt; interface is defined like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# excerpt from /etc/network/interfaces
+
+auto wg0
+iface wg0 inet static
+  address 10.10.10.1
+  netmask 255.255.255.0
+  pre-up ip link add dev wg0 type wireguard
+  pre-up wg setconf wg0 /etc/wireguard/wg0.conf
+  pre-down ip link delete dev wg0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One more player here is firewall (&lt;code&gt;iptables&lt;/code&gt; in my case). It must be configured
+to allow traffic coming from &lt;code&gt;wg0&lt;/code&gt; interface to be forwarded to outside world.&lt;/p&gt;
+&lt;p&gt;Something like this should help you to get started:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ sudo iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
+$ sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+$ sudo iptables -t nat -A POSTROUTING -o eth0 -s 10.10.10.0/24 -j MASQUERADE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Don&#39;t forget to make these rules permanent and allow forwarding on the server
+using &lt;code&gt;sysctl&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;net.ipv4.ip_forward=1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&#39;s it for the server.&lt;/p&gt;
+&lt;h2 id=&#34;client&#34;&gt;Client&lt;a class=&#34;headerlink&#34; href=&#34;#client&#34; title=&#34;Permanent link&#34;&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Client configuration file looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;ini&#34;&gt;# /etc/wireguard/wg0.conf on the client
+
+[Interface]
+PrivateKey = &amp;lt;private key of the client&amp;gt;
+
+[Peer]
+PublicKey = &amp;lt;public key of the server&amp;gt;
+PresharedKey = &amp;lt;preshared key&amp;gt;
+Endpoint = &amp;lt;server public ip&amp;gt;:55000
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;ve faced another issue while configuring the client - something absolutely
+unexpected when pinging any host, even VPN server endpoint:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ ping 10.10.10.1
+PING 10.10.10.1 (10.10.10.1) 56(84) bytes of data.
+From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=3 Destination Host Unreachable
+ping: sendmsg: Required key not available
+^C
+--- 10.10.10.1 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2028ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The same for pinging Google DNS:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
+ping: sendmsg: Required key not available
+From 10.10.10.10 icmp_seq=3 Destination Host Unreachable
+ping: sendmsg: Required key not available
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2037ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The reason for this was &lt;code&gt;AllowedIPs&lt;/code&gt; misconfiguration:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;ini&#34;&gt;# This is wrong setting
+AllowedIPs = 0.0.0.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;ve somehow lost CIDR part from the address which means address will look like
+&lt;code&gt;0.0.0.0/32&lt;/code&gt; which is absolutely wrong.&lt;/p&gt;
+&lt;p&gt;Pay attention to &lt;code&gt;wg&lt;/code&gt; output, to &lt;code&gt;allowed ips&lt;/code&gt; value especially:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ sudo wg
+interface: wg0
+  public key: &amp;lt;client public key&amp;gt;
+  private key: (hidden)
+  listening port: 52312
+
+peer: &amp;lt;server public key&amp;gt;
+  preshared key: (hidden)
+  endpoint: &amp;lt;server ip address&amp;gt;:55000
+  allowed ips: 0.0.0.0/32
+  latest handshake: 1 minute, 12 seconds ago
+  transfer: 644 B received, 2.23 KiB sent
+  persistent keepalive: every 25 seconds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, correct value for &lt;code&gt;AllowedIPs&lt;/code&gt; should look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;ini&#34;&gt;# This is correct setting
+AllowedIPs = 0.0.0.0/0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And now we&#39;ve come to the most interesting part of the show - to client-side
+network configuration.&lt;/p&gt;
+&lt;p&gt;The solution for my usecase was &lt;a href=&#34;https://www.wireguard.com/netns/#sample-script&#34;&gt;here&lt;/a&gt; - simple
+script by (probably) &lt;a href=&#34;https://www.wireguard.com&#34;&gt;wireguard&lt;/a&gt; author. Thank you, Jason!&lt;/p&gt;
+&lt;p&gt;After some experiments I&#39;ve taken an opposite approach from the original -
+prepared &lt;code&gt;wg0&lt;/code&gt; interface is moved to &lt;code&gt;vpn&lt;/code&gt; namespace and is configured to be
+the default route within this namespace.&lt;/p&gt;
+&lt;p&gt;We can check what interfaces our new &lt;code&gt;vpn&lt;/code&gt; namespace has and how routing table
+looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ vpn up
+...
+$ vpn exec ip link
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+10: wg0: &amp;lt;POINTOPOINT,NOARP,UP,LOWER_UP&amp;gt; mtu 1420 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/none
+...
+$ vpn exec ip route
+default dev wg0 scope link
+10.10.10.0/24 dev wg0 proto kernel scope link src 10.10.10.10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty good, right?&lt;/p&gt;
+&lt;p&gt;One more minor issue was the lack of domain name resolution for programs
+running within &lt;code&gt;vpn&lt;/code&gt; namespace. I was not expecting this so it took some time
+to understand the reason.&lt;/p&gt;
+&lt;p&gt;Citing &lt;a href=&#34;http://manpages.ubuntu.com/manpages/trusty/man8/ip-netns.8.html&#34;&gt;ip-netns&lt;/a&gt; manual:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A network namespace is logically another copy of the network stack, with
+its own routes, firewall rules, and network devices.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This means nobody is listening on &lt;code&gt;127.0.0.1:53&lt;/code&gt; within &lt;code&gt;vpn&lt;/code&gt; namespace. We can
+easily solve this issue by starting another copy of &lt;a href=&#34;https://nlnetlabs.nl/projects/unbound/about/&#34;&gt;unbound&lt;/a&gt; within
+&lt;code&gt;vpn&lt;/code&gt; namespace (I&#39;ve decided to use separate copy of &lt;code&gt;unbound.conf&lt;/code&gt; for this
+named &lt;code&gt;unbound.vpn.conf&lt;/code&gt;, YMMV).&lt;/p&gt;
+&lt;p&gt;Here is the script I&#39;m using to manage VPN:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;bash&#34;&gt;#!/usr/bin/env bash
+
+set -ex
+
+[[ $UID != 0 ]] &amp;amp;&amp;amp; exec sudo -E &amp;quot;$(readlink -f &amp;quot;$0&amp;quot;)&amp;quot; &amp;quot;$@&amp;quot;
+
+NS=&amp;quot;vpn&amp;quot;
+WGIF=&amp;quot;wg0&amp;quot;
+WGCONF=&amp;quot;/etc/wireguard/$WGIF.conf&amp;quot;
+WGADDRIPV4=&amp;quot;10.10.10.10/24&amp;quot;
+UNBOUNDCONF=&amp;quot;/etc/unbound/unbound.$NS.conf&amp;quot;
+UNBOUNDPID=&amp;quot;/run/unbound.$NS.pid&amp;quot;
+
+up() {
+    ip netns add $NS
+    ip link add $WGIF type wireguard
+    wg setconf $WGIF $WGCONF
+    ip link set $WGIF netns $NS
+    ip -n $NS addr add $WGADDRIPV4 dev $WGIF
+    ip -n $NS link set lo up
+    ip -n $NS link set $WGIF up
+    ip -n $NS route add default dev $WGIF
+    ip netns exec $NS unbound -c $UNBOUNDCONF
+}
+
+down() {
+    UPID=`cat $UNBOUNDPID`
+    kill $UPID || true
+    ip -n $NS link set $WGIF down
+    ip -n $NS link del $WGIF
+    ip netns del $NS
+}
+
+status() {
+    exec ip netns exec $NS wg
+}
+
+execi() {
+    exec ip netns exec $NS sudo -E -u \#${SUDO_UID:-$(id -u)} -g \#${SUDO_GID:-$(id -g)} -- &amp;quot;$@&amp;quot;
+}
+
+command=&amp;quot;$1&amp;quot;
+shift
+
+case &amp;quot;$command&amp;quot; in
+    up) up &amp;quot;$@&amp;quot; ;;
+    down) down &amp;quot;$@&amp;quot; ;;
+    exec) execi &amp;quot;$@&amp;quot; ;;
+    status) status &amp;quot;$@&amp;quot; ;;
+    *) echo &amp;quot;Usage: $0 up|down|exec&amp;quot; &amp;gt;&amp;amp;2; exit 1 ;;
+esac
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now I can start Firefox/IceCat within &lt;code&gt;vpn&lt;/code&gt; namespace and be sure all traffic
+is routed through VPN:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;shell&#34;&gt;$ vpn exec icecat
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;m using &lt;code&gt;netctl&lt;/code&gt; to manage my network interfaces and the plan is to use
+&lt;a href=&#34;https://wiki.archlinux.org/index.php/Netctl#Using_hooks&#34;&gt;netctl hooks&lt;/a&gt; to bring VPN interface up or down as needed.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.wireguard.com&#34;&gt;wireguard&lt;/a&gt; looks quite good (one more time - thank you, Jason A.
+Donenfeld!) and I&#39;m planning to use it for some time to decide if I can switch
+from SOCKS5 proxy to VPN.&lt;/p&gt;
         </content>
         <author>
             <name>Yuri Egorov</name>
