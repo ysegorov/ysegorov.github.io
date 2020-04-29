@@ -16,60 +16,59 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux">Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux<a class="headerlink" href="#alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux" title="Permanent link">&para;</a></h1>
+            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-on-archlinux">Alcor Micro AU6601 PCI-E Flash card reader controller on ArchLinux</h1>
 <p><em>Update</em>. Please check <a href="/2018/au6601-2/">this post</a> for installation instructions for
 Linux kernel 4.16+.</p>
 <p>I'm running <a href="https://archlinux.org">ArchLinux</a> on this <a href="https://www.asus.com/Commercial-Notebooks/ASUSPRO_ADVANCED_BU401LG/">perfect ASUSPRO BU401LG notebook</a>
 by ASUS and the only problem I faced recently was sd-card reader
 not working at all.</p>
 <p><strong><code>lspci</code></strong> shows the following:</p>
-<pre><code class="shell">
-$ lspci
-00:00.0 Host bridge: Intel Corporation Haswell-ULT DRAM Controller (rev 09)
-00:02.0 VGA compatible controller: Intel Corporation Haswell-ULT Integrated Graphics Controller (rev 09)
-00:03.0 Audio device: Intel Corporation Haswell-ULT HD Audio Controller (rev 09)
-00:04.0 Signal processing controller: Intel Corporation Device 0a03 (rev 09)
-00:16.0 Communication controller: Intel Corporation 8 Series HECI #0 (rev 04)
-00:19.0 Ethernet controller: Intel Corporation Ethernet Connection I218-V (rev 04)
-00:1b.0 Audio device: Intel Corporation 8 Series HD Audio Controller (rev 04)
-00:1c.0 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 1 (rev e4)
-00:1c.1 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 2 (rev e4)
-00:1c.3 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 4 (rev e4)
-00:1c.4 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 5 (rev e4)
-00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI #1 (rev 04)
-00:1f.0 ISA bridge: Intel Corporation 8 Series LPC Controller (rev 04)
-00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller 1 [AHCI mode] (rev 04)
-00:1f.3 SMBus: Intel Corporation 8 Series SMBus Controller (rev 04)
-00:1f.6 Signal processing controller: Intel Corporation 8 Series Thermal (rev 04)
-02:00.0 Unassigned class [ff00]: Alcor Micro AU6601 PCI-E Flash card reader controller
-03:00.0 Network controller: Intel Corporation Wireless 7260 (rev 6b)
-04:00.0 3D controller: NVIDIA Corporation GK208M [GeForce GT 730M] (rev a1)
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="color:#fdf4c1;">$ lspci
+00:00.0 Host bridge: Intel Corporation Haswell-ULT DRAM Controller (rev 09</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:02.0 VGA compatible controller: Intel Corporation Haswell-ULT Integrated Graphics Controller (rev 09</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:03.0 Audio device: Intel Corporation Haswell-ULT HD Audio Controller (rev 09</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:04.0 Signal processing controller: Intel Corporation Device 0a03 (rev 09</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:16.0 Communication controller: Intel Corporation 8 Series HECI </span><span style="font-style:italic;color:#928374;">#0 (rev 04)
+</span><span style="color:#fdf4c1;">00:19.0 Ethernet controller: Intel Corporation Ethernet Connection I218-V (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1b.0 Audio device: Intel Corporation 8 Series HD Audio Controller (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1c.0 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 1 (rev e4</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1c.1 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 2 (rev e4</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1c.3 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 4 (rev e4</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1c.4 PCI bridge: Intel Corporation 8 Series PCI Express Root Port 5 (rev e4</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI </span><span style="font-style:italic;color:#928374;">#1 (rev 04)
+</span><span style="color:#fdf4c1;">00:1f.0 ISA bridge: Intel Corporation 8 Series LPC Controller (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1f.2 SATA controller: Intel Corporation 8 Series SATA Controller 1 </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">AHCI mode</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;"> (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1f.3 SMBus: Intel Corporation 8 Series SMBus Controller (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">00:1f.6 Signal processing controller: Intel Corporation 8 Series Thermal (rev 04</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">02:00.0 Unassigned class </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">ff00</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">: Alcor Micro AU6601 PCI-E Flash card reader controller
+03:00.0 Network controller: Intel Corporation Wireless 7260 (rev 6b</span><span style="color:#fdf4c1aa;">)
+</span><span style="color:#fdf4c1;">04:00.0 3D controller: NVIDIA Corporation GK208M </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">GeForce GT 730M</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;"> (rev a1</span><span style="color:#fdf4c1aa;">)
 
-</code></pre>
-
+</span></pre>
 <p>There are no events in logs after inserting sd-card into slot. So, after a bit
 of searching here is the solution.</p>
-<p>Thanks to <a href="https://launchpad.net/~iacobs">Sabin Iacob</a> there is a <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601">driver</a> for the card reader
+<p>Thanks to <a href="https://launchpad.net/%7Eiacobs">Sabin Iacob</a> there is a <a href="https://launchpad.net/%7Eiacobs/+archive/ubuntu/au6601">driver</a> for the card reader
 and the only thing to do is to install it.</p>
 <p>Driver is packaged for Ubuntu and these are the steps I've done to install
 it on Arch:</p>
 <ul>
-<li>download appropriate <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb">deb-package</a> (i386 or amd64)
-  from <a href="https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+packages">packages</a> page</li>
+<li>download appropriate <a href="https://launchpad.net/%7Eiacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0%7Eppa7_amd64.deb">deb-package</a> (i386 or amd64)
+from <a href="https://launchpad.net/%7Eiacobs/+archive/ubuntu/au6601/+packages">packages</a> page</li>
 <li>install <code>debtap</code> package from AUR if not already installed</li>
 <li>initialize <code>debtap</code> database</li>
 <li>convert deb package to archlinux package using <code>debtap</code></li>
@@ -77,8 +76,9 @@ it on Arch:</p>
 <li>install kernel driver</li>
 <li>use card reader :)</li>
 </ul>
-<pre><code class="shell">
-$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="color:#fdf4c1;">$ wget https://launchpad.net/~iacobs/+archive/ubuntu/au6601/+files/au6601-dkms_0.3-0~ppa7_amd64.deb
 $ yaourt -S debtap
 $ sudo debtap -u
 $ debtap au6601-dkms_0.3-0-ppa7_amd64.deb
@@ -86,20 +86,22 @@ $ yaourt -U au6601-dkms-0.3-1-x86_64.pkg.tar.xz
 $ sudo modprobe au6601-pci
 $ udevil mount /dev/mmcblk0p1
 
-# profit!
+</span><span style="font-style:italic;color:#928374;"># profit!
 
-</code></pre>
-            <div class="content-last-modified"><small><em>Last modified: 2016-09-30 05:16:00 UTC</em></small></div>
+</span></pre>
+            <div class="content-last-modified"><small><em>Last modified: 2016-09-30 05:16:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2016/svg-snabbdom-loader/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Webpack loader to use svg icons as snabbdom VNode</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2016/svg-snabbdom-loader/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Webpack loader to use svg icons as snabbdom VNode</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2016/do/">
-                        <span class="ib">DO</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2016/do/">
+                        <span class="ib">DO</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -109,7 +111,7 @@ $ udevil mount /dev/mmcblk0p1
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -119,8 +121,8 @@ $ udevil mount /dev/mmcblk0p1
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -129,17 +131,14 @@ $ udevil mount /dev/mmcblk0p1
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

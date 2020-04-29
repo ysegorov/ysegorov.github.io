@@ -16,21 +16,20 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="meet-juvi">Meet Juvi<a class="headerlink" href="#meet-juvi" title="Permanent link">&para;</a></h1>
+            <h1 id="meet-juvi">Meet Juvi</h1>
 <p>While working on a pet project I've created a small client-side library
 responsible (mostly) for a View part in MV* patterns and have named it
 <a href="https://github.com/ysegorov/juvi">juvi</a> (without any specific reason, just to have short name being
@@ -52,7 +51,7 @@ following features included out-of-the-box:</p>
 <li>unified way to attach event handlers to DOM</li>
 <li>unified way to declare, render and attach to DOM children views</li>
 <li>simple and reliable way to close view on its own and children views and
-  free resources</li>
+free resources</li>
 </ul>
 <p>There is almost no magic inside <a href="https://github.com/ysegorov/juvi/blob/develop/src/view.js">view.js</a>, just check the code (code can
 speak, certainly).</p>
@@ -61,38 +60,39 @@ speak, certainly).</p>
 technique.</p>
 <p>And one more note about children views.</p>
 <p>Children views must be described in view instance as:</p>
-<pre><code class="javascript">// code can be placed into init method
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;">// code can be placed into init method
 
-this.children = {
-    $title: TitleView(somePropsObject),
-    $items: this.items.map(function (it) { return ItemView.new(it); })
-};
+</span><span style="color:#fdf4c1;">this</span><span style="color:#fdf4c1aa;">.children </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{
+    $title: </span><span style="color:#fdf4c1;">TitleView(somePropsObject)</span><span style="color:#fdf4c1aa;">,
+    $items: </span><span style="color:#fdf4c1;">this.items.map(</span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(it) { </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">ItemView</span><span style="color:#fdf4c1;">.new(it); })
+</span><span style="color:#fdf4c1aa;">};
 
-</code></pre>
-
+</span></pre>
 <p>and DOM nodes as:</p>
-<pre><code class="javascript">// code should be placed into populateNodes method
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;">// code should be placed into populateNodes method
 
-var el = this.el,
-    $ = this.$;         // NB. not a jQuery!
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">el </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">this</span><span style="color:#fdf4c1aa;">.el,
+    </span><span style="color:#fdf4c1;">$ </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">this</span><span style="color:#fdf4c1aa;">.$;         </span><span style="font-style:italic;color:#928374;">// NB. not a jQuery!
 
-this.nodes = {
-    $title: $('[data-title]', el),
-    $items: $('[data-items]', el)
-};
+</span><span style="color:#fdf4c1;">this</span><span style="color:#fdf4c1aa;">.nodes </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{
+    $title: </span><span style="color:#fdf4c1;">$(</span><span style="color:#b8bb26;">&#39;[data-title]&#39;</span><span style="color:#fdf4c1;">, el)</span><span style="color:#fdf4c1aa;">,
+    $items: </span><span style="color:#fdf4c1;">$(</span><span style="color:#b8bb26;">&#39;[data-items]&#39;</span><span style="color:#fdf4c1;">, el)
+</span><span style="color:#fdf4c1aa;">};
 
-</code></pre>
-
+</span></pre>
 <p>Having such a definitions view will automatically render all children views and
 attach them to the specified DOM nodes:</p>
 <ul>
 <li><strong>this.children.$title</strong> view will be attached to <strong>this.nodes.$title</strong> node</li>
 <li><strong>this.children.$items</strong> views will be attached to <strong>this.nodes.$items</strong> node
-  (keeping order)</li>
+(keeping order)</li>
 </ul>
 <p>There is no way to emit or listen for events per view because I'm trying to
-keep events flow organized in a <strong>Flux</strong> way. Here is the <a href="https://github.com/ysegorov/juvi/blob/develop/src/dispatcher.js">dispatcher.js</a>
-- instance of <a href="https://github.com/ysegorov/juvi/blob/develop/src/pubsub.js">pubsub.js</a>.</p>
+keep events flow organized in a <strong>Flux</strong> way.
+Here is the <a href="https://github.com/ysegorov/juvi/blob/develop/src/dispatcher.js">dispatcher.js</a> - instance of
+<a href="https://github.com/ysegorov/juvi/blob/develop/src/pubsub.js">pubsub.js</a>.</p>
 <p>And I almost forgot about this dependency - <strong>Promise</strong>. It's up to you to
 pick the one and include it in your project.
 Currently I'm using some parts of <a href="https://github.com/zloirock/core-js">core.js</a>
@@ -101,20 +101,23 @@ polyfill suitable for <strong>pubsub</strong> too.</p>
 <p>That's it.</p>
 <p>The mantra stays the same.</p>
 <p><strong>Become a creator, not a consumer.</strong></p>
-<hr>
+<hr />
 <p>NB. I'm thinking about rewriting <a href="https://github.com/ysegorov/jquery.dashboard">jquery.dashboard</a>
 and <a href="https://bitbucket.org/ysegorov/mg/src">mg</a> libraries using <a href="https://github.com/ysegorov/juvi">Juvi</a>.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2015-06-29 08:44:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2015-06-29 08:44:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2015/jukoro-0.1.2/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Jukoro 0.1.2 release</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2015/jukoro-0.1.2/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Jukoro 0.1.2 release</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2016/django-debug/">
-                        <span class="ib">Django project debugging</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2016/django-debug/">
+                        <span class="ib">Django project debugging</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -124,7 +127,7 @@ and <a href="https://bitbucket.org/ysegorov/mg/src">mg</a> libraries using <a hr
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -134,8 +137,8 @@ and <a href="https://bitbucket.org/ysegorov/mg/src">mg</a> libraries using <a hr
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -144,17 +147,14 @@ and <a href="https://bitbucket.org/ysegorov/mg/src">mg</a> libraries using <a hr
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

@@ -16,21 +16,20 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="logger-service-using-epoll-part-2">Logger service using epoll - Part 2<a class="headerlink" href="#logger-service-using-epoll-part-2" title="Permanent link">&para;</a></h1>
+            <h1 id="logger-service-using-epoll-part-2">Logger service using epoll - Part 2</h1>
 <div class="note">
 <p>This is a follow-up for <a href="/2017/logger/">part 1</a> post about logger service.</p>
 </div>
@@ -41,105 +40,105 @@ requests.</p>
 <p><em>Please do remember that all figures in this post I've got running the code on
 my laptop - YMMV</em>.</p>
 <p>To test the service I have this script:</p>
-<pre><code class="python">#!/usr/bin/env python
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;">#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import time
-import random
-import logging
-import logging.config
-import multiprocessing as mp
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">os
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">time
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">random
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">logging
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">logging.config
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">multiprocessing </span><span style="color:#fa5c4b;">as </span><span style="color:#fdf4c1aa;">mp
 
 
-def setup_logging():
-    conf = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'default': {
-                'format': (
-                    '%(levelname)1.1s %(asctime)s %(name)s:%(lineno)3s '
-                    '%(message)s'),
-                'datefmt': '%Y.%m.%d %H:%M:%S',
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">setup_logging</span><span style="color:#fdf4c1aa;">():
+    conf </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{
+        </span><span style="color:#b8bb26;">&#39;version&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1aa;">,
+        </span><span style="color:#b8bb26;">&#39;disable_existing_loggers&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">False</span><span style="color:#fdf4c1aa;">,
+        </span><span style="color:#b8bb26;">&#39;formatters&#39;</span><span style="color:#fdf4c1aa;">: {
+            </span><span style="color:#b8bb26;">&#39;default&#39;</span><span style="color:#fdf4c1aa;">: {
+                </span><span style="color:#b8bb26;">&#39;format&#39;</span><span style="color:#fdf4c1aa;">: (
+                    </span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">%(levelname)1.1s %(asctime)s %(name)s</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%(lineno)3s </span><span style="color:#b8bb26;">&#39;
+                    &#39;</span><span style="color:#fdf4c1;">%(message)s</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1aa;">),
+                </span><span style="color:#b8bb26;">&#39;datefmt&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">%Y</span><span style="color:#b8bb26;">.</span><span style="color:#fdf4c1;">%m</span><span style="color:#b8bb26;">.</span><span style="color:#fdf4c1;">%d %H</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%M</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%S</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1aa;">,
             }
         },
-        'handlers': {
-            'service_logger': {
-                'level': 'DEBUG',
-                # must be importable
-                'class': 'svctools.handlers.SocketHandler',
-                'host': '127.0.0.1',
-                'port': 5000,
+        </span><span style="color:#b8bb26;">&#39;handlers&#39;</span><span style="color:#fdf4c1aa;">: {
+            </span><span style="color:#b8bb26;">&#39;service_logger&#39;</span><span style="color:#fdf4c1aa;">: {
+                </span><span style="color:#b8bb26;">&#39;level&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#b8bb26;">&#39;DEBUG&#39;</span><span style="color:#fdf4c1aa;">,
+                </span><span style="font-style:italic;color:#928374;"># must be importable
+                </span><span style="color:#b8bb26;">&#39;class&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#b8bb26;">&#39;svctools.handlers.SocketHandler&#39;</span><span style="color:#fdf4c1aa;">,
+                </span><span style="color:#b8bb26;">&#39;host&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#b8bb26;">&#39;127.0.0.1&#39;</span><span style="color:#fdf4c1aa;">,
+                </span><span style="color:#b8bb26;">&#39;port&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">5000</span><span style="color:#fdf4c1aa;">,
             },
         },
-        'loggers': {
-            '': {
-                'level': 'DEBUG',
-                'handlers': ['service_logger'],
-                'propagate': False,
+        </span><span style="color:#b8bb26;">&#39;loggers&#39;</span><span style="color:#fdf4c1aa;">: {
+            </span><span style="color:#b8bb26;">&#39;&#39;</span><span style="color:#fdf4c1aa;">: {
+                </span><span style="color:#b8bb26;">&#39;level&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#b8bb26;">&#39;DEBUG&#39;</span><span style="color:#fdf4c1aa;">,
+                </span><span style="color:#b8bb26;">&#39;handlers&#39;</span><span style="color:#fdf4c1aa;">: [</span><span style="color:#b8bb26;">&#39;service_logger&#39;</span><span style="color:#fdf4c1aa;">],
+                </span><span style="color:#b8bb26;">&#39;propagate&#39;</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">False</span><span style="color:#fdf4c1aa;">,
             },
         },
     }
-    logging.config.dictConfig(conf)
+    </span><span style="color:#fdf4c1;">logging.config.dictConfig(conf)
 
 
-def run(idx):
-    msg = '[%06d] log message %08d'
-    pid = os.getpid()
-    logger = logging.getLogger(__name__)
-    cnt = count = random.randint(300, 800)
-    while True:
-        logger.debug(msg, pid, cnt, extra={'trace_id': idx})
-        cnt -= 1
-        time.sleep(random.choice((0.01, 0.02, 0.03, 0.04, 0.03, 0.02, 0.01)))
-        if cnt == 0:
-            break
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">run</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">idx</span><span style="color:#fdf4c1aa;">):
+    msg </span><span style="color:#fe8019;">= </span><span style="color:#b8bb26;">&#39;[</span><span style="color:#fdf4c1;">%06d</span><span style="color:#b8bb26;">] log message </span><span style="color:#fdf4c1;">%08d</span><span style="color:#b8bb26;">&#39;
+    </span><span style="color:#fdf4c1aa;">pid </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.getpid()
+    </span><span style="color:#fdf4c1aa;">logger </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">logging.getLogger(</span><span style="color:#fabd2f;">__name__</span><span style="color:#fdf4c1;">)
+    </span><span style="color:#fdf4c1aa;">cnt </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">count </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">random.randint(</span><span style="color:#d3869b;">300</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">800</span><span style="color:#fdf4c1;">)
+    </span><span style="color:#fa5c4b;">while </span><span style="color:#d3869b;">True</span><span style="color:#fdf4c1aa;">:
+        </span><span style="color:#fdf4c1;">logger.debug(msg, pid, cnt, extra</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">{</span><span style="color:#b8bb26;">&#39;trace_id&#39;</span><span style="color:#fdf4c1;">: idx})
+        </span><span style="color:#fdf4c1aa;">cnt </span><span style="color:#fe8019;">-= </span><span style="color:#d3869b;">1
+        </span><span style="color:#fdf4c1;">time.sleep(random.choice((</span><span style="color:#d3869b;">0.01</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.02</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.03</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.04</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.03</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.02</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">0.01</span><span style="color:#fdf4c1;">)))
+        </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1aa;">cnt </span><span style="color:#fe8019;">== </span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1aa;">:
+            </span><span style="color:#fa5c4b;">break
 
-    logger.debug('[%06d] --------', pid, extra={'trace_id': idx})
+    </span><span style="color:#fdf4c1;">logger.debug(</span><span style="color:#b8bb26;">&#39;[</span><span style="color:#fdf4c1;">%06d</span><span style="color:#b8bb26;">] --------&#39;</span><span style="color:#fdf4c1;">, pid, extra</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">{</span><span style="color:#b8bb26;">&#39;trace_id&#39;</span><span style="color:#fdf4c1;">: idx})
 
-    return count
-
-
-def main():
-    pool = mp.Pool(200, setup_logging)
-    r = pool.map_async(run, range(1000))
-
-    data = r.get()
-    print('sent %s records' % sum(data))
+    </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1aa;">count
 
 
-if __name__ == &quot;__main__&quot;:
-    main()
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">main</span><span style="color:#fdf4c1aa;">():
+    pool </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">mp.Pool(</span><span style="color:#d3869b;">200</span><span style="color:#fdf4c1;">, setup_logging)
+    </span><span style="color:#fdf4c1aa;">r </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">pool.map_async(run, </span><span style="color:#fabd2f;">range</span><span style="color:#fdf4c1;">(</span><span style="color:#d3869b;">1000</span><span style="color:#fdf4c1;">))
 
-</code></pre>
+    </span><span style="color:#fdf4c1aa;">data </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">r.get()
+    </span><span style="color:#fabd2f;">print</span><span style="color:#fdf4c1;">(</span><span style="color:#b8bb26;">&#39;sent </span><span style="color:#fdf4c1;">%s</span><span style="color:#b8bb26;"> records&#39; </span><span style="color:#fe8019;">% </span><span style="color:#fabd2f;">sum</span><span style="color:#fdf4c1;">(data))
 
+
+</span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">__name__ </span><span style="color:#fe8019;">== </span><span style="color:#b8bb26;">&quot;__main__&quot;</span><span style="color:#fdf4c1aa;">:
+    </span><span style="color:#fdf4c1;">main()
+
+</span></pre>
 <p>We have pool of 200 processes performing the same action - just calling
 <code>logger.debug</code>.
 Single action to be performed by a process is the following:</p>
 <ul>
 <li>randomly select number of logging messages to be send to service (somewhere
-  between 300 and 800 messages)</li>
+between 300 and 800 messages)</li>
 <li>send messages one by one with a tiny delay in between (to simulate some kind
-  of real load)</li>
+of real load)</li>
 </ul>
 <p>We will be running 1000 of such actions which means we will send about 500k
 messages to our service (this is just an approximation).</p>
-<h3 id="step-1-logging-to-a-file-only">Step 1 - logging to a file (only)<a class="headerlink" href="#step-1-logging-to-a-file-only" title="Permanent link">&para;</a></h3>
+<h3 id="step-1-logging-to-a-file-only">Step 1 - logging to a file (only)</h3>
 <p>It was not interesting at all as I've got about <strong>8700 records per second</strong> -
 very impressive. But we need all records to be stored in database - to do
 a query later. Let's see.</p>
-<h3 id="step-2-logging-to-a-file-and-to-postgresql-using-logging-handler">Step 2 - logging to a file and to PostgreSQL using logging handler<a class="headerlink" href="#step-2-logging-to-a-file-and-to-postgresql-using-logging-handler" title="Permanent link">&para;</a></h3>
+<h3 id="step-2-logging-to-a-file-and-to-postgresql-using-logging-handler">Step 2 - logging to a file and to PostgreSQL using logging handler</h3>
 <p>The code for PostgreSQL logging handler is available <a href="https://gist.github.com/ysegorov/8947d99a016aa00ace51d9ab4d89c428#file-pghandler-py">here</a>. This
 time results were disappointing - about <strong>200 records per second</strong> (at the same
 time there was no data loss which is good).</p>
-<h3 id="step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler">Step 3 - logging to a file and to PostgreSQL using self-made handler<a class="headerlink" href="#step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler" title="Permanent link">&para;</a></h3>
+<h3 id="step-3-logging-to-a-file-and-to-postgresql-using-self-made-handler">Step 3 - logging to a file and to PostgreSQL using self-made handler</h3>
 <p>It was clear that our service everytime runs the same query inserting just one
 record to database. So, the trick is to employ buffering and to insert records
 in bulk using, for example, <a href="http://initd.org/psycopg/docs/extras.html#psycopg2.extras.execute_values"><code>psycopg2.extras.execute_values</code></a>.
 This time I've got about <strong>3600 records per second</strong> using 1k-blocks - much
 better. For a batches of 100 records I've got about <strong>3000 records per second</strong>
-- a bit slower but still good enough.</p>
+which is a bit slower but still good enough.</p>
 <p>This solution has one trick though. As we are prebuffering records there will
 be times buffer is not full and there is no incoming records for some time.
 This can lead to data loss which is bad. To solve this problem we can use
@@ -153,17 +152,20 @@ regular basis and to flush receiving buffer on it.</p>
 <li>the code looks ugly</li>
 </ul>
 <p>Last feature will be fixed soon. Stay tuned.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2017-03-30 16:45:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2017-03-30 16:45:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2017/moon/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">The finger pointing at the moon is not the moon</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2017/moon/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">The finger pointing at the moon is not the moon</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2017/wt-docs/">
-                        <span class="ib">WT documentation</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2017/wt-docs/">
+                        <span class="ib">WT documentation</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -173,7 +175,7 @@ regular basis and to flush receiving buffer on it.</p>
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -183,8 +185,8 @@ regular basis and to flush receiving buffer on it.</p>
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -193,17 +195,14 @@ regular basis and to flush receiving buffer on it.</p>
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

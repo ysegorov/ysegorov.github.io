@@ -16,37 +16,37 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="jukoro-documentation-using-sphinx">Jukoro documentation using Sphinx<a class="headerlink" href="#jukoro-documentation-using-sphinx" title="Permanent link">&para;</a></h1>
+            <h1 id="jukoro-documentation-using-sphinx">Jukoro documentation using Sphinx</h1>
 <p>Summary about creating python library documentation using <a href="http://sphinx-doc.org/">Sphinx</a> and
 publishing it to <a href="https://pages.github.com/">GitHub Pages</a> (based on <a href="http://raxcloud.blogspot.co.uk/2013/02/documenting-python-code-using-sphinx.html">this article</a>).</p>
-<pre><code class="bash">$ git clone git@github.com:ysegorov/jukoro.git
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ git clone git@github.com:ysegorov/jukoro.git
 $ cd jukoro
 
 $ mkdir docs
 $ pip install sphinx
-$ sphinx-apidoc -A &quot;Yuri Egorov&quot; -F -o docs jukoro
+$ sphinx-apidoc -A </span><span style="color:#b8bb26;">&quot;Yuri Egorov&quot;</span><span style="color:#fdf4c1;"> -F -o docs jukoro
 
 $ git add docs
-$ git commit -m &quot;sphinx-apidoc generated docs folder contents&quot;
+$ git commit -m </span><span style="color:#b8bb26;">&quot;sphinx-apidoc generated docs folder contents&quot;
 
-$ mkdir gh-pages
-$ vim docs/Makefile  ## change BUILDDIR to ../gh-pages
+</span><span style="color:#fdf4c1;">$ mkdir gh-pages
+$ vim docs/Makefile  </span><span style="font-style:italic;color:#928374;">## change BUILDDIR to ../gh-pages
 
-$ /usr/share/git/workdir/git-new-workdir . gh-pages/html
+</span><span style="color:#fdf4c1;">$ /usr/share/git/workdir/git-new-workdir . gh-pages/html
 $ cd gh-pages/html
 
 $ git checkout --orphan gh-pages
@@ -57,32 +57,34 @@ $ make html
 $ cd -
 
 $ git add .
-$ git commit -m &quot;sphinx generated docs&quot;
-$ git push -u origin gh-pages
+$ git commit -m </span><span style="color:#b8bb26;">&quot;sphinx generated docs&quot;
+</span><span style="color:#fdf4c1;">$ git push -u origin gh-pages
 
-$ touch .nojekyll  ## to skip Jekyll
-$ git add .nojekyll
-$ git commit -m &quot;.nojekyll&quot;
-$ git push
-</code></pre>
-
+$ touch .nojekyll  </span><span style="font-style:italic;color:#928374;">## to skip Jekyll
+</span><span style="color:#fdf4c1;">$ git add .nojekyll
+$ git commit -m </span><span style="color:#b8bb26;">&quot;.nojekyll&quot;
+</span><span style="color:#fdf4c1;">$ git push
+</span></pre>
 <p>And now there is <a href="https://ysegorov.github.io/jukoro">jukoro's documentation</a> available online (still requires
 some attention).</p>
 <p>For some reason I've started <a href="/2015/markdown-live/">to use markdown</a> for <code>readme</code> and <code>changelog</code>
 files but now it seems it would be better to use <a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>.</p>
 <p>This way it will be possible to include <code>readme</code> and <code>changelog</code> to
 documentation (which is not finished yet).</p>
-            <div class="content-last-modified"><small><em>Last modified: 2015-04-01 10:40:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2015-04-01 10:40:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2015/markdown-live/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Markdown preview</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2015/markdown-live/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Markdown preview</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2015/excellent-article/">
-                        <span class="ib">Excellent article</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2015/jukoro-0.1.2/">
+                        <span class="ib">Jukoro 0.1.2 release</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -92,7 +94,7 @@ documentation (which is not finished yet).</p>
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -102,8 +104,8 @@ documentation (which is not finished yet).</p>
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -112,17 +114,14 @@ documentation (which is not finished yet).</p>
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

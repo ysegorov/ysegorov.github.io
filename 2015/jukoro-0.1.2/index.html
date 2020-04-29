@@ -16,28 +16,27 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="jukoro-012-release">Jukoro 0.1.2 release<a class="headerlink" href="#jukoro-012-release" title="Permanent link">&para;</a></h1>
+            <h1 id="jukoro-0-1-2-release">Jukoro 0.1.2 release</h1>
 <p>It happened - first public release of <a href="https://github.com/ysegorov/jukoro.git">Jukoro</a> (not on PyPi but still).</p>
 <p>Documentation is <a href="https://ysegorov.github.io/jukoro">here</a>.</p>
 <p>It is an experiment and I'll do my best working on it.</p>
-<h2 id="features-highlight-postgresql-focused">Features highlight (PostgreSQL-focused)<a class="headerlink" href="#features-highlight-postgresql-focused" title="Permanent link">&para;</a></h2>
+<h2 id="features-highlight-postgresql-focused">Features highlight (PostgreSQL-focused)</h2>
 <ul>
 <li>unified tables structure in PostgreSQL storing data in a single per
-  table <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">jsonb</a> field</li>
+table <a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">jsonb</a> field</li>
 <li>out-of-the-box way to keep historical data in tables</li>
 <li>out-of-the-box support for <code>psycopg2</code> named cursors</li>
 <li>single per-database sequence generator for objects identifiers</li>
@@ -47,51 +46,54 @@
 <li>PostgreSQL schema support</li>
 <li>way to introspect current database state</li>
 <li>way to prepare sql queries to synchronize database state and entities
-  (models) declarations (queries to create missed tables/indices/constraints
-  and to drop orphaned tables/indices/constraints)</li>
+(models) declarations (queries to create missed tables/indices/constraints
+and to drop orphaned tables/indices/constraints)</li>
 <li>separation of concerns to work with PostgreSQL (explicit ways to work with
-  pool/connection/transaction/results,
-  to describe entities (models in terms of Django's ORM),
-  to introspect database,
-  to create customized sql queries)</li>
+pool/connection/transaction/results,
+to describe entities (models in terms of Django's ORM),
+to introspect database,
+to create customized sql queries)</li>
 </ul>
-<h2 id="packages-and-modules">Packages and modules<a class="headerlink" href="#packages-and-modules" title="Permanent link">&para;</a></h2>
+<h2 id="packages-and-modules">Packages and modules</h2>
 <ul>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.pg.html">jukoro.pg</a> -
-  package to work with PostgreSQL built on top of
-  <a href="http://initd.org/psycopg/docs/">psycopg2</a></li>
+package to work with PostgreSQL built on top of
+<a href="http://initd.org/psycopg/docs/">psycopg2</a></li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.redis.html">jukoro.redis</a> -
-  package to work with Redis having several useful helpers</li>
+package to work with Redis having several useful helpers</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.arrow.html">jukoro.arrow</a> -
-  package built on top of <a href="http://crsmithdev.com/arrow/">arrow</a> library</li>
+package built on top of <a href="http://crsmithdev.com/arrow/">arrow</a> library</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.decorators">jukoro.decorators</a> - 
-  module containing some useful decorators</li>
+module containing some useful decorators</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.json">jukoro.json</a> -
-  abstraction built on top of Python's stdlib <code>json</code></li>
+abstraction built on top of Python's stdlib <code>json</code></li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.pickle">jukoro.pickle</a> -
-  abstraction built on top of Python's stdlib <code>cPickle</code></li>
+abstraction built on top of Python's stdlib <code>cPickle</code></li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.base32">jukoro.base32</a> -
-  abstraction built on top of <a href="https://github.com/jbittel/base32-crockford">base32_crockford</a>
-  library</li>
+abstraction built on top of <a href="https://github.com/jbittel/base32-crockford">base32_crockford</a>
+library</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.email">jukoro.email</a> -
-  email helpers</li>
+email helpers</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.structures">jukoro.structures</a> -
-  some useful structures</li>
+some useful structures</li>
 <li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.utils">jukoro.utils</a> -
-  utilities</li>
+utilities</li>
 </ul>
 <p>I am going to use it in project I'm currently working on.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2015-04-06 17:01:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2015-04-06 17:01:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2015/excellent-article/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Excellent article</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2015/jukoro-docs-using-sphinx/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Jukoro documentation using Sphinx</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2015/juvi/">
-                        <span class="ib">Meet Juvi</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2015/juvi/">
+                        <span class="ib">Meet Juvi</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -101,7 +103,7 @@
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -111,8 +113,8 @@
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -121,16 +123,14 @@
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-
-
+        
 
         
         

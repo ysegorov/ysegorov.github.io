@@ -16,54 +16,53 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="dotenv">Dotenv<a class="headerlink" href="#dotenv" title="Permanent link">&para;</a></h1>
+            <h1 id="dotenv">Dotenv</h1>
 <p>I've got used to <a href="https://github.com/theskumar/python-dotenv">python-dotenv</a> library to customize some
 project's settings on per-deployment basis. But there is one thing which I
 can't say I like.</p>
-<h2 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h2>
+<h2 id="problem">Problem</h2>
 <p>The problem is the way this library makes values from <code>.env</code> available to
 project - by using <code>os.environ.setdefault</code> which actually pollutes project's
 environment.</p>
 <p>By occasion this can lead to some sensitive information like api keys to leak.
 Let's fix it.</p>
-<h2 id="solution">Solution<a class="headerlink" href="#solution" title="Permanent link">&para;</a></h2>
+<h2 id="solution">Solution</h2>
 <p>My first attempt was to check the library's API and find a way to load values
 without polluting <code>os.environ</code>. This is possible and here is the code:</p>
-<pre><code class="python"># -*- coding: utf-8 -*-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># -*- coding: utf-8 -*-
 
-import os
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">os
 
-from dotenv.main import dotenv_values
+</span><span style="color:#fa5c4b;">from </span><span style="color:#fdf4c1aa;">dotenv.main </span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">dotenv_values
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DOTFILE = os.environ.get('DOTFILE', '.env')
+</span><span style="color:#fdf4c1;">BASE_DIR </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.path.dirname(os.path.abspath(</span><span style="color:#fabd2f;">__file__</span><span style="color:#fdf4c1;">))
+DOTFILE </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.environ.get(</span><span style="color:#b8bb26;">&#39;DOTFILE&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#b8bb26;">&#39;.env&#39;</span><span style="color:#fdf4c1;">)
 
-dotenv = {}
-dotenv_path = os.path.join(BASE_DIR, DOTFILE)
-if os.path.isfile(dotenv_path):
-    dotenv = dotenv_values(dotenv_path)
+</span><span style="color:#fdf4c1aa;">dotenv </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{}
+dotenv_path </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.path.join(BASE_DIR, DOTFILE)
+</span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">os.path.isfile(dotenv_path)</span><span style="color:#fdf4c1aa;">:
+    dotenv </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">dotenv_values(dotenv_path)
 
-def env(key, default=None):
-    return os.environ.get(key, dotenv.get(key, default))
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">env</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">key</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">default</span><span style="color:#fe8019;">=</span><span style="color:#d3869b;">None</span><span style="color:#fdf4c1aa;">):
+    </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">os.environ.get(key, dotenv.get(key, default))
 
-API_KEY = env('API_KEY', 'test-key')
+API_KEY </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">env(</span><span style="color:#b8bb26;">&#39;API_KEY&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#b8bb26;">&#39;test-key&#39;</span><span style="color:#fdf4c1;">)
 
-</code></pre>
-
+</span></pre>
 <p>This solution works and looks pretty, well, reasonable. At the same time
 <code>dotenv_values</code> function is not documented and there is a chance API can be
 changed.</p>
@@ -72,78 +71,78 @@ command-line interface or automatic <code>.env</code> file location up the direc
 (I always know where <code>.env</code> file should be).</p>
 <p>So, I've rolled my own solution which has fewer lines of code and is very easy
 to reason about:</p>
-<pre><code class="python"># -*- coding: utf-8 -*-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+</span><span style="color:#fa5c4b;">from </span><span style="color:#fdf4c1aa;">__future__ </span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">absolute_import
 
-import os
-import codecs
-import logging
-
-
-logger = logging.getLogger(__name__)
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">os
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">codecs
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">logging
 
 
-def load_dotenv(filename, encoding='utf-8'):
-
-    decoder = codecs.getdecoder('unicode_escape')
-
-    def decode(v):
-        if v and v[0] == v[-1] and v[0] in ('&quot;', '\''):
-            v = decoder(v[1:-1])[0]
-        return v
-
-    with codecs.open(filename, 'rb', encoding=encoding) as f:
-        lines = (x.strip() for x in f if x.strip())
-        lines = (x for x in lines if not x.startswith('#') and '=' in x)
-        lines = (x.split('=', 1) for x in lines)
-        lines = ((x.strip(), y.strip()) for x, y in lines)
-        lines = ((x.upper(), decode(y)) for x, y in lines)
-        for line in lines:
-            yield line
+logger </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">logging.getLogger(</span><span style="color:#fabd2f;">__name__</span><span style="color:#fdf4c1;">)
 
 
-class dotenv(object):
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">load_dotenv</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">filename</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">encoding</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;utf-8&#39;</span><span style="color:#fdf4c1aa;">):
 
-    def __init__(self, filename='.env', encoding='utf-8'):
-        fn = filename
-        if not os.path.isabs(filename):
-            filename = os.path.abspath(os.path.join(os.curdir, filename))
-        if not os.path.exists(filename):
-            logger.warning('dotenv file &quot;%s&quot; not found', fn)
-            filename = None
-        self.filename = filename
-        self.encoding = encoding
-        self._data = None
+    decoder </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">codecs.getdecoder(</span><span style="color:#b8bb26;">&#39;unicode_escape&#39;</span><span style="color:#fdf4c1;">)
 
-    @property
-    def data(self):
-        if self._data is None and self.filename is not None:
-            self._data = dict(
-                load_dotenv(self.filename, encoding=self.encoding))
-        return self._data
+    </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">decode</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">v</span><span style="color:#fdf4c1aa;">):
+        </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1aa;">v </span><span style="color:#fe8019;">and </span><span style="color:#fdf4c1aa;">v[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1aa;">] </span><span style="color:#fe8019;">== </span><span style="color:#fdf4c1aa;">v[</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1aa;">] </span><span style="color:#fe8019;">and </span><span style="color:#fdf4c1aa;">v[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1aa;">] </span><span style="color:#fe8019;">in </span><span style="color:#fdf4c1aa;">(</span><span style="color:#b8bb26;">&#39;&quot;&#39;</span><span style="color:#fdf4c1aa;">, </span><span style="color:#b8bb26;">&#39;\&#39;&#39;</span><span style="color:#fdf4c1aa;">):
+            v </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">decoder(v[</span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">:</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">])</span><span style="color:#fdf4c1aa;">[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1aa;">]
+        </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1aa;">v
 
-    def get(self, key, default=None):
-        data = self.data or {}
-        return os.environ.get(key, data.get(key, default))
-</code></pre>
+    </span><span style="color:#fa5c4b;">with </span><span style="color:#fdf4c1;">codecs.open(filename, </span><span style="color:#b8bb26;">&#39;rb&#39;</span><span style="color:#fdf4c1;">, encoding</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">encoding) </span><span style="color:#fa5c4b;">as </span><span style="color:#fdf4c1aa;">f:
+        lines </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">x.strip() </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">x </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">f </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">x.strip()</span><span style="color:#fdf4c1aa;">)
+        lines </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">(x </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">x </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">lines </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">not </span><span style="color:#fdf4c1;">x.startswith(</span><span style="color:#b8bb26;">&#39;#&#39;</span><span style="color:#fdf4c1;">) </span><span style="color:#fe8019;">and </span><span style="color:#b8bb26;">&#39;=&#39; </span><span style="color:#fe8019;">in </span><span style="color:#fdf4c1aa;">x)
+        lines </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">x.split(</span><span style="color:#b8bb26;">&#39;=&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">) </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">x </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">lines)
+        lines </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">((</span><span style="color:#fdf4c1;">x.strip()</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">y.strip()</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">x, y </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">lines)
+        lines </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">((</span><span style="color:#fdf4c1;">x.upper()</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">decode(y)</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">x, y </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">lines)
+        </span><span style="color:#fa5c4b;">for </span><span style="color:#fdf4c1aa;">line </span><span style="color:#fa5c4b;">in </span><span style="color:#fdf4c1aa;">lines:
+            </span><span style="color:#fa5c4b;">yield </span><span style="color:#fdf4c1aa;">line
 
+
+</span><span style="color:#fa5c4b;">class </span><span style="color:#8ec07c;">dotenv</span><span style="color:#fdf4c1aa;">(</span><span style="color:#8ec07c;">object</span><span style="color:#fdf4c1aa;">):
+
+    </span><span style="color:#fa5c4b;">def </span><span style="color:#fabd2f;">__init__</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">filename</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;.env&#39;</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">encoding</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;utf-8&#39;</span><span style="color:#fdf4c1aa;">):
+        fn </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">filename
+        </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">not </span><span style="color:#fdf4c1;">os.path.isabs(filename)</span><span style="color:#fdf4c1aa;">:
+            filename </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.path.abspath(os.path.join(os.curdir, filename))
+        </span><span style="color:#fa5c4b;">if </span><span style="color:#fe8019;">not </span><span style="color:#fdf4c1;">os.path.exists(filename)</span><span style="color:#fdf4c1aa;">:
+            </span><span style="color:#fdf4c1;">logger.warning(</span><span style="color:#b8bb26;">&#39;dotenv file &quot;</span><span style="color:#fdf4c1;">%s</span><span style="color:#b8bb26;">&quot; not found&#39;</span><span style="color:#fdf4c1;">, fn)
+            </span><span style="color:#fdf4c1aa;">filename </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">None
+        </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">.filename </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">filename
+        </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">.encoding </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">encoding
+        </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">._data </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">None
+
+    </span><span style="color:#fdf4c1aa;">@</span><span style="color:#fabd2f;">property
+    </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">data</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">):
+        </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">._data </span><span style="color:#fe8019;">is </span><span style="color:#d3869b;">None </span><span style="color:#fe8019;">and </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">.filename </span><span style="color:#fe8019;">is not </span><span style="color:#d3869b;">None</span><span style="color:#fdf4c1aa;">:
+            </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">._data </span><span style="color:#fe8019;">= </span><span style="color:#fabd2f;">dict</span><span style="color:#fdf4c1;">(
+                load_dotenv(self.filename, encoding</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">self.encoding))
+        </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">._data
+
+    </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">get</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">key</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">default</span><span style="color:#fe8019;">=</span><span style="color:#d3869b;">None</span><span style="color:#fdf4c1aa;">):
+        data </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">self</span><span style="color:#fdf4c1aa;">.data </span><span style="color:#fe8019;">or </span><span style="color:#fdf4c1aa;">{}
+        </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">os.environ.get(key, data.get(key, default))
+</span></pre>
 <p>It can be used like this:</p>
-<pre><code class="python"># -*- coding: utf-8 -*-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># -*- coding: utf-8 -*-
 
-import os
+</span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">os
 
-from .dotenv import dotenv
+</span><span style="color:#fa5c4b;">from .</span><span style="color:#fdf4c1aa;">dotenv </span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">dotenv
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DOTFILE = os.environ.get('DOTFILE', '.env')
+</span><span style="color:#fdf4c1;">BASE_DIR </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.path.dirname(os.path.abspath(</span><span style="color:#fabd2f;">__file__</span><span style="color:#fdf4c1;">))
+DOTFILE </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">os.environ.get(</span><span style="color:#b8bb26;">&#39;DOTFILE&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#b8bb26;">&#39;.env&#39;</span><span style="color:#fdf4c1;">)
 
-env = dotenv(filename=os.path.join(BASE_DIR, DOTFILE))
+</span><span style="color:#fdf4c1aa;">env </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">dotenv(filename</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">os.path.join(BASE_DIR, DOTFILE))
 
-API_KEY = env.get('API_KEY', 'test-key')
+API_KEY </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">env.get(</span><span style="color:#b8bb26;">&#39;API_KEY&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#b8bb26;">&#39;test-key&#39;</span><span style="color:#fdf4c1;">)
 
-</code></pre>
-
+</span></pre>
 <p>It is very easy to extend <code>dotenv</code> class with methods like <code>get_bool</code>,
 <code>get_int</code>, <code>get_list</code> or whatever you need and provide some logic to verify
 settings values as needed.</p>
@@ -151,19 +150,22 @@ settings values as needed.</p>
 specified (this is useful while running <em>jenkins</em> jobs).</p>
 <p>By implementing self-made solution we can simplify
 our project's dependency tree and be sure everything works as we need.</p>
-<hr>
+<hr />
 <p>That's it for <strong>dotenv</strong>. Stay tuned.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2017-04-13 16:40:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2017-04-13 16:40:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2017/reloadable/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Reloadable decorator</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2017/reloadable/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Reloadable decorator</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2018/au6601-2/">
-                        <span class="ib">AU6601 PCI-E Flash card reader and Linux kernel 4.16</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2018/au6601-2/">
+                        <span class="ib">AU6601 PCI-E Flash card reader and Linux kernel 4.16</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -173,7 +175,7 @@ our project's dependency tree and be sure everything works as we need.</p>
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -183,8 +185,8 @@ our project's dependency tree and be sure everything works as we need.</p>
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -193,17 +195,14 @@ our project's dependency tree and be sure everything works as we need.</p>
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

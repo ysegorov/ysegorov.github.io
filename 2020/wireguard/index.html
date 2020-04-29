@@ -16,21 +16,20 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="wireguard-and-linux-network-namespaces-perfect-fit">Wireguard and Linux network namespaces - perfect fit<a class="headerlink" href="#wireguard-and-linux-network-namespaces-perfect-fit" title="Permanent link">&para;</a></h1>
+            <h1 id="wireguard-and-linux-network-namespaces-perfect-fit">Wireguard and Linux network namespaces - perfect fit</h1>
 <p>I'm using two browsers usually - Firefox (switched to IceCat recently) and
 Chromium.</p>
 <p>Firefox/IceCat is my workhorse, which is configured to route all
@@ -43,11 +42,11 @@ use <a href="https://www.wireguard.com">wireguard</a> for my usecase - to route 
 through VPN keeping all other traffic as is.</p>
 <p>For domain name resolution I'm using locally installed <a href="https://nlnetlabs.nl/projects/unbound/about/">Unbound</a>
 server which is bound to localhost. My <code>/etc/resolv.conf</code> file looks like this:</p>
-<pre><code>nameserver 127.0.0.1
-</code></pre>
-
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">nameserver 127.0.0.1
+</span></pre>
 <p>It is configured to forward requests to <a href="https://www.quad9.net">Quad9</a> resolver (no Google, no
-Cloudfront, right) but I'm planning to turn forwarding off and just use
+Cloudflare, right) but I'm planning to turn forwarding off and just use
 <a href="https://nlnetlabs.nl/projects/unbound/about/">Unbound</a> on its own.</p>
 <p>There are numerous posts in the Internet covering <a href="https://www.wireguard.com">wireguard</a>
 configuration so I'll just show my server/client configuration with some notes.</p>
@@ -62,23 +61,24 @@ file can't be used with <code>wg</code>. I've lost some time while battling this
 <li><code>55000</code> - VPN server port wireguard will be listening on</li>
 <li>VPN server will route all traffic coming from client to the outside world</li>
 </ul>
-<h2 id="server">Server<a class="headerlink" href="#server" title="Permanent link">&para;</a></h2>
+<h2 id="server">Server</h2>
 <p>My server configuration file looks like this:</p>
-<pre><code class="ini"># /etc/wireguard/wg0.conf on server
-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># /etc/wireguard/wg0.conf on the server
+</span><span style="color:#fa5c4b;">
 [Interface]
-PrivateKey = &lt;private key of the server&gt;
-ListenPort = 55000
-
+</span><span style="color:#fdf4c1;">PrivateKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">private key of the server</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fdf4c1;">ListenPort </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">55000
+</span><span style="color:#fa5c4b;">
 [Peer]
-PublicKey = &lt;public key of the client&gt;
-PresharedKey = &lt;preshared key&gt;
-AllowedIPs = 10.10.10.10/32
-</code></pre>
-
+</span><span style="color:#fdf4c1;">PublicKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">public key of the client</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fdf4c1;">PresharedKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">preshared key</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fdf4c1;">AllowedIPs </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">10.10.10.10/32
+</span></pre>
 <p>I use <a href="https://www.alpinelinux.org">Alpine Linux</a> on the server for my experiments with wireguard
 and my <code>wg0</code> interface is defined like this:</p>
-<pre><code># excerpt from /etc/network/interfaces
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;"># excerpt from /etc/network/interfaces
 
 auto wg0
 iface wg0 inet static
@@ -87,41 +87,41 @@ iface wg0 inet static
   pre-up ip link add dev wg0 type wireguard
   pre-up wg setconf wg0 /etc/wireguard/wg0.conf
   pre-down ip link delete dev wg0
-</code></pre>
-
+</span></pre>
 <p>One more player here is firewall (<code>iptables</code> in my case). It must be configured
 to allow traffic coming from <code>wg0</code> interface to be forwarded to outside world.</p>
 <p>Something like this should help you to get started:</p>
-<pre><code class="shell">$ sudo iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ sudo iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT
 $ sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 $ sudo iptables -t nat -A POSTROUTING -o eth0 -s 10.10.10.0/24 -j MASQUERADE
-</code></pre>
-
+</span></pre>
 <p>Don't forget to make these rules permanent and allow forwarding on the server
 using <code>sysctl</code>:</p>
-<pre><code>net.ipv4.ip_forward=1
-</code></pre>
-
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">net.ipv4.ip_forward=1
+</span></pre>
 <p>That's it for the server.</p>
-<h2 id="client">Client<a class="headerlink" href="#client" title="Permanent link">&para;</a></h2>
+<h2 id="client">Client</h2>
 <p>Client configuration file looks like this:</p>
-<pre><code class="ini"># /etc/wireguard/wg0.conf on the client
-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># /etc/wireguard/wg0.conf on the client
+</span><span style="color:#fa5c4b;">
 [Interface]
-PrivateKey = &lt;private key of the client&gt;
-
+</span><span style="color:#fdf4c1;">PrivateKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">private key of the client</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fa5c4b;">
 [Peer]
-PublicKey = &lt;public key of the server&gt;
-PresharedKey = &lt;preshared key&gt;
-Endpoint = &lt;server public ip&gt;:55000
-AllowedIPs = 0.0.0.0/0
-PersistentKeepalive = 25
-</code></pre>
-
+</span><span style="color:#fdf4c1;">PublicKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">public key of the server</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fdf4c1;">PresharedKey </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">preshared key</span><span style="color:#fe8019;">&gt;
+</span><span style="color:#fdf4c1;">Endpoint </span><span style="color:#fe8019;">= &lt;</span><span style="color:#fdf4c1aa;">server public ip</span><span style="color:#fe8019;">&gt;:</span><span style="color:#d3869b;">55000
+</span><span style="color:#fdf4c1;">AllowedIPs </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">0.0.0.0/0
+PersistentKeepalive </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">25
+</span></pre>
 <p>I've faced another issue while configuring the client - something absolutely
 unexpected when pinging any host, even VPN server endpoint:</p>
-<pre><code class="shell">$ ping 10.10.10.1
-PING 10.10.10.1 (10.10.10.1) 56(84) bytes of data.
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ ping 10.10.10.1
+PING 10.10.10.1 (10.10.10.1</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fdf4c1;">56(84</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fdf4c1;">bytes of data.
 From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
 ping: sendmsg: Required key not available
 From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
@@ -131,11 +131,11 @@ ping: sendmsg: Required key not available
 ^C
 --- 10.10.10.1 ping statistics ---
 3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2028ms
-</code></pre>
-
+</span></pre>
 <p>The same for pinging Google DNS:</p>
-<pre><code class="shell">$ ping 8.8.8.8
-PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fdf4c1;">56(84</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fdf4c1;">bytes of data.
 From 10.10.10.10 icmp_seq=1 Destination Host Unreachable
 ping: sendmsg: Required key not available
 From 10.10.10.10 icmp_seq=2 Destination Host Unreachable
@@ -145,36 +145,35 @@ ping: sendmsg: Required key not available
 ^C
 --- 8.8.8.8 ping statistics ---
 3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2037ms
-</code></pre>
-
+</span></pre>
 <p>The reason for this was <code>AllowedIPs</code> misconfiguration:</p>
-<pre><code class="ini"># This is wrong setting
-AllowedIPs = 0.0.0.0
-</code></pre>
-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># This is wrong setting
+</span><span style="color:#fdf4c1;">AllowedIPs </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">0.0.0.0
+</span></pre>
 <p>I've somehow lost CIDR part from the address which means address will look like
 <code>0.0.0.0/32</code> which is absolutely wrong.</p>
 <p>Pay attention to <code>wg</code> output, to <code>allowed ips</code> value especially:</p>
-<pre><code class="shell">$ sudo wg
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ sudo wg
 interface: wg0
-  public key: &lt;client public key&gt;
-  private key: (hidden)
-  listening port: 52312
+  public key: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1;">client public key</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">
+  private key: (hidden</span><span style="color:#fdf4c1aa;">)
+  </span><span style="color:#fdf4c1;">listening port: 52312
 
-peer: &lt;server public key&gt;
-  preshared key: (hidden)
-  endpoint: &lt;server ip address&gt;:55000
+peer: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1;">server public key</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">
+  preshared key: (hidden</span><span style="color:#fdf4c1aa;">)
+  </span><span style="color:#fdf4c1;">endpoint: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1;">server ip address</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">:55000
   allowed ips: 0.0.0.0/32
   latest handshake: 1 minute, 12 seconds ago
   transfer: 644 B received, 2.23 KiB sent
   persistent keepalive: every 25 seconds
-</code></pre>
-
+</span></pre>
 <p>So, correct value for <code>AllowedIPs</code> should look like this:</p>
-<pre><code class="ini"># This is correct setting
-AllowedIPs = 0.0.0.0/0
-</code></pre>
-
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;"># This is correct setting
+</span><span style="color:#fdf4c1;">AllowedIPs </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">0.0.0.0/0
+</span></pre>
 <p>And now we've come to the most interesting part of the show - to client-side
 network configuration.</p>
 <p>The solution for my usecase was <a href="https://www.wireguard.com/netns/#sample-script">here</a> - simple
@@ -184,19 +183,19 @@ prepared <code>wg0</code> interface is moved to <code>vpn</code> namespace and i
 the default route within this namespace.</p>
 <p>We can check what interfaces our new <code>vpn</code> namespace has and how routing table
 looks like:</p>
-<pre><code class="shell">$ vpn up
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ vpn up
 ...
 $ vpn exec ip link
-1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+1: lo: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1;">LOOPBACK,UP,LOWER_UP</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;"> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-10: wg0: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+10: wg0: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1;">POINTOPOINT,NOARP,UP,LOWER_UP</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;"> mtu 1420 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
     link/none
 ...
 $ vpn exec ip route
 default dev wg0 scope link
 10.10.10.0/24 dev wg0 proto kernel scope link src 10.10.10.10
-</code></pre>
-
+</span></pre>
 <p>Pretty good, right?</p>
 <p>One more minor issue was the lack of domain name resolution for programs
 running within <code>vpn</code> namespace. I was not expecting this so it took some time
@@ -211,21 +210,22 @@ easily solve this issue by starting another copy of <a href="https://nlnetlabs.n
 <code>vpn</code> namespace (I've decided to use separate copy of <code>unbound.conf</code> for this
 named <code>unbound.vpn.conf</code>, YMMV).</p>
 <p>Here is the script I'm using to manage VPN:</p>
-<pre><code class="bash">#!/usr/bin/env bash
+<pre style="background-color:#282828;">
+<span style="font-style:italic;color:#928374;">#!/usr/bin/env bash
 
-set -ex
+</span><span style="color:#fabd2f;">set </span><span style="color:#fdf4c1;">-ex
 
-[[ $UID != 0 ]] &amp;&amp; exec sudo -E &quot;$(readlink -f &quot;$0&quot;)&quot; &quot;$@&quot;
+</span><span style="color:#fabd2f;">[[ </span><span style="color:#fdf4c1;">$UID </span><span style="color:#fe8019;">!=</span><span style="color:#fdf4c1;"> 0 </span><span style="color:#fabd2f;">]] </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fabd2f;">exec</span><span style="color:#fdf4c1;"> sudo -E </span><span style="color:#b8bb26;">&quot;$(</span><span style="color:#fdf4c1;">readlink -f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">0</span><span style="color:#b8bb26;">&quot;)&quot; &quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot;
 
-NS=&quot;vpn&quot;
-WGIF=&quot;wg0&quot;
-WGCONF=&quot;/etc/wireguard/$WGIF.conf&quot;
-WGADDRIPV4=&quot;10.10.10.10/24&quot;
-UNBOUNDCONF=&quot;/etc/unbound/unbound.$NS.conf&quot;
-UNBOUNDPID=&quot;/run/unbound.$NS.pid&quot;
+</span><span style="color:#fdf4c1;">NS</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;vpn&quot;
+</span><span style="color:#fdf4c1;">WGIF</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;wg0&quot;
+</span><span style="color:#fdf4c1;">WGCONF</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;/etc/wireguard/$</span><span style="color:#fdf4c1;">WGIF</span><span style="color:#b8bb26;">.conf&quot;
+</span><span style="color:#fdf4c1;">WGADDRIPV4</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;10.10.10.10/24&quot;
+</span><span style="color:#fdf4c1;">UNBOUNDCONF</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;/etc/unbound/unbound.$</span><span style="color:#fdf4c1;">NS</span><span style="color:#b8bb26;">.conf&quot;
+</span><span style="color:#fdf4c1;">UNBOUNDPID</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;/run/unbound.$</span><span style="color:#fdf4c1;">NS</span><span style="color:#b8bb26;">.pid&quot;
 
-up() {
-    ip netns add $NS
+</span><span style="color:#8ec07c;">up</span><span style="color:#fdf4c1aa;">() {
+    </span><span style="color:#fdf4c1;">ip netns add $NS
     ip link add $WGIF type wireguard
     wg setconf $WGIF $WGCONF
     ip link set $WGIF netns $NS
@@ -234,52 +234,53 @@ up() {
     ip -n $NS link set $WGIF up
     ip -n $NS route add default dev $WGIF
     ip netns exec $NS unbound -c $UNBOUNDCONF
-}
+</span><span style="color:#fdf4c1aa;">}
 
-down() {
-    UPID=`cat $UNBOUNDPID`
-    kill $UPID || true
+</span><span style="color:#8ec07c;">down</span><span style="color:#fdf4c1aa;">() {
+    </span><span style="color:#fdf4c1;">UPID</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">`cat $UNBOUNDPID`
+    </span><span style="color:#fabd2f;">kill </span><span style="color:#fdf4c1;">$UPID </span><span style="color:#fe8019;">|| </span><span style="color:#fdf4c1;">true
     ip -n $NS link set $WGIF down
     ip -n $NS link del $WGIF
     ip netns del $NS
-}
+</span><span style="color:#fdf4c1aa;">}
 
-status() {
-    exec ip netns exec $NS wg
-}
+</span><span style="color:#8ec07c;">status</span><span style="color:#fdf4c1aa;">() {
+    </span><span style="color:#fabd2f;">exec</span><span style="color:#fdf4c1;"> ip netns exec $NS wg
+</span><span style="color:#fdf4c1aa;">}
 
-execi() {
-    exec ip netns exec $NS sudo -E -u \#${SUDO_UID:-$(id -u)} -g \#${SUDO_GID:-$(id -g)} -- &quot;$@&quot;
-}
+</span><span style="color:#8ec07c;">execi</span><span style="color:#fdf4c1aa;">() {
+    </span><span style="color:#fabd2f;">exec</span><span style="color:#fdf4c1;"> ip netns exec $NS sudo -E -u </span><span style="color:#b8bb26;">\#</span><span style="color:#fdf4c1;">${SUDO_UID</span><span style="color:#fe8019;">:-</span><span style="color:#fdf4c1;">$(id -u)} -g </span><span style="color:#b8bb26;">\#</span><span style="color:#fdf4c1;">${SUDO_GID</span><span style="color:#fe8019;">:-</span><span style="color:#fdf4c1;">$(id -g)}</span><span style="color:#fe8019;"> -- </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot;
+</span><span style="color:#fdf4c1aa;">}
 
-command=&quot;$1&quot;
-shift
+</span><span style="color:#fdf4c1;">command</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">1</span><span style="color:#b8bb26;">&quot;
+</span><span style="color:#fabd2f;">shift
 
-case &quot;$command&quot; in
-    up) up &quot;$@&quot; ;;
-    down) down &quot;$@&quot; ;;
-    exec) execi &quot;$@&quot; ;;
-    status) status &quot;$@&quot; ;;
-    *) echo &quot;Usage: $0 up|down|exec&quot; &gt;&amp;2; exit 1 ;;
-esac
-</code></pre>
-
+</span><span style="color:#fa5c4b;">case </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">command</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fa5c4b;">in</span><span style="color:#fdf4c1aa;">
+    up</span><span style="color:#fa5c4b;">) </span><span style="color:#fdf4c1;">up </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1aa;">;;
+    down</span><span style="color:#fa5c4b;">) </span><span style="color:#fdf4c1;">down </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1aa;">;;
+    exec</span><span style="color:#fa5c4b;">) </span><span style="color:#fdf4c1;">execi </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1aa;">;;
+    status</span><span style="color:#fa5c4b;">) </span><span style="color:#fdf4c1;">status </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">@</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fdf4c1aa;">;;
+    </span><span style="color:#fe8019;">*</span><span style="color:#fa5c4b;">) </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;Usage: $</span><span style="color:#fdf4c1;">0</span><span style="color:#b8bb26;"> up|down|exec&quot; </span><span style="color:#fe8019;">&gt;&amp;</span><span style="color:#d3869b;">2</span><span style="color:#fe8019;">; </span><span style="color:#fabd2f;">exit</span><span style="color:#fdf4c1;"> 1 </span><span style="color:#fdf4c1aa;">;;
+</span><span style="color:#fa5c4b;">esac
+</span></pre>
 <p>Now I can start Firefox/IceCat within <code>vpn</code> namespace and be sure all traffic
 is routed through VPN:</p>
-<pre><code class="shell">$ vpn exec icecat
-</code></pre>
-
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">$ vpn exec icecat
+</span></pre>
 <p>I'm using <code>netctl</code> to manage my network interfaces and the plan is to use
 <a href="https://wiki.archlinux.org/index.php/Netctl#Using_hooks">netctl hooks</a> to bring VPN interface up or down as needed.</p>
 <p><a href="https://www.wireguard.com">wireguard</a> looks quite good (one more time - thank you, Jason A.
 Donenfeld!) and I'm planning to use it for some time to decide if I can switch
 from SOCKS5 proxy to VPN.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2020-04-22 17:35:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2020-04-22 17:35:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2018/au6601-2/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">AU6601 PCI-E Flash card reader and Linux kernel 4.16</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2018/au6601-2/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">AU6601 PCI-E Flash card reader and Linux kernel 4.16</span>
                     </a>
                 </div>
                 <div class="content-next">
@@ -292,7 +293,7 @@ from SOCKS5 proxy to VPN.</p>
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -302,8 +303,8 @@ from SOCKS5 proxy to VPN.</p>
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -312,17 +313,14 @@ from SOCKS5 proxy to VPN.</p>
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

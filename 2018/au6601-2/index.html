@@ -16,51 +16,51 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416">Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16<a class="headerlink" href="#alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-416" title="Permanent link">&para;</a></h1>
+            <h1 id="alcor-micro-au6601-pci-e-flash-card-reader-controller-and-linux-kernel-4-16">Alcor Micro AU6601 PCI-E Flash card reader controller and Linux kernel 4.16</h1>
 <p>I've got email from <em>Justin Faber</em> today saying the procedure, described
 <a href="/2016/au6601/">here</a>, doesn't work for Linux kernel 4.16.6-1 in ArchLinux - build
 fails with the following log:</p>
-<pre><code class="shell">make -C /lib/modules/4.16.6-1-ARCH/build/ SUBDIRS=/var/lib/dkms/au6601/0.3/build modules
-make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
-make[1]: Entering directory '/usr/lib/modules/4.16.6-1-ARCH/build'
-  CC [M]  /var/lib/dkms/au6601/0.3/build/au6601.o
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">make -C /lib/modules/4.16.6-1-ARCH/build/ SUBDIRS=/var/lib/dkms/au6601/0.3/build modules
+make[1]: warning: jobserver unavailable: using -j1.  Add </span><span style="color:#b8bb26;">&#39;+&#39;</span><span style="color:#fdf4c1;"> to parent make rule.
+make[1]: Entering directory </span><span style="color:#b8bb26;">&#39;/usr/lib/modules/4.16.6-1-ARCH/build&#39;
+  </span><span style="color:#fdf4c1;">CC </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">M</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">  /var/lib/dkms/au6601/0.3/build/au6601.o
 /var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_pci_probe’:
-/var/lib/dkms/au6601/0.3/build/au6601.c:1187:2: error: implicit declaration of function ‘setup_timer’; did you mean ‘setup_irq’? [-Werror=implicit-function-declaration]
-  setup_timer(&amp;host-&gt;timer, au6601_timeout_timer, (unsigned long)host);
-  ^~~~~~~~~~~
+/var/lib/dkms/au6601/0.3/build/au6601.c:1187:2: error: implicit declaration of function ‘setup_timer’</span><span style="color:#fe8019;">; </span><span style="color:#fdf4c1;">did you mean ‘setup_irq’</span><span style="color:#fe8019;">? </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">-Werror=implicit</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1;">function</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1;">declaration</span><span style="color:#fa5c4b;">]
+  </span><span style="color:#fdf4c1;">setup_timer(</span><span style="color:#fe8019;">&amp;</span><span style="color:#fdf4c1;">host-</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;">timer, au6601_timeout_timer, (unsigned long</span><span style="color:#fdf4c1aa;">)</span><span style="color:#fdf4c1;">host</span><span style="color:#fdf4c1aa;">)</span><span style="color:#fe8019;">;
+  </span><span style="color:#fdf4c1;">^~~~~~~~~~~
   setup_irq
 /var/lib/dkms/au6601/0.3/build/au6601.c: In function ‘au6601_send_cmd’:
-/var/lib/dkms/au6601/0.3/build/au6601.c:619:5: warning: ‘ctrl’ may be used uninitialized in this function [-Wmaybe-uninitialized]
-  u8 ctrl; /* some mysterious flags and control */
+/var/lib/dkms/au6601/0.3/build/au6601.c:619:5: warning: ‘ctrl’ may be used uninitialized in this function </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">-Wmaybe</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1;">uninitialized</span><span style="color:#fa5c4b;">]
+  </span><span style="color:#fdf4c1;">u8 ctrl</span><span style="color:#fe8019;">; </span><span style="color:#fdf4c1;">/* some mysterious flags and control </span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">/
      ^~~~
 cc1: some warnings being treated as errors
-make[2]: *** [scripts/Makefile.build:325: /var/lib/dkms/au6601/0.3/build/au6601.o] Error 1
-make[1]: *** [Makefile:1562: _module_/var/lib/dkms/au6601/0.3/build] Error 2
-make[1]: Leaving directory '/usr/lib/modules/4.16.6-1-ARCH/build'
-make: *** [Makefile:33: default] Error 2 
+make[2]: </span><span style="color:#fe8019;">*** </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">scripts/Makefile.build:325: /var/lib/dkms/au6601/0.3/build/au6601.o</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;"> Error 1
+make[1]: </span><span style="color:#fe8019;">*** </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">Makefile:1562: _module_/var/lib/dkms/au6601/0.3/build</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;"> Error 2
+make[1]: Leaving directory </span><span style="color:#b8bb26;">&#39;/usr/lib/modules/4.16.6-1-ARCH/build&#39;
+</span><span style="color:#fdf4c1;">make: </span><span style="color:#fe8019;">*** </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">Makefile:33: default</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;"> Error 2 
 
-</code></pre>
-
+</span></pre>
 <p><a href="https://duckduckgo.com/">DuckDuckGo</a> (my default search engine, by the way) <a href="https://duckduckgo.com/?q=linux+setup_timer+timer_setup+site%3Agithub.com">helped</a>
 to localize <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">the issue</a> - changes in Linux kernel timers API.</p>
 <p>I've followed instructions from the <a href="https://github.com/torvalds/linux/commit/e99e88a9d2b067465adaa9c111ada99a041bef9a">commit comments</a>
 and prepared the <em>patch</em> and <em>PKGBUILD</em> to simplify installation:</p>
-<script src="https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2.js"></script>
-
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;ysegorov&#x2F;951ae99426f5bd9092c3b4138e207af2.js"></script>
+</div>
 <p><strong>Please use this procedure and generated package at your own risk as I'm not
 a Linux kernel driver developer</strong>.</p>
 <p>Here is an updated version of steps to install the driver for <strong>amd64</strong>
@@ -68,34 +68,37 @@ architecture and Linux kernel 4.16+:</p>
 <ul>
 <li>create temporary directory somewhere and <code>cd</code> into it</li>
 <li>download <a href="https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2">patch and PKGBUILD</a> (ensure <code>PKGBUILD</code> and
-    <code>au6601-timers.diff</code> are located in the root of previously created
-    temporary directory)</li>
+<code>au6601-timers.diff</code> are located in the root of previously created
+temporary directory)</li>
 <li>build and install package using <code>makepkg</code></li>
 <li>install kernel driver</li>
 <li>use card reader :)</li>
 </ul>
-<pre><code class="shell">
-$ mkdir au6601-dkms &amp;&amp; cd au6601-dkms
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="color:#fdf4c1;">$ mkdir au6601-dkms </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fabd2f;">cd</span><span style="color:#fdf4c1;"> au6601-dkms
 $ wget -O au6601-pkgbuild.zip https://gist.github.com/ysegorov/951ae99426f5bd9092c3b4138e207af2/archive/master.zip
 $ unzip -j au6601-pkgbuild.zip
 $ makepkg -si
 $ sudo modprobe au6601-pci
 $ udevil mount /dev/mmcblk0p1
 
-# profit!
+</span><span style="font-style:italic;color:#928374;"># profit!
 
-</code></pre>
-            <div class="content-last-modified"><small><em>Last modified: 2018-05-05 07:12:00 UTC</em></small></div>
+</span></pre>
+            <div class="content-last-modified"><small><em>Last modified: 2018-05-05 07:12:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2017/dotenv/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Dotenv</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2017/dotenv/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Dotenv</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2020/wireguard/">
-                        <span class="ib">Wireguard and Linux network namespaces - perfect fit</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2020/wireguard/">
+                        <span class="ib">Wireguard and Linux network namespaces - perfect fit</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -105,7 +108,7 @@ $ udevil mount /dev/mmcblk0p1
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -115,8 +118,8 @@ $ udevil mount /dev/mmcblk0p1
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -125,17 +128,14 @@ $ udevil mount /dev/mmcblk0p1
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

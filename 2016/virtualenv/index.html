@@ -16,21 +16,20 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="self-made-virtualenv-wrapper">Self-made Virtualenv Wrapper<a class="headerlink" href="#self-made-virtualenv-wrapper" title="Permanent link">&para;</a></h1>
+            <h1 id="self-made-virtualenv-wrapper">Self-made Virtualenv Wrapper</h1>
 <p>Not long ago I've switched from <a href="https://pypi.python.org/pypi/virtualenvwrapper">virtualenvwrapper</a> to self-made solution
 based on <a href="https://gist.github.com/datagrok/2199506">this idea</a> by <a href="http://datagrok.org/">datagrok</a>.
 It works pretty well for me and I'd like to share it here.</p>
@@ -38,109 +37,109 @@ It works pretty well for me and I'd like to share it here.</p>
 for all projects and to have shell helper to easily jump into any project
 and to automatically activate it's <a href="https://github.com/pypa/virtualenv">virtualenv</a> if it exists.</p>
 <p>Here is how it looks in <code>bash</code>:</p>
-<pre><code class="bash">
-[local] [egorov@asus 11:33:19]:~  $ dev blog
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="color:#fdf4c1;">[local] </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">egorov@asus 11:33:19</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">:~  $ dev blog
 Virtual environment found in /home/egorov/_dev/blog/env, activated.
-(blog) [local] [egorov@asus 11:34:31]:~/_dev/blog git:master= $
+</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">blog</span><span style="color:#fdf4c1aa;">) </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">local</span><span style="color:#fa5c4b;">] [</span><span style="color:#fdf4c1;">egorov@asus 11:34:31</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">:~/_dev/blog git:master= $
 
-</code></pre>
-
+</span></pre>
 <p>Besides just jumping into directory I wanted to have <code>tab</code> autocompletion and
 easy way to create new projects <code>home</code> directory:</p>
-<pre><code class="bash">
-# autocompletion
-[local] [egorov@asus 11:43:01]:~  $ dev service-  # tab hitted twice
-service-account   service-feedback  service-products  service-workers
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="font-style:italic;color:#928374;"># autocompletion
+</span><span style="color:#fdf4c1;">[local] </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">egorov@asus 11:43:01</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">:~  $ dev service-  </span><span style="font-style:italic;color:#928374;"># tab hitted twice
+</span><span style="color:#fdf4c1;">service-account   service-feedback  service-products  service-workers
 
-# new project home
-[local] [egorov@asus 11:52:08]:~  $ dev rogue
-mkdir: created directory '/home/egorov/_dev/rogue'
-No virtual environment found, skipping activate.
-[local] [egorov@asus 11:52:25]:~/_dev/rogue  $
+</span><span style="font-style:italic;color:#928374;"># new project home
+</span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">local</span><span style="color:#fa5c4b;">] [</span><span style="color:#fdf4c1;">egorov@asus 11:52:08</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">:~  $ dev rogue
+mkdir: created directory </span><span style="color:#b8bb26;">&#39;/home/egorov/_dev/rogue&#39;
+</span><span style="color:#fdf4c1;">No virtual environment found, skipping activate.
+[local] </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">egorov@asus 11:52:25</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">:~/_dev/rogue  $
 
-</code></pre>
-
+</span></pre>
 <p>So, here are <code>bash</code> helpers which should be placed somewhere inside <code>~/.bashrc</code>
 or <code>~/.bash_profile</code> (mine lives <a href="https://github.com/ysegorov/dotfiles/blob/master/.bash.d/dev">there</a>).
 <code>_dev</code> function depends on <code>inve</code> shell script which must be available
 in <code>PATH</code> (I have <code>$HOME/bin</code> in <code>PATH</code> for this and <code>inve</code> lives <a href="https://github.com/ysegorov/dotfiles/blob/master/bin/inve">there</a>).</p>
-<pre><code class="bash">
-# dev
-DEV=${HOME}/_dev  # home for all projects
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="font-style:italic;color:#928374;"># dev
+</span><span style="color:#fdf4c1;">DEV</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">${</span><span style="color:#fdf4c1;">HOME</span><span style="color:#b8bb26;">}/_dev  </span><span style="font-style:italic;color:#928374;"># home for all projects
 
-_dev() {
-    local p=${DEV}/$1
-    [ ! -d $p ] &amp;&amp; mkdir $p
-    cd $p
-    inve  # binary file to be accessible in PATH
-    return 0
-}
-_dev_complete()
+</span><span style="color:#8ec07c;">_dev</span><span style="color:#fdf4c1aa;">() {
+    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">p</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">${</span><span style="color:#fdf4c1;">DEV</span><span style="color:#b8bb26;">}/$</span><span style="color:#fdf4c1;">1
+    </span><span style="color:#fabd2f;">[ </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">-d $p </span><span style="color:#fabd2f;">] </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">mkdir $p
+    </span><span style="color:#fabd2f;">cd </span><span style="color:#fdf4c1;">$p
+    inve  </span><span style="font-style:italic;color:#928374;"># binary file to be accessible in PATH
+</span><span style="color:#fdf4c1;">    return 0
+</span><span style="color:#fdf4c1aa;">}
+</span><span style="color:#8ec07c;">_dev_complete</span><span style="color:#fdf4c1aa;">()
 {
-    local cur prev opts
-    local p=${DEV}
-    [ ! -d $p ] &amp;&amp; `which mkdir` $p
-    COMPREPLY=()
-    cur=&quot;${COMP_WORDS[COMP_CWORD]}&quot;
-    prev=&quot;${COMP_WORDS[COMP_CWORD-1]}&quot;
-    opts=`cd $p &amp;&amp; find -L . -maxdepth 1 -type d | sed 's|[\./]||g'`
+    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">cur prev opts
+    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">p</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">${</span><span style="color:#fdf4c1;">DEV</span><span style="color:#b8bb26;">}
+    </span><span style="color:#fabd2f;">[ </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">-d $p </span><span style="color:#fabd2f;">] </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">`which mkdir` $p
+    COMPREPLY</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1aa;">()
+    </span><span style="color:#fdf4c1;">cur</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">COMP_WORDS[COMP_CWORD]</span><span style="color:#b8bb26;">}&quot;
+    </span><span style="color:#fdf4c1;">prev</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">COMP_WORDS[COMP_CWORD</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">]</span><span style="color:#b8bb26;">}&quot;
+    </span><span style="color:#fdf4c1;">opts</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">`</span><span style="color:#fabd2f;">cd </span><span style="color:#fdf4c1;">$p </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">find -L . -maxdepth 1 -type d </span><span style="color:#fe8019;">| </span><span style="color:#fdf4c1;">sed </span><span style="color:#b8bb26;">&#39;s|[\./]||g&#39;</span><span style="color:#fdf4c1;">`
 
-    COMPREPLY=( $(compgen -W &quot;${opts}&quot; -- ${cur}) )
+    COMPREPLY</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1aa;">( $(</span><span style="color:#fdf4c1;">compgen -W </span><span style="color:#b8bb26;">&quot;${</span><span style="color:#fdf4c1;">opts</span><span style="color:#b8bb26;">}&quot;</span><span style="color:#fe8019;"> -- </span><span style="color:#fdf4c1;">${cur}</span><span style="color:#fdf4c1aa;">) )
 }
-alias dev=_dev
-complete -F _dev_complete dev
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">dev</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">_dev
+</span><span style="color:#fdf4c1;">complete -F _dev_complete dev
 
-</code></pre>
-
+</span></pre>
 <p><code>inve</code> executable content:</p>
-<pre><code class="bash">
-#!/usr/bin/env bash
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">
+</span><span style="font-style:italic;color:#928374;">#!/usr/bin/env bash
 
 # tuned idea from: https://gist.github.com/datagrok/2199506
 #
 # inve
 #
-# For use with Ian Bicking's virtualenv tool. Attempts to find the root of
+# For use with Ian Bicking&#39;s virtualenv tool. Attempts to find the root of
 # a virtual environment and activate it in subshell.
 
 # First, locate the root of the current virtualenv
-cwd=$PWD
-export DEV_ROOT=$cwd
+</span><span style="color:#fdf4c1;">cwd</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">$</span><span style="color:#fdf4c1;">PWD
+</span><span style="color:#fa5c4b;">export </span><span style="color:#fdf4c1;">DEV_ROOT</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">$</span><span style="color:#fdf4c1;">cwd
 
-while [ &quot;$PWD&quot; != &quot;/&quot; ]; do
-    # Stop here if this the root of a virtualenv
+</span><span style="color:#fa5c4b;">while </span><span style="color:#fabd2f;">[ </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">PWD</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">!= </span><span style="color:#b8bb26;">&quot;/&quot; </span><span style="color:#fabd2f;">]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">do
+    </span><span style="font-style:italic;color:#928374;"># Stop here if this the root of a virtualenv
     # will look for virtualenv in `current dir` or in `env` subdirectory
-    if [ \
+    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[ </span><span style="color:#fdf4c1;">\
         -x bin/python \
-        -a -e lib/python*/site.py \
-        -a -e include/python*/Python.h ]
-    then
-        export VIRTUAL_ENV=&quot;$PWD&quot;
-        break
-    elif [ \
+        -a -e lib/python</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">/site.py \
+        -a -e include/python</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">/Python.h </span><span style="color:#fabd2f;">]
+    </span><span style="color:#fa5c4b;">then
+        export </span><span style="color:#fdf4c1;">VIRTUAL_ENV</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">PWD</span><span style="color:#b8bb26;">&quot;
+        </span><span style="color:#fa5c4b;">break
+    elif </span><span style="color:#fabd2f;">[ </span><span style="color:#fdf4c1;">\
         -x env/bin/python \
-        -a -e env/lib/python*/site.py \
-        -a -e env/include/python*/Python.h ]
-    then
-        export VIRTUAL_ENV=&quot;$PWD/env&quot;
-        break
+        -a -e env/lib/python</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">/site.py \
+        -a -e env/include/python</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">/Python.h </span><span style="color:#fabd2f;">]
+    </span><span style="color:#fa5c4b;">then
+        export </span><span style="color:#fdf4c1;">VIRTUAL_ENV</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">PWD</span><span style="color:#b8bb26;">/env&quot;
+        </span><span style="color:#fa5c4b;">break
     fi
-    cd ..
-done
-if [ &quot;$PWD&quot; = &quot;/&quot; ]; then
-    export PATH=&quot;$cwd/node_modules/.bin:$PATH&quot;
-    echo &quot;No virtual environment found, skipping activate.&quot; &gt;&amp;2
-    cd $cwd
-else
-    # Activate
-    export PATH=&quot;$VIRTUAL_ENV/bin:$cwd/node_modules/.bin:$PATH&quot;
-    unset PYTHONHOME
-    echo &quot;Virtual environment found in ${VIRTUAL_ENV}, activated.&quot; &gt;&amp;2
-fi
-exec &quot;$SHELL&quot;
+    </span><span style="color:#fabd2f;">cd</span><span style="color:#fdf4c1;"> ..
+</span><span style="color:#fa5c4b;">done
+if </span><span style="color:#fabd2f;">[ </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">PWD</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fe8019;">= </span><span style="color:#b8bb26;">&quot;/&quot; </span><span style="color:#fabd2f;">]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+    export </span><span style="color:#fdf4c1;">PATH</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">cwd</span><span style="color:#b8bb26;">/node_modules/.bin:$</span><span style="color:#fdf4c1;">PATH</span><span style="color:#b8bb26;">&quot;
+    </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;No virtual environment found, skipping activate.&quot; </span><span style="color:#fe8019;">&gt;&amp;</span><span style="color:#d3869b;">2
+    </span><span style="color:#fabd2f;">cd </span><span style="color:#fdf4c1;">$cwd
+</span><span style="color:#fa5c4b;">else
+    </span><span style="font-style:italic;color:#928374;"># Activate
+    </span><span style="color:#fa5c4b;">export </span><span style="color:#fdf4c1;">PATH</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">VIRTUAL_ENV</span><span style="color:#b8bb26;">/bin:$</span><span style="color:#fdf4c1;">cwd</span><span style="color:#b8bb26;">/node_modules/.bin:$</span><span style="color:#fdf4c1;">PATH</span><span style="color:#b8bb26;">&quot;
+    </span><span style="color:#fabd2f;">unset</span><span style="color:#fdf4c1;"> PYTHONHOME
+    </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;Virtual environment found in ${</span><span style="color:#fdf4c1;">VIRTUAL_ENV</span><span style="color:#b8bb26;">}, activated.&quot; </span><span style="color:#fe8019;">&gt;&amp;</span><span style="color:#d3869b;">2
+</span><span style="color:#fa5c4b;">fi
+</span><span style="color:#fabd2f;">exec </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">SHELL</span><span style="color:#b8bb26;">&quot;
 
-</code></pre>
-
+</span></pre>
 <p><code>inve</code> script looks for <code>virtualenv</code> in <code>env</code> subdirectory or attempts to
 find it somewhere upper in the filesystem tree. It modifies <code>PATH</code> prepending
 <code>$VIRTUALENV/bin</code> and <code>node_modules/.bin</code> directories and starts new shell.
@@ -150,28 +149,31 @@ it's pretty safe to exit this subshell and have parent shell clean as it should
 be.</p>
 <p>To easily navigate to some directories within activated <code>virtualenv</code> I have a
 couple of bash aliases defined:</p>
-<pre><code class="bash">
-alias cdsrc='cd ${VIRTUAL_ENV}/src'
-alias cdsitepackages='cd ${VIRTUAL_ENV}/lib/python*/site-packages/'
-alias cdproject='cd ${DEV_ROOT:-VIRTUAL_ENV}; if [ `basename ${PWD}` = &quot;env&quot; ]; then cd ..; fi'
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1;">
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">cdsrc</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;cd ${VIRTUAL_ENV}/src&#39;
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">cdsitepackages</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;cd ${VIRTUAL_ENV}/lib/python*/site-packages/&#39;
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">cdproject</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&#39;cd ${DEV_ROOT:-VIRTUAL_ENV}; if [ `basename ${PWD}` = &quot;env&quot; ]; then cd ..; fi&#39;
 
-</code></pre>
-
+</span></pre>
 <p>This approach allows me to have virtual environments using <code>python2</code> or
 <code>python3</code> under single <em>root</em> directory and to have single tool to jump into
 project be it <code>python2</code>, <code>python3</code> or even <code>nodejs</code> project.</p>
 <p>Everything works pretty good for me.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2016-12-28 08:27:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2016-12-28 08:27:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2016/jenkinsfile/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Pipeline As a Code With Jenkins</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2016/jenkinsfile/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Pipeline As a Code With Jenkins</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2017/wt/">
-                        <span class="ib">Static blog generator</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2017/wt/">
+                        <span class="ib">Static blog generator</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -181,7 +183,7 @@ project be it <code>python2</code>, <code>python3</code> or even <code>nodejs</c
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -191,8 +193,8 @@ project be it <code>python2</code>, <code>python3</code> or even <code>nodejs</c
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -201,17 +203,14 @@ project be it <code>python2</code>, <code>python3</code> or even <code>nodejs</c
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         

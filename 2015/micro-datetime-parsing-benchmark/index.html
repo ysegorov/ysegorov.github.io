@@ -16,67 +16,69 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Words And Thoughts Atom Feed" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css">
-
+        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        
     </head>
     <body>
         
+
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="micro-datetime-parsing-benchmark">Micro datetime parsing benchmark<a class="headerlink" href="#micro-datetime-parsing-benchmark" title="Permanent link">&para;</a></h1>
+            <h1 id="micro-datetime-parsing-benchmark">Micro datetime parsing benchmark</h1>
 <p>Just a note for myself about datetime parsing in python.</p>
 <p>Let's assume we know ahead that we have a datetime string in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a>
 format and timezone is <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">UTC</a>.</p>
 <p>Here is a benchmark.</p>
-<pre><code class="python">In [1]: import arrow, re, datetime as dt
+<pre style="background-color:#282828;">
+<span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fa5c4b;">import </span><span style="color:#fdf4c1aa;">arrow, re, datetime </span><span style="color:#fa5c4b;">as </span><span style="color:#fdf4c1aa;">dt
 
-In [2]: iso = arrow.utcnow().isoformat()
+In [</span><span style="color:#d3869b;">2</span><span style="color:#fdf4c1aa;">]: iso </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">arrow.utcnow().isoformat()
 
-In [3]: iso
-Out[3]: '2015-03-26T07:59:44.210642+00:00'
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">3</span><span style="color:#fdf4c1aa;">]: iso
+Out[</span><span style="color:#d3869b;">3</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#b8bb26;">&#39;2015-03-26T07:59:44.210642+00:00&#39;
 
-In [4]: r = re.compile(r'[\-T:\.]')
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">4</span><span style="color:#fdf4c1aa;">]: r </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">re.compile(</span><span style="color:#fa5c4b;">r</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">[</span><span style="color:#b8bb26;">\-</span><span style="color:#fdf4c1;">T:</span><span style="color:#b8bb26;">\.</span><span style="color:#fdf4c1;">]</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">)
 
-In [5]: arrow.get(iso)
-Out[5]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">5</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fdf4c1;">arrow.get(iso)
+</span><span style="color:#fdf4c1aa;">Out[</span><span style="color:#d3869b;">5</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1aa;">Arrow [</span><span style="color:#d3869b;">2015</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">03</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1aa;">26T07:</span><span style="color:#d3869b;">59</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">44.210642</span><span style="color:#fe8019;">+</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">]</span><span style="color:#fe8019;">&gt;
 
-In [6]: arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
-Out[6]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">6</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fdf4c1;">arrow.get(dt.datetime.strptime(iso.rpartition(</span><span style="color:#b8bb26;">&#39;+&#39;</span><span style="color:#fdf4c1;">)[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">], </span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">%Y</span><span style="color:#b8bb26;">-</span><span style="color:#fdf4c1;">%m</span><span style="color:#b8bb26;">-</span><span style="color:#fdf4c1;">%d</span><span style="color:#b8bb26;">T</span><span style="color:#fdf4c1;">%H</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%M</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%S</span><span style="color:#b8bb26;">.</span><span style="color:#fdf4c1;">%f</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">), </span><span style="color:#b8bb26;">&#39;UTC&#39;</span><span style="color:#fdf4c1;">)
+</span><span style="color:#fdf4c1aa;">Out[</span><span style="color:#d3869b;">6</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1aa;">Arrow [</span><span style="color:#d3869b;">2015</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">03</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1aa;">26T07:</span><span style="color:#d3869b;">59</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">44.210642</span><span style="color:#fe8019;">+</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">]</span><span style="color:#fe8019;">&gt;
 
-In [7]: arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
-Out[7]: &lt;Arrow [2015-03-26T07:59:44.210642+00:00]&gt;
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">7</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fdf4c1;">arrow.get(dt.datetime(</span><span style="color:#fe8019;">*</span><span style="color:#fabd2f;">map</span><span style="color:#fdf4c1;">(</span><span style="color:#fabd2f;">int</span><span style="color:#fdf4c1;">, r.split(iso.rpartition(</span><span style="color:#b8bb26;">&#39;+&#39;</span><span style="color:#fdf4c1;">)[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">]))), </span><span style="color:#b8bb26;">&#39;UTC&#39;</span><span style="color:#fdf4c1;">)
+</span><span style="color:#fdf4c1aa;">Out[</span><span style="color:#d3869b;">7</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">&lt;</span><span style="color:#fdf4c1aa;">Arrow [</span><span style="color:#d3869b;">2015</span><span style="color:#fe8019;">-</span><span style="color:#d3869b;">03</span><span style="color:#fe8019;">-</span><span style="color:#fdf4c1aa;">26T07:</span><span style="color:#d3869b;">59</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">44.210642</span><span style="color:#fe8019;">+</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">:</span><span style="color:#d3869b;">00</span><span style="color:#fdf4c1aa;">]</span><span style="color:#fe8019;">&gt;
 
-In [8]: %timeit arrow.get(iso)
-10000 loops, best of 3: 54.7 µs per loop
+</span><span style="color:#fdf4c1aa;">In [</span><span style="color:#d3869b;">8</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">%</span><span style="color:#fdf4c1aa;">timeit </span><span style="color:#fdf4c1;">arrow.get(iso)
+</span><span style="color:#d3869b;">10000 </span><span style="color:#fdf4c1aa;">loops, best of </span><span style="color:#d3869b;">3</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">54.7 </span><span style="color:#fdf4c1aa;">µs per loop
 
-In [9]: %timeit arrow.get(dt.datetime.strptime(iso.rpartition('+')[0], '%Y-%m-%dT%H:%M:%S.%f'), 'UTC')
-100000 loops, best of 3: 17.5 µs per loop
+In [</span><span style="color:#d3869b;">9</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">%</span><span style="color:#fdf4c1aa;">timeit </span><span style="color:#fdf4c1;">arrow.get(dt.datetime.strptime(iso.rpartition(</span><span style="color:#b8bb26;">&#39;+&#39;</span><span style="color:#fdf4c1;">)[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">], </span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">%Y</span><span style="color:#b8bb26;">-</span><span style="color:#fdf4c1;">%m</span><span style="color:#b8bb26;">-</span><span style="color:#fdf4c1;">%d</span><span style="color:#b8bb26;">T</span><span style="color:#fdf4c1;">%H</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%M</span><span style="color:#b8bb26;">:</span><span style="color:#fdf4c1;">%S</span><span style="color:#b8bb26;">.</span><span style="color:#fdf4c1;">%f</span><span style="color:#b8bb26;">&#39;</span><span style="color:#fdf4c1;">), </span><span style="color:#b8bb26;">&#39;UTC&#39;</span><span style="color:#fdf4c1;">)
+</span><span style="color:#d3869b;">100000 </span><span style="color:#fdf4c1aa;">loops, best of </span><span style="color:#d3869b;">3</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">17.5 </span><span style="color:#fdf4c1aa;">µs per loop
 
-In [10]: %timeit arrow.get(dt.datetime(*map(int, r.split(iso.rpartition('+')[0]))), 'UTC')
-100000 loops, best of 3: 8.83 µs per loop
-</code></pre>
-
+In [</span><span style="color:#d3869b;">10</span><span style="color:#fdf4c1aa;">]: </span><span style="color:#fe8019;">%</span><span style="color:#fdf4c1aa;">timeit </span><span style="color:#fdf4c1;">arrow.get(dt.datetime(</span><span style="color:#fe8019;">*</span><span style="color:#fabd2f;">map</span><span style="color:#fdf4c1;">(</span><span style="color:#fabd2f;">int</span><span style="color:#fdf4c1;">, r.split(iso.rpartition(</span><span style="color:#b8bb26;">&#39;+&#39;</span><span style="color:#fdf4c1;">)[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">]))), </span><span style="color:#b8bb26;">&#39;UTC&#39;</span><span style="color:#fdf4c1;">)
+</span><span style="color:#d3869b;">100000 </span><span style="color:#fdf4c1aa;">loops, best of </span><span style="color:#d3869b;">3</span><span style="color:#fdf4c1aa;">: </span><span style="color:#d3869b;">8.83 </span><span style="color:#fdf4c1aa;">µs per loop
+</span></pre>
 <p>Unfortunatelly, the third way of parsing is wrong because it doesn't take into
 account microseconds zero-padded to the left.</p>
 <p><a href="https://github.com/crsmithdev/arrow">Arrow</a> library is just great and is certainly worth trying out.</p>
-            <div class="content-last-modified"><small><em>Last modified: 2015-03-26 07:05:00 UTC</em></small></div>
+
+            <div class="content-last-modified"><small><em>Last modified: 2015-03-26 07:05:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="/2015/grief/">
-                        <i class="fa fa-angle-double-left fa-fw"></i><span class="ib">Grief</span>
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2015/excellent-article/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Excellent article</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="/2015/chtd/">
-                        <span class="ib">Chtd</span><i class="fa fa-angle-double-right fa-fw"></i>
+                    <a class="content-next-link" href="https://ysegorov.github.io/2015/markdown-live/">
+                        <span class="ib">Markdown preview</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
                 </div>
             </div>
@@ -86,7 +88,7 @@ account microseconds zero-padded to the left.</p>
     <div class="sidebar-wrapper">
         <div class="sidebar">
     <div class="sidebar-header">
-        <div class="blog-title header">Words And Thoughts</div>
+        <div class="blog-title header">Words and Thoughts</div>
         
     </div>
     <nav class="blog-nav">
@@ -96,8 +98,8 @@ account microseconds zero-padded to the left.</p>
         </ul>
     </nav>
     <div class="social-links">
-        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><i class="fa fa-github fa-2x"></i></a>
-        <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
     </div>
     <div class="sidebar-quote-container">
         <blockquote class="sidebar-quote">
@@ -106,17 +108,14 @@ account microseconds zero-padded to the left.</p>
         </blockquote>
     </div>
 </div>
+
     </div>
 </div>
 
 
         
-
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
+        
 
         
         
