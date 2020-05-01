@@ -19,8 +19,8 @@
         <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com">
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588337461">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588337461">
         
     </head>
     <body>
@@ -63,7 +63,7 @@ situation was acceptable. But the more we wrote the code more difficult it
 becomes to control the situation.</p>
 <p>I don't remember exact dates but we changed it.</p>
 <p>As a first step it was switch to <strong>mercurial</strong> repositories hosted by
-[BitBucket][bitbucket]. We've splitted monolitic <strong>svn</strong>-repository to several
+<a href="https://bitbucket.org">BitBucket</a>. We've splitted monolitic <strong>svn</strong>-repository to several
 <strong>hg</strong> repos.</p>
 <p>As a second step we've adopted <a href="http://nvie.com/posts/a-successful-git-branching-model/">gitflow</a> as a main workflow to work with
 features, fixes and releases (it was my investigation about possible
@@ -77,17 +77,17 @@ projects and it's just great.</p>
 <h3 id="bitbucket-and-redmine">BitBucket and Redmine</h3>
 <p>Using <strong>svn</strong> we had a post-commit hook configured to send email with diff to
 developers mailing list.</p>
-<p>After switching to [BitBucket][bitbucket] we wanted to keep these emails
+<p>After switching to <a href="https://bitbucket.org">BitBucket</a> we wanted to keep these emails
 with diff so our internal project called <strong>bbhook</strong> was born and released by me.</p>
 <p>It is backed by <strong>PostgreSQL</strong> and <strong>Django</strong> and has two modes of operation -
-as a service to be notified by [BitBucket][bitbucket] about push and
+as a service to be notified by <a href="https://bitbucket.org">BitBucket</a> about push and
 as a django-command configured to run by crontab every 5 minutes.</p>
 <p><strong>Bbhook</strong> project can handle multiple <strong>hg</strong> repositories and under the hood
 it does the following:</p>
 <ul>
 <li>update repositories mirrors (repositories must be cloned on the same
 server running <strong>bbhook</strong>)</li>
-<li>process each new commit arrived from [BitBucket][bitbucket]:
+<li>process each new commit arrived from <a href="https://bitbucket.org">BitBucket</a>:
 <ul>
 <li>get diff</li>
 <li>prepare email text using <strong>pygments</strong></li>

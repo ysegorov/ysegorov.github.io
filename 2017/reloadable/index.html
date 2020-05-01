@@ -19,8 +19,8 @@
         <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com">
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588337461">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588337461">
         
     </head>
     <body>
@@ -30,8 +30,11 @@
     <div class="content-wrapper">
         <div class="content ">
             <h1 id="reloadable-decorator">Reloadable decorator</h1>
-<p><a href="https://ysegorov.github.io/wt-docs/">wt</a> has a feature I'd like to share here. It was one of the first features
-of <a href="https://ysegorov.github.io/wt-docs/">wt</a> I think.</p>
+<div class="note">
+<p><strong>Update.</strong> <code>wt</code> library has been moved to archive, no plans to develop it further.</p>
+</div>
+<p><a href="https://github.com/ysegorov/wt/">wt</a> has a feature I'd like to share here. It was one of the first features
+of <a href="https://github.com/ysegorov/wt/">wt</a> I think.</p>
 <h2 id="problem">Problem</h2>
 <p>Suppose I have an idea for some post, just like this one.</p>
 <p>I've opened terminal, started <strong>wt</strong> in <em>development</em> mode using
@@ -42,7 +45,7 @@ this post to configuration - <strong><code>wt.yaml</code></strong> file.</p>
 <p>After this step I'm expecting refreshed page in the browser to contain updated
 data from configuration.</p>
 <h2 id="solution">Solution</h2>
-<p>Internally <a href="https://ysegorov.github.io/wt-docs/">wt</a> has a so called <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> to handle
+<p>Internally <a href="https://github.com/ysegorov/wt/">wt</a> has a so called <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> to handle
 incoming requests. It depends on <strong><code>wt.yaml</code></strong> configuration and reads it on
 initialization.</p>
 <p>It is quite possible for the <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> to contain logic to reload
@@ -105,7 +108,7 @@ simple yet very useful.</p>
 </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">engine</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">fn</span><span style="color:#fdf4c1aa;">):
     </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">WT(fn)
 </span></pre>
-<p>Currently <a href="https://ysegorov.github.io/wt-docs/">wt</a> uses <a href="http://aiohttp.readthedocs.io/en/stable/">aiohttp</a> as http backend.</p>
+<p>Currently <a href="https://github.com/ysegorov/wt/">wt</a> uses <a href="http://aiohttp.readthedocs.io/en/stable/">aiohttp</a> as http backend.</p>
 <p>It's only configured handler calls <strong><code>engine</code></strong> function to get rendering
 <a href="https://github.com/ysegorov/wt/blob/master/wt/engine.py#L22">engine</a> instance (you can check <a href="https://github.com/ysegorov/wt/blob/master/wt/server.py">server module</a> sources
 for details).</p>

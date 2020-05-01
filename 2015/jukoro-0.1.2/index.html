@@ -19,8 +19,8 @@
         <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com">
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588144287">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588144287">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588337461">
+        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588337461">
         
     </head>
     <body>
@@ -30,8 +30,10 @@
     <div class="content-wrapper">
         <div class="content ">
             <h1 id="jukoro-0-1-2-release">Jukoro 0.1.2 release</h1>
+<div class="note">
+<p><strong>Update.</strong> This library has been moved to archive, no plans to develop it further.</p>
+</div>
 <p>It happened - first public release of <a href="https://github.com/ysegorov/jukoro.git">Jukoro</a> (not on PyPi but still).</p>
-<p>Documentation is <a href="https://ysegorov.github.io/jukoro">here</a>.</p>
 <p>It is an experiment and I'll do my best working on it.</p>
 <h2 id="features-highlight-postgresql-focused">Features highlight (PostgreSQL-focused)</h2>
 <ul>
@@ -56,30 +58,21 @@ to create customized sql queries)</li>
 </ul>
 <h2 id="packages-and-modules">Packages and modules</h2>
 <ul>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.pg.html">jukoro.pg</a> -
-package to work with PostgreSQL built on top of
+<li><code>jukoro.pg</code> - package to work with PostgreSQL built on top of
 <a href="http://initd.org/psycopg/docs/">psycopg2</a></li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.redis.html">jukoro.redis</a> -
-package to work with Redis having several useful helpers</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.arrow.html">jukoro.arrow</a> -
-package built on top of <a href="http://crsmithdev.com/arrow/">arrow</a> library</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.decorators">jukoro.decorators</a> - 
-module containing some useful decorators</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.json">jukoro.json</a> -
-abstraction built on top of Python's stdlib <code>json</code></li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.pickle">jukoro.pickle</a> -
-abstraction built on top of Python's stdlib <code>cPickle</code></li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.base32">jukoro.base32</a> -
-abstraction built on top of <a href="https://github.com/jbittel/base32-crockford">base32_crockford</a>
-library</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.email">jukoro.email</a> -
-email helpers</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.structures">jukoro.structures</a> -
-some useful structures</li>
-<li><a href="http://ysegorov.github.io/jukoro/jukoro.html#module-jukoro.utils">jukoro.utils</a> -
-utilities</li>
+<li><code>jukoro.redis</code> - package to work with Redis having several useful helpers</li>
+<li><code>jukoro.arrow</code> - package built on top of <a href="http://crsmithdev.com/arrow/">arrow</a> library</li>
+<li><code>jukoro.decorators</code> - module containing some useful decorators</li>
+<li><code>jukoro.json</code> - abstraction built on top of Python's stdlib <code>json</code></li>
+<li><code>jukoro.pickle</code> - abstraction built on top of Python's stdlib <code>cPickle</code></li>
+<li><code>jukoro.base32</code> - abstraction built on top of
+<a href="https://github.com/jbittel/base32-crockford">base32_crockford</a> library</li>
+<li><code>jukoro.email</code> - email helpers</li>
+<li><code>jukoro.structures</code> - some useful structures</li>
+<li><code>jukoro.utils</code> - utilities</li>
 </ul>
-<p>I am going to use it in project I'm currently working on.</p>
+<p><del>I am going to use it in project I'm currently working on</del> (it was never
+used).</p>
 
             <div class="content-last-modified"><small><em>Last modified: 2015-04-06 17:01:00 +00:00 UTC</em></small></div>
             
