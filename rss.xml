@@ -7,7 +7,36 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://ysegorov.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Wed, 22 Apr 2020 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 01 May 2020 00:00:00 +0000</lastBuildDate>
+        
+            <item>
+                <title>Zola</title>
+                <pubDate>Fri, 01 May 2020 00:00:00 +0000</pubDate>
+                <link>https://ysegorov.github.io/2020/zola/</link>
+                <guid>https://ysegorov.github.io/2020/zola/</guid>
+                <description>&lt;h1 id=&quot;zola&quot;&gt;Zola&lt;&#x2F;h1&gt;
+&lt;p&gt;I&#x27;ve decided to switch from &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;wt&#x2F;&quot;&gt;wt&lt;&#x2F;a&gt; (which is archived now) to &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;zola&lt;&#x2F;a&gt; to
+manage this blog.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;wt&lt;&#x2F;code&gt; worked quite well for me but it requires time to manage it and to
+develop it further (and I was not happy with &lt;code&gt;yaml&lt;&#x2F;code&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;There are a lot of alternatives in this area and by occasion I&#x27;ve met
+&lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;zola&lt;&#x2F;a&gt;. Luckily, it has most of the features I was using with &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;wt&#x2F;&quot;&gt;wt&lt;&#x2F;a&gt;
+(actually, it was the reason to switch to &lt;code&gt;zola&lt;&#x2F;code&gt; and to archive &lt;code&gt;wt&lt;&#x2F;code&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;It took some time to understand the way &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;zola&lt;&#x2F;a&gt; works - mostly to convert
+templates from &lt;a href=&quot;https:&#x2F;&#x2F;jinja.palletsprojects.com&#x2F;&quot;&gt;jinja&lt;&#x2F;a&gt; to &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;tera&lt;&#x2F;a&gt; and to update front-matter
+from &lt;a href=&quot;https:&#x2F;&#x2F;yaml.org&quot;&gt;yaml&lt;&#x2F;a&gt; to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;toml-lang&#x2F;toml&quot;&gt;toml&lt;&#x2F;a&gt; format within markdown files.&lt;&#x2F;p&gt;
+&lt;p&gt;I was hit by just one issue while converting this blog from &lt;code&gt;wt&lt;&#x2F;code&gt; to &lt;code&gt;zola&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;It was not clear to me that there is no need to apply &lt;code&gt;markdown&lt;&#x2F;code&gt; filter to
+content in templates as it was applied implicitly. Applying it for a second
+time breaks syntax highlighting formatting which led me to a thought that I
+can&#x27;t use &lt;code&gt;zola&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Happily, I&#x27;ve looked through the &lt;code&gt;zola&#x27;s&lt;&#x2F;code&gt; issues and found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;getzola&#x2F;zola&#x2F;issues&#x2F;989&quot;&gt;this
+one&lt;&#x2F;a&gt;. There is no need to apply &lt;code&gt;markdown&lt;&#x2F;code&gt; filter to
+content in templates. Yay. Perfect.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s see how it will work for me.&lt;&#x2F;p&gt;
+&lt;p&gt;Stay tuned and take care of you and your family.&lt;&#x2F;p&gt;
+</description>
+            </item>
         
             <item>
                 <title>Wireguard and Linux network namespaces - perfect fit</title>
