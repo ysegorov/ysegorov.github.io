@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Excellent article</title>
+        <title>Markdown preview (Rust version)</title>
         
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,44 +29,51 @@
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="excellent-article">Excellent article</h1>
-<p>Really excellent <a href="http://kukuruku.co/hub/programming/do-not-learn-frameworks-learn-the-architecture">article</a> (<a href="http://habrahabr.ru/post/253297/">original</a> in Russian).</p>
-<p>Yesterday I've summed up <a href="/2015/chtd/">my experience</a> working for <a href="http://chtd.ru">Chtd</a>
-and I have one more thought to share.</p>
-<p>It's just one more reason to minimize frameworks usage.</p>
-<p>From my experience frameworks are a trap. You can safely use them for some time
-but in case your project is evolving and you want to follow the evolution of
-used frameworks you will find yourself spending time refactoring your code to
-work with that exact framework.</p>
-<p>Instead of developing your project's business logic you have to support
-some framework code evolution.<br />
-It sounds strange for me.<br />
-I've faced this problem working for <a href="http://chtd.ru">Chtd</a> but I had no luck
-explaining the problem to colleagues.</p>
-<p>There is a way to use framework - just freeze it on a specific version but
-that's another trap.</p>
-<p>You will have to support framework at that specific
-version on your own fixing bugs or adding missed functionality or backporting
-or whatever. Do you really need it?</p>
-<p>I think it's better to spend time focusing on your business logic.</p>
-<p>To be a good developer you have to find your own way. Build something on
-your own. Make mistakes. Fix them. Explore and share your knowledge.</p>
-<p>Become a creator, not a consumer.</p>
+            <h1 id="markdown-preview-written-in-rust">Markdown preview written in Rust</h1>
+<p>About a year or so ago I've switched to self-made python script to preview
+markdown file in browser (<a href="https://github.com/ysegorov/dotfiles/commit/3e54334f3afbb2f79b1536661ac5c7e469228d51#diff-222c971ff832264e6f73fa6475e6ffeb">this commit</a> introduced it in my
+own <a href="https://github.com/ysegorov/dotfiles">dotfiles</a> repository).</p>
+<p>It was using <a href="https://pandoc.org">pandoc</a> under the hood to convert markdown to html. Well,
+it was not optimal, probably, but it worked.</p>
+<p>I've started to read <a href="https://www.rust-lang.org">Rust</a> documentation recently and decided to
+(re)implement markdown preview in Rust.</p>
+<p>The most valuable thing I saw in this was the fact that it will be single
+binary to use - no third-party dependencies would be needed to install.</p>
+<p>So, here is <a href="https://github.com/ysegorov/mdpreview-rs">the code</a> - markdown preview written in Rust.</p>
+<p>This is my first project written in Rust and it is definitely not as idiomatic
+as it should be and has no tests at the moment but it works as expected. Yay.</p>
+<p>Under the hood <a href="https://github.com/ysegorov/mdpreview-rs">mdpreview</a> uses following Rust libraries:</p>
+<ul>
+<li><a href="https://docs.rs/clap/">clap</a> - to process command-line arguments,</li>
+<li><a href="https://docs.rs/pulldown-cmark/">pulldown-cmark</a> - to convert markdown to html,</li>
+<li><a href="https://docs.rs/hyper/">hyper</a> and <a href="https://docs.rs/tokio/">tokio</a> - web server to serve generated html.</li>
+</ul>
+<p>Some ideas for the code I've got looking through sources of <a href="https://www.getzola.org">zola</a>.</p>
+<p><a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">Ownership</a> is a new concept for me and I'm still not sure I'm
+getting it right but Rust is definitely worth trying. Here is the list of
+resources I'm using to study Rust (just for the record):</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/book/">The Book</a>,</li>
+<li><a href="https://doc.rust-lang.org/stable/rust-by-example/">Rust By Example</a>,</li>
+<li><a href="https://rust-lang-nursery.github.io/rust-cookbook/intro.html">Rust Cookbook</a>,</li>
+<li><a href="https://doc.rust-lang.org/std/index.html">The Standard Library</a>,</li>
+<li><a href="https://crates.io">crates.io</a>,</li>
+<li><a href="https://docs.rs">docs.rs</a>.</li>
+</ul>
+<p>That's it for the <a href="https://github.com/ysegorov/mdpreview-rs">mdpreview</a> intro, let's move on and
+(re)implement in Rust something else. Stay tuned.</p>
 
-            <div class="content-last-modified"><small><em>Last modified: 2015-04-06 16:58:00 +00:00 UTC</em></small></div>
+            <div class="content-last-modified"><small><em>Last modified: 2020-05-05 07:38:00 +00:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="https://ysegorov.github.io/2015/chtd/">
+                    <a class="content-prev-link" href="https://ysegorov.github.io/2020/zola/">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
-                        <span class="ib">Chtd</span>
+                        <span class="ib">Zola</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="https://ysegorov.github.io/2015/micro-datetime-parsing-benchmark/">
-                        <span class="ib">Micro datetime parsing benchmark</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
-                    </a>
+                    
                 </div>
             </div>
             

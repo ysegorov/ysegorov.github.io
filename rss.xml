@@ -7,7 +7,48 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://ysegorov.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Fri, 01 May 2020 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Tue, 05 May 2020 00:00:00 +0000</lastBuildDate>
+        
+            <item>
+                <title>Markdown preview (Rust version)</title>
+                <pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate>
+                <link>https://ysegorov.github.io/2020/mdpreview/</link>
+                <guid>https://ysegorov.github.io/2020/mdpreview/</guid>
+                <description>&lt;h1 id=&quot;markdown-preview-written-in-rust&quot;&gt;Markdown preview written in Rust&lt;&#x2F;h1&gt;
+&lt;p&gt;About a year or so ago I&#x27;ve switched to self-made python script to preview
+markdown file in browser (&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;dotfiles&#x2F;commit&#x2F;3e54334f3afbb2f79b1536661ac5c7e469228d51#diff-222c971ff832264e6f73fa6475e6ffeb&quot;&gt;this commit&lt;&#x2F;a&gt; introduced it in my
+own &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;dotfiles&quot;&gt;dotfiles&lt;&#x2F;a&gt; repository).&lt;&#x2F;p&gt;
+&lt;p&gt;It was using &lt;a href=&quot;https:&#x2F;&#x2F;pandoc.org&quot;&gt;pandoc&lt;&#x2F;a&gt; under the hood to convert markdown to html. Well,
+it was not optimal, probably, but it worked.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve started to read &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&quot;&gt;Rust&lt;&#x2F;a&gt; documentation recently and decided to
+(re)implement markdown preview in Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;The most valuable thing I saw in this was the fact that it will be single
+binary to use - no third-party dependencies would be needed to install.&lt;&#x2F;p&gt;
+&lt;p&gt;So, here is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;mdpreview-rs&quot;&gt;the code&lt;&#x2F;a&gt; - markdown preview written in Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;This is my first project written in Rust and it is definitely not as idiomatic
+as it should be and has no tests at the moment but it works as expected. Yay.&lt;&#x2F;p&gt;
+&lt;p&gt;Under the hood &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;mdpreview-rs&quot;&gt;mdpreview&lt;&#x2F;a&gt; uses following Rust libraries:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;clap&#x2F;&quot;&gt;clap&lt;&#x2F;a&gt; - to process command-line arguments,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;pulldown-cmark&#x2F;&quot;&gt;pulldown-cmark&lt;&#x2F;a&gt; - to convert markdown to html,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;hyper&#x2F;&quot;&gt;hyper&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;tokio&#x2F;&quot;&gt;tokio&lt;&#x2F;a&gt; - web server to serve generated html.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Some ideas for the code I&#x27;ve got looking through sources of &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&quot;&gt;zola&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-01-what-is-ownership.html&quot;&gt;Ownership&lt;&#x2F;a&gt; is a new concept for me and I&#x27;m still not sure I&#x27;m
+getting it right but Rust is definitely worth trying. Here is the list of
+resources I&#x27;m using to study Rust (just for the record):&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;&quot;&gt;The Book&lt;&#x2F;a&gt;,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;stable&#x2F;rust-by-example&#x2F;&quot;&gt;Rust By Example&lt;&#x2F;a&gt;,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;rust-lang-nursery.github.io&#x2F;rust-cookbook&#x2F;intro.html&quot;&gt;Rust Cookbook&lt;&#x2F;a&gt;,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;index.html&quot;&gt;The Standard Library&lt;&#x2F;a&gt;,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;crates.io&quot;&gt;crates.io&lt;&#x2F;a&gt;,&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&quot;&gt;docs.rs&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;That&#x27;s it for the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;mdpreview-rs&quot;&gt;mdpreview&lt;&#x2F;a&gt; intro, let&#x27;s move on and
+(re)implement in Rust something else. Stay tuned.&lt;&#x2F;p&gt;
+</description>
+            </item>
         
             <item>
                 <title>Zola</title>
@@ -1782,7 +1823,12 @@ documentation (which is not finished yet).&lt;&#x2F;p&gt;
                 <guid>https://ysegorov.github.io/2015/markdown-live/</guid>
                 <description>&lt;h1 id=&quot;markdown-preview&quot;&gt;Markdown preview&lt;&#x2F;h1&gt;
 &lt;div class=&quot;note&quot;&gt;
-&lt;p&gt;&lt;strong&gt;Update.&lt;&#x2F;strong&gt; For &lt;a href=&quot;http:&#x2F;&#x2F;docutils.sourceforge.net&#x2F;rst.html&quot;&gt;reStructuredText&lt;&#x2F;a&gt; there is an excellent &lt;a href=&quot;https:&#x2F;&#x2F;mg.pov.lt&#x2F;restview&#x2F;&quot;&gt;restview&lt;&#x2F;a&gt;
+&lt;p&gt;&lt;strong&gt;Update 2.&lt;&#x2F;strong&gt; I&#x27;ve created &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ysegorov&#x2F;mdpreview-rs&quot;&gt;mdpreview&lt;&#x2F;a&gt; project - self-made
+solution to preview markdown files in browser. The code is written in Rust.
+Short introduction is available &lt;a href=&quot;https:&#x2F;&#x2F;ysegorov.github.io&#x2F;2020&#x2F;mdpreview&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;note&quot;&gt;
+&lt;p&gt;&lt;strong&gt;Update 1.&lt;&#x2F;strong&gt; For &lt;a href=&quot;http:&#x2F;&#x2F;docutils.sourceforge.net&#x2F;rst.html&quot;&gt;reStructuredText&lt;&#x2F;a&gt; there is an excellent &lt;a href=&quot;https:&#x2F;&#x2F;mg.pov.lt&#x2F;restview&#x2F;&quot;&gt;restview&lt;&#x2F;a&gt;
 library which works out-of-the-box.&lt;&#x2F;p&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;It took half-a-workday time to find suitable solution to be able to somehow
