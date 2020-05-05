@@ -34,7 +34,7 @@ as it should be and has no tests at the moment but it works as expected. Yay.&lt
 &lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;hyper&#x2F;&quot;&gt;hyper&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;tokio&#x2F;&quot;&gt;tokio&lt;&#x2F;a&gt; - web server to serve generated html.&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;p&gt;Some ideas for the code I&#x27;ve got looking through sources of &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&quot;&gt;zola&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-01-what-is-ownership.html&quot;&gt;Ownership&lt;&#x2F;a&gt; is a new concept for me and I&#x27;m still not sure I&#x27;m
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-01-what-is-ownership.html&quot;&gt;Ownership&lt;&#x2F;a&gt; is a new concept to me and I&#x27;m still not sure I&#x27;m
 getting it right but Rust is definitely worth trying. Here is the list of
 resources I&#x27;m using to study Rust (just for the record):&lt;&#x2F;p&gt;
 &lt;ul&gt;
