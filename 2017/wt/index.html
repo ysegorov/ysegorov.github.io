@@ -16,24 +16,33 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588684801">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588684801">
+        <link href="/atom.xml" type="application/xml" rel="alternate" title="Words and Thoughts Atom Feed" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="/css/normalize.css?ts=1785082170">
+        <link rel="stylesheet" href="/css/style.css?ts=1785082170">
         
+        
+
+<!-- see https://www.npmjs.com/package/@highlightjs/cdn-assets?activeTab=code for themes -->
+
+
     </head>
     <body>
         
-
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="static-blog-generator">Static Blog Generator</h1>
-<div class="note">
-<p><strong>Update.</strong> This library has been moved to archive, no plans to develop it further.</p>
+            <h1 id="static-blog-generator">Static Blog Generator <a class="header-anchor" href="#static-blog-generator">¶</a></h1>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p><s><strong>Update 1.</strong> This library has been moved to archive, no plans to develop it further</s>.</p>
 </div>
-<p>This is a short introduction to <a href="https://github.com/ysegorov/wt">wt</a> - library I've made for my personal
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p><strong>Update 2.</strong> This library was unarchived, rebuilt from scratch and released as 3.0.0 version.</p>
+</div>
+<p>This is a short introduction to <a href="https://codeberg.org/ysegorov/wt">wt</a> - library I've made for my personal
 use.</p>
 <p>It is pretty young and it lacks some features I'd like it to have but it
 works pretty good for me.</p>
@@ -44,9 +53,9 @@ have several ideas and this is the first one named <strong>wt</strong>.
 I know that <strong>wt</strong> is a name for executable from <a href="https://github.com/wiredtiger/wiredtiger">WiredTiger</a>
 distribution but I think it's ok. This library is not expected to be installed
 system-wide, it should be used within virtual environment.
-And luckily the name was free on <a href="https://pypi.python.org/pypi/wt">pypi</a>.</p>
+And luckily the name was free on <a href="https://pypi.org/project/wt">pypi</a>.</p>
 <p>The library requires <strong>python 3</strong> and have the following features (citing from
-<a href="https://github.com/ysegorov/wt/blob/master/README.md">readme</a>):</p>
+<a href="https://codeberg.org/ysegorov/wt/src/branch/main/README.md">readme</a>):</p>
 <ul>
 <li><a href="http://daringfireball.net/projects/markdown/">markdown</a> for content</li>
 <li><a href="http://yaml.org/">yaml</a> for configuration</li>
@@ -59,28 +68,28 @@ And luckily the name was free on <a href="https://pypi.python.org/pypi/wt">pypi<
 <li>no python coding needed to work with</li>
 </ul>
 <p>At the moment I've used it in a couple of projects.</p>
-<p>The first one is this blog (<a href="https://github.com/ysegorov/blog">blog source code</a>) and another one
+<p>The first one is this blog (<a href="https://codeberg.org/ysegorov/blog">blog source code</a>) and another one
 is the <a href="https://tolsha.ru/">tolsha.ru site</a> (in Russian) I've created for my elder
 brother who makes <a href="https://en.wikipedia.org/wiki/Pottery">pottery</a> and <a href="https://tolsha.ru/util/">they</a> <a href="https://tolsha.ru/milk/chasha_lebed/">are</a> <a href="https://tolsha.ru/souvenirs/">amazing</a>
 (<a href="https://github.com/ysegorov/tolsha.ru">site source code</a>).</p>
-<p>These two sites are pretty different in nature but <a href="https://github.com/ysegorov/wt">wt</a> works very well for
+<p>These two sites are pretty different in nature but <a href="https://codeberg.org/ysegorov/wt">wt</a> works very well for
 both.</p>
 <p>I'll keep this library moving forward adding more features and refactoring
 some internals for a better code.</p>
-<p><del>The next project I have plans for is <strong>rss reader</strong> and there is a big chance
-I'll build it using <a href="http://elixir-lang.org/">Elixir</a>/<a href="http://www.phoenixframework.org/">Phoenix</a></del> (not happened).</p>
+<p><s>The next project I have plans for is <strong>rss reader</strong> and there is a big chance
+I'll build it using <a href="http://elixir-lang.org/">Elixir</a>/<a href="http://www.phoenixframework.org/">Phoenix</a></s> (not happened).</p>
 
-            <div class="content-last-modified"><small><em>Last modified: 2017-03-22 05:20:00 +00:00 UTC</em></small></div>
+            <div class="content-last-modified"><small><em>Last modified: 2026-07-26 11:41:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="https://ysegorov.github.io/2016/virtualenv/">
+                    <a class="content-prev-link" href="/2016/virtualenv/">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
                         <span class="ib">Self-made Virtualenv Wrapper</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="https://ysegorov.github.io/2017/logger/">
+                    <a class="content-next-link" href="/2017/logger/">
                         <span class="ib">Logger service using epoll - Part 1</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
@@ -112,14 +121,16 @@ I'll build it using <a href="http://elixir-lang.org/">Elixir</a>/<a href="http:/
         </blockquote>
     </div>
 </div>
-
     </div>
 </div>
 
 
         
+
         
         
+
+
 
         
         

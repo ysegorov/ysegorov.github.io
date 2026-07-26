@@ -16,20 +16,24 @@
         <!-- Place favicon.ico in the root directory -->
 
         
-        <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Words and Thoughts RSS Feed" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/normalize.css?t=1588684801">
-        <link rel="stylesheet" href="https://ysegorov.github.io/css/style.css?t=1588684801">
+        <link href="/atom.xml" type="application/xml" rel="alternate" title="Words and Thoughts Atom Feed" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="/css/normalize.css?ts=1785082170">
+        <link rel="stylesheet" href="/css/style.css?ts=1785082170">
         
+        
+
+<!-- see https://www.npmjs.com/package/@highlightjs/cdn-assets?activeTab=code for themes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/humanoid-light.min.css">
+
     </head>
     <body>
         
-
 <div class="body">
     <div class="content-wrapper">
         <div class="content ">
-            <h1 id="webpack-loader-to-use-svg-icons-as-snabbdom-vnode">Webpack loader to use svg icons as snabbdom VNode</h1>
+            <h1 id="webpack-loader-to-use-svg-icons-as-snabbdom-vnode">Webpack loader to use svg icons as snabbdom VNode <a class="header-anchor" href="#webpack-loader-to-use-svg-icons-as-snabbdom-vnode">¶</a></h1>
 <div class="note">
 <p><strong>Update.</strong> This library has been moved to archive, no plans to develop it further.</p>
 </div>
@@ -49,63 +53,61 @@ part was <strong>union types</strong>.</p>
 <p>Studying <a href="http://guide.elm-lang.org/architecture/index.html">The ELM Architecture</a> helped a lot in this.</p>
 <p>To dive deeper on the subject I've created a very simple implementation of
 union types which in it's core just tags values using specified tag name:</p>
-<pre style="background-color:#282828;">
-<span style="font-style:italic;color:#928374;">// type.js
+<pre><code class="language-javascript">// type.js
 
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">curryN </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;ramda/src/curryN&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">;
+var curryN = require('ramda/src/curryN');
 
-</span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">Type</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">spec</span><span style="color:#fdf4c1aa;">) {
-    </span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">o </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{},
-        </span><span style="color:#fdf4c1;">keys </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Object</span><span style="color:#fdf4c1;">.keys(spec)</span><span style="color:#fdf4c1aa;">;
+function Type(spec) {
+    var o = {},
+        keys = Object.keys(spec);
 
-    </span><span style="color:#fdf4c1;">keys.forEach(</span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(key) {
-        </span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">fn </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">spec[key];
-        </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">(spec[key].length </span><span style="color:#fe8019;">&gt; </span><span style="color:#d3869b;">2</span><span style="color:#fdf4c1;">) {
-            o[key] </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">curryN(fn.length </span><span style="color:#fe8019;">- </span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">, </span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">() {
-                </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">{
+    keys.forEach(function (key) {
+        var fn = spec[key];
+        if (spec[key].length &gt; 2) {
+            o[key] = curryN(fn.length - 1, function () {
+                return {
                     value: [].slice.apply(arguments),
                     tag: key,
                     handler: fn
                 };
             });
-        } </span><span style="color:#fa5c4b;">else </span><span style="color:#fdf4c1;">{
-            o[key] </span><span style="color:#fe8019;">= </span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(smth) {
-                </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">{
+        } else {
+            o[key] = function (smth) {
+                return {
                     value: smth,
                     tag: key,
                     handler: fn
                 };
             };
         }
-    })</span><span style="color:#fdf4c1aa;">;
-    </span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">update</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">tagged</span><span style="color:#fdf4c1aa;">, </span><span style="color:#fdf4c1;">model</span><span style="color:#fdf4c1aa;">) {
-        </span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">tag </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">tagged</span><span style="color:#fdf4c1aa;">.tag,
-            </span><span style="color:#fdf4c1;">value </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">tagged</span><span style="color:#fdf4c1aa;">.</span><span style="color:#fabd2f;">value</span><span style="color:#fdf4c1aa;">,
-            </span><span style="color:#fdf4c1;">fn </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">tagged</span><span style="color:#fdf4c1aa;">.handler;
-        </span><span style="color:#fdf4c1;">value </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Array</span><span style="color:#fdf4c1;">.isArray(value) </span><span style="color:#fe8019;">? </span><span style="color:#fdf4c1;">value
-                                        </span><span style="color:#fe8019;">: </span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">value </span><span style="color:#fe8019;">!= </span><span style="color:#d3869b;">null </span><span style="color:#fe8019;">? </span><span style="color:#fdf4c1aa;">[</span><span style="color:#fdf4c1;">value</span><span style="color:#fdf4c1aa;">] </span><span style="color:#fe8019;">: </span><span style="color:#fdf4c1aa;">[]);
-        </span><span style="color:#fdf4c1;">value.</span><span style="color:#fabd2f;">push</span><span style="color:#fdf4c1;">(model)</span><span style="color:#fdf4c1aa;">;
-        </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">fn.apply(</span><span style="color:#d3869b;">null</span><span style="color:#fdf4c1;">, value)</span><span style="color:#fdf4c1aa;">;
+    });
+    function update(tagged, model) {
+        var tag = tagged.tag,
+            value = tagged.value,
+            fn = tagged.handler;
+        value = Array.isArray(value) ? value
+                                        : (value != null ? [value] : []);
+        value.push(model);
+        return fn.apply(null, value);
     }
-    </span><span style="color:#fdf4c1;">o</span><span style="color:#fdf4c1aa;">.update </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">curryN(</span><span style="color:#d3869b;">2</span><span style="color:#fdf4c1;">, update)</span><span style="color:#fdf4c1aa;">;
-    </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">o</span><span style="color:#fdf4c1aa;">;
+    o.update = curryN(2, update);
+    return o;
 }
-</span></pre>
+</code></pre>
 <p>Example of union type definition:</p>
-<pre style="background-color:#282828;">
-<span style="font-style:italic;color:#928374;">// component.js
+<pre><code class="language-javascript">// component.js
 
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">Type </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;./type&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">;
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">R </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;ramda&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">;
+var Type = require('./type');
+var R = require('ramda');
 
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">Msg </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">Type({
-    </span><span style="color:#8ec07c;">Click</span><span style="color:#fdf4c1;">: </span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(evt, model) { </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">R</span><span style="color:#fdf4c1;">.assoc(</span><span style="color:#b8bb26;">&#39;clicks&#39;</span><span style="color:#fdf4c1;">, model.clicks </span><span style="color:#fe8019;">+ </span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">, model); },
-    </span><span style="color:#8ec07c;">Remove</span><span style="color:#fdf4c1;">: </span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(evt, model) { </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">R</span><span style="color:#fdf4c1;">.assoc(</span><span style="color:#b8bb26;">&#39;_removed&#39;</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">true</span><span style="color:#fdf4c1;">, model); },
-    </span><span style="color:#8ec07c;">Tick</span><span style="color:#fdf4c1;">: </span><span style="color:#fa5c4b;">function </span><span style="color:#fdf4c1;">(model) {
-        </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">R</span><span style="color:#fdf4c1;">.assoc(</span><span style="color:#b8bb26;">&#39;count&#39;</span><span style="color:#fdf4c1;">, model.count </span><span style="color:#fe8019;">&gt; </span><span style="color:#d3869b;">359 </span><span style="color:#fe8019;">? </span><span style="color:#d3869b;">0 </span><span style="color:#fe8019;">: </span><span style="color:#fdf4c1;">model.count </span><span style="color:#fe8019;">+ </span><span style="color:#d3869b;">1</span><span style="color:#fdf4c1;">, model);
+var Msg = Type({
+    Click: function (evt, model) { return R.assoc('clicks', model.clicks + 1, model); },
+    Remove: function (evt, model) { return R.assoc('_removed', true, model); },
+    Tick: function (model) {
+        return R.assoc('count', model.count &gt; 359 ? 0 : model.count + 1, model);
     }
-})</span><span style="color:#fdf4c1aa;">;
-</span></pre>
+});
+</code></pre>
 <p>It is a bit simplier than <a href="https://github.com/paldepind/union-type">union-type</a>, doesn't have type checking and
 probably missing something in this implementation.</p>
 <p>Anyway, it helped me to understand the data flow.</p>
@@ -119,42 +121,41 @@ would be great to have <strong>svg</strong> icons available as <a href="https://
 <p>So, here is <a href="https://github.com/ysegorov/svg-snabbdom-loader">the webpack loader</a> for this (this is my first published
 <strong>npm</strong> module).</p>
 <p>Usage is pretty simple just like any webpack loader:</p>
-<pre style="background-color:#282828;">
-<span style="font-style:italic;color:#928374;">// icons.js
+<pre><code class="language-javascript">// icons.js
 
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">home </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;./svg/home.svg&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">,
-    </span><span style="color:#fdf4c1;">alert </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;./svg/alert.svg&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">,
-    </span><span style="color:#fe8019;">...
+var home = require('./svg/home.svg'),
+    alert = require('./svg/alert.svg'),
+    ...
 
-</span><span style="color:#fabd2f;">module.exports </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1aa;">{
-    home: </span><span style="color:#fdf4c1;">home</span><span style="color:#fdf4c1aa;">,
-    alert: </span><span style="color:#fdf4c1;">alert</span><span style="color:#fdf4c1aa;">,
-    </span><span style="color:#fe8019;">...
-</span><span style="color:#fdf4c1aa;">};
-</span></pre><pre style="background-color:#282828;">
-<span style="font-style:italic;color:#928374;">// alerts.js
+module.exports = {
+    home: home,
+    alert: alert,
+    ...
+};
+</code></pre>
+<pre><code class="language-javascript">// alerts.js
 
-</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">icons </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;./icons&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">,
-    </span><span style="color:#fdf4c1;">h </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">require(</span><span style="color:#b8bb26;">&#39;snabbdom/h&#39;</span><span style="color:#fdf4c1;">)</span><span style="color:#fdf4c1aa;">;
+var icons = require('./icons'),
+    h = require('snabbdom/h');
 
-</span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">view</span><span style="color:#fdf4c1aa;">(</span><span style="color:#fdf4c1;">model</span><span style="color:#fdf4c1aa;">) {
-    </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">h(</span><span style="color:#b8bb26;">&#39;div.info&#39;</span><span style="color:#fdf4c1;">, {}, [icons.alert, </span><span style="color:#b8bb26;">&#39;Some alert here&#39;</span><span style="color:#fdf4c1;">])</span><span style="color:#fdf4c1aa;">;
+function view(model) {
+    return h('div.info', {}, [icons.alert, 'Some alert here']);
 }
-</span></pre>
+</code></pre>
 <p>The loader can be chained with <strong>svgo-loader</strong>, please check the docs for this.</p>
 <p>That's it for now.</p>
 
-            <div class="content-last-modified"><small><em>Last modified: 2016-07-04 08:45:00 +00:00 UTC</em></small></div>
+            <div class="content-last-modified"><small><em>Last modified: 2016-07-04 08:45:00 UTC</em></small></div>
             
             <div class="content-prev-next">
                 <div class="content-prev">
-                    <a class="content-prev-link" href="https://ysegorov.github.io/2016/django-debug/">
+                    <a class="content-prev-link" href="/2016/django-debug/">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
                         <span class="ib">Django project debugging</span>
                     </a>
                 </div>
                 <div class="content-next">
-                    <a class="content-next-link" href="https://ysegorov.github.io/2016/au6601/">
+                    <a class="content-next-link" href="/2016/au6601/">
                         <span class="ib">Alcor Micro AU6601 PCI-E Flash card reader controller</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
                     </a>
@@ -186,14 +187,17 @@ would be great to have <strong>svg</strong> icons available as <a href="https://
         </blockquote>
     </div>
 </div>
-
     </div>
 </div>
 
 
         
+
         
         
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
 
         
         

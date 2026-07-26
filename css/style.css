@@ -82,6 +82,7 @@ blockquote {
     flex: 0 0 38.45%;
     align-items: flex-end;
     background-color: #455a64;
+    /* background-color: #755a64; */
 }
 .sidebar {
     flex: 1;
@@ -296,3 +297,34 @@ blockquote {
 .hljs {
     max-height: 320px;
 }
+
+/* --- header anchors --- */
+.content .header-anchor {
+    margin-left: 0.25rem;
+    padding-left: 0.125rem;
+    padding-right: 0.125rem;
+    visibility: hidden;
+    font-size: .98em;
+}
+.content h1:hover .header-anchor,
+.content h2:hover .header-anchor,
+.content h3:hover .header-anchor,
+.content h4:hover .header-anchor,
+.content h5:hover .header-anchor,
+.content h6:hover .header-anchor {
+    visibility: visible;
+}
+
+.markdown-alert {
+    border-left: 4px solid;
+    background-color: rgba(235, 235, 235, .5);
+    padding: 12px;
+    font-style: italic;
+}
+.markdown-alert + .markdown-alert { margin-top: 12px; }
+.markdown-alert p { margin: 0; }
+
+.markdown-alert-title { display: none; }
+
+.markdown-alert-note { border-color: #0969da; }
+.markdown-alert-warning { border-color: #bf8700; }
