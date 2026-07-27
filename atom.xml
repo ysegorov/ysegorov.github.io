@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2026-07-27T12:16:48.230433+00:00</updated>
+    <updated>2026-07-27T16:12:00.845148+00:00</updated>
     
     
     
@@ -2619,6 +2619,47 @@ index 4a2ce87..143021d 100644
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ssh root@192.168.0.55
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Don&#39;t forget to backup your &lt;code&gt;/boot/header.img&lt;/code&gt; file or full USB stick.&lt;/strong&gt;&lt;/p&gt;
+
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Break the silence</title>
+        <link href="https://ysegorov.github.io/2026/break-the-silence/" rel="alternate" />
+        <id>https://ysegorov.github.io/2026/break-the-silence/</id>
+        <updated>2026-07-27T16:05:00+00:00</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;break-the-silence&#34;&gt;Break the silence &lt;a class=&#34;header-anchor&#34; href=&#34;#break-the-silence&#34;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;So, after the rather long period of silence I&#39;m back.&lt;/p&gt;
+&lt;p&gt;Since 2020 a lot has happened in the world as a whole, in IT world and
+in my own small and private world.&lt;/p&gt;
+&lt;p&gt;Looking back at these years, at mostly sad events happening in the world and in
+the country I&#39;m living in I must confess it was hard to be productive somedays.&lt;/p&gt;
+&lt;p&gt;But what doesn&#39;t kill us makes us stronger, right? Well, at least in theory.&lt;/p&gt;
+&lt;p&gt;Let&#39;s move on.&lt;/p&gt;
+&lt;h2 id=&#34;passware&#34;&gt;Passware &lt;a class=&#34;header-anchor&#34; href=&#34;#passware&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I quit my job at &lt;a href=&#34;https://www.passware.com&#34;&gt;Passware&lt;/a&gt; on May 30, 2025, more than a year ago.&lt;/p&gt;
+&lt;p&gt;It was longest period of time I was working for a commercial company in my life -
+almost 10 years, 9 years and 9 months to be exact (cool figures by the way).&lt;/p&gt;
+&lt;p&gt;I will publish a brief summary about it soon.&lt;/p&gt;
+&lt;p&gt;I&#39;m unemployed at the moment. Can&#39;t say I&#39;m actively looking for work but
+I&#39;m open to offers.&lt;/p&gt;
+&lt;h2 id=&#34;back-to-wt&#34;&gt;Back to &lt;a href=&#34;https://codeberg.org/ysegorov/wt/&#34;&gt;wt&lt;/a&gt; &lt;a class=&#34;header-anchor&#34; href=&#34;#back-to-wt&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Being unemployed I decided to revive my small project - static site builder &lt;a href=&#34;https://codeberg.org/ysegorov/wt/&#34;&gt;wt&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Couple of times I was asked to handover the name &lt;strong&gt;&lt;code&gt;wt&lt;/code&gt;&lt;/strong&gt; on &lt;a href=&#34;https://pypi.org&#34;&gt;PyPI&lt;/a&gt; as the project
+looked abandoned. Can&#39;t say I agree with such requests. Personally I would look
+for a new name instead of asking for handover.&lt;/p&gt;
+&lt;p&gt;Anyway, I&#39;ve spent some time, slowly rewrote &lt;a href=&#34;https://codeberg.org/ysegorov/wt/&#34;&gt;wt&lt;/a&gt; from scratch and published it as
+version &lt;a href=&#34;https://pypi.org/project/wt/3.0.0/&#34;&gt;3.0.0&lt;/a&gt; (&lt;a href=&#34;https://pypi.org/project/wt/3.1.0/&#34;&gt;3.1.0&lt;/a&gt; is the latest release at the moment).&lt;/p&gt;
+&lt;p&gt;This version is completely incompatible with previous versions (oops!) but it looks
+much better on the inside (and it still doesn&#39;t support tags).&lt;/p&gt;
+&lt;p&gt;Documentation is not available online but it is &lt;a href=&#34;https://codeberg.org/ysegorov/wt/src/branch/main/docs/pages/&#34;&gt;available&lt;/a&gt; in the repository.&lt;/p&gt;
+&lt;p&gt;And &lt;a href=&#34;https://codeberg.org/ysegorov/blog/&#34;&gt;this blog&lt;/a&gt; is now managed by &lt;a href=&#34;https://codeberg.org/ysegorov/wt/&#34;&gt;wt&lt;/a&gt;. Again.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Let&#39;s move on.&lt;/p&gt;
 
         </content>
         <author>
