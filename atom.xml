@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2026-07-26T16:09:29.438531+00:00</updated>
+    <updated>2026-07-27T10:02:18.564591+00:00</updated>
     
     
     
@@ -2357,6 +2357,268 @@ resources I&#39;m using to study Rust (just for the record):&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;That&#39;s it for the &lt;a href=&#34;https://github.com/ysegorov/mdpreview-rs&#34;&gt;mdpreview&lt;/a&gt; intro, let&#39;s move on and
 (re)implement in Rust something else. Stay tuned.&lt;/p&gt;
+
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Void Linux Full Disk Encryption with detached header, remote unlock and /boot on USB stick</title>
+        <link href="https://ysegorov.github.io/2024/voidelinux-fde-detached-header-remote-unlock/" rel="alternate" />
+        <id>https://ysegorov.github.io/2024/voidelinux-fde-detached-header-remote-unlock/</id>
+        <updated>2026-07-27T09:35:00+00:00</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;void-linux-full-disk-encryption-with-detached-header-remote-unlock-and-boot-on-usb-stick&#34;&gt;Void Linux Full Disk Encryption with detached header, remote unlock and /boot on USB stick &lt;a class=&#34;header-anchor&#34; href=&#34;#void-linux-full-disk-encryption-with-detached-header-remote-unlock-and-boot-on-usb-stick&#34;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;div class=&#34;markdown-alert markdown-alert-note&#34;&gt;
+&lt;p class=&#34;markdown-alert-title&#34;&gt;Note&lt;/p&gt;
+&lt;p&gt;This post was initially published as &lt;a href=&#34;https://gist.github.com/ysegorov/23a71d7009da96dc661a774fed1c4b50&#34;&gt;gist&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;This is a short description of steps to have new secure Void Linux installation with following features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;/boot&lt;/code&gt;&lt;/strong&gt; partition on USB stick (not encrypted)&lt;/li&gt;
+&lt;li&gt;full disk encryption with &lt;strong&gt;detached LUKS header&lt;/strong&gt; on USB stick&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LVM&lt;/strong&gt; on top of the encrypted partition&lt;/li&gt;
+&lt;li&gt;remote unlocking of the encrypted partition using &lt;strong&gt;&lt;code&gt;dropbear&lt;/code&gt;&lt;/strong&gt; ssh server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;mkinitcpio&lt;/code&gt;&lt;/strong&gt; to generate initramfs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This manual is heavily based on Void Linux &lt;a href=&#34;https://docs.voidlinux.org/installation/guides/fde.html&#34;&gt;FDE&lt;/a&gt; documentation,
+Void Linux &lt;a href=&#34;https://docs.voidlinux.org/config/kernel.html&#34;&gt;kernel&lt;/a&gt; documentation,
+Arch Linux &lt;a href=&#34;https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#LVM_on_LUKS&#34;&gt;LVM on LUKS&lt;/a&gt; documentation,
+Arch Linux &lt;a href=&#34;https://wiki.archlinux.org/title/Dm-crypt/Specialties#Encrypted_system_using_a_detached_LUKS_header&#34;&gt;detached LUKS header&lt;/a&gt; documentation and
+Arch Linux &lt;a href=&#34;https://wiki.archlinux.org/title/Dm-crypt/Specialties#Remote_unlocking_of_root_(or_other)_partition&#34;&gt;remote unlocking&lt;/a&gt; documentation.&lt;/p&gt;
+&lt;p&gt;This manual assumptions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;/dev/sda&lt;/code&gt;&lt;/strong&gt; - USB stick&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;/dev/nvme0n1&lt;/code&gt;&lt;/strong&gt; - internal drive&lt;/li&gt;
+&lt;li&gt;wired network connection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Be very careful with drive names! Check command syntax twice before pressing Enter key!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;To start prepare Void Linux &lt;a href=&#34;https://docs.voidlinux.org/installation/live-images/prep.html&#34;&gt;installation media&lt;/a&gt;
+(must be separate USB drive or whatever else you have to start the process) and boot using it.&lt;/p&gt;
+&lt;p&gt;You are expected to run all commands below on a target computer running one of live Void Linux installers
+(some steps can be made beforehand on another computer though).&lt;/p&gt;
+&lt;h2 id=&#34;prepare-usb-stick&#34;&gt;Prepare USB stick &lt;a class=&#34;header-anchor&#34; href=&#34;#prepare-usb-stick&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# dd if=/dev/urandom of=/dev/sda bs=1M oflag=direct status=progress
+# fdisk /dev/sda
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;USB stick must have dos label and two partitions - EFI (to mount as &lt;code&gt;/boot/efi&lt;/code&gt;) and Linux (to mount as &lt;code&gt;/boot&lt;/code&gt;).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# fdisk -l /dev/sda
+Disk /dev/sda: 7.45 GiB, 8002732032 bytes, 15630336 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x0bfa9df7
+
+Device     Boot   Start     End Sectors  Size Id Type
+/dev/sda1          2048 1050623 1048576  512M ef EFI (FAT-12/16/32)
+/dev/sda2       1050624 3147775 2097152    1G 83 Linux
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;format-usb-stick-paritions&#34;&gt;Format USB stick paritions &lt;a class=&#34;header-anchor&#34; href=&#34;#format-usb-stick-paritions&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# mkfs.vfat /dev/sda1
+# mkfs.ext2 /dev/sda2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;temporary-mount-devsda2-partition-to-create-file-to-hold-luks-header&#34;&gt;Temporary mount /dev/sda2 partition to create file to hold LUKS header &lt;a class=&#34;header-anchor&#34; href=&#34;#temporary-mount-devsda2-partition-to-create-file-to-hold-luks-header&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# mount /dev/sda2 /mnt
+# dd if=/dev/zero of=/mnt/header.img bs=16M count=1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;prepare-internal-drive&#34;&gt;Prepare internal drive &lt;a class=&#34;header-anchor&#34; href=&#34;#prepare-internal-drive&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# dd if=/dev/urandom of=/dev/nvme0n1 bs=1M oflag=direct status=progress
+# fdisk /dev/nvme0n1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Internal drive must have gpt label and single Linux partition.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# fdisk -l /dev/nvme0n1
+Disk /dev/nvme0n1: 931.51 GiB, 1000204886016 bytes, 1953525168 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 45526BA4-E54F-2641-9A90-5735D0C3C772
+
+Device         Start        End    Sectors   Size Type
+/dev/nvme0n1p1  2048 1953523711 1953521664 931.5G Linux filesystem
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;create-and-open-luks-conatiner&#34;&gt;Create and open LUKS conatiner &lt;a class=&#34;header-anchor&#34; href=&#34;#create-and-open-luks-conatiner&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# cryptsetup luksFormat --header /mnt/header.img /dev/nvme0n1p1
+# cryptsetup open --header /mnt/header.img /dev/nvme0n1p1 cryptlvm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;prepare-logical-volumes&#34;&gt;Prepare logical volumes &lt;a class=&#34;header-anchor&#34; href=&#34;#prepare-logical-volumes&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# pvcreate /dev/mapper/cryptlvm
+# vgcreate lvgroup /dev/mapper/cryptlvm
+# lvcreate -L 8G -n swap lvgroup
+# lvcreate -L 32G -n root lvgroup
+# lvcreate -l 100%FREE -n home lvgroup
+# lvreduce -L -256M lvgroup/home
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# mkfs.ext4 /dev/lvgroup/root
+# mkfs.ext4 /dev/lvgroup/home
+# mkswap /dev/lvgroup/swap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;unmount-usb-stick&#34;&gt;Unmount USB stick &lt;a class=&#34;header-anchor&#34; href=&#34;#unmount-usb-stick&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# umount /mnt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;installation&#34;&gt;Installation &lt;a class=&#34;header-anchor&#34; href=&#34;#installation&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;mount-filesystems&#34;&gt;Mount filesystems &lt;a class=&#34;header-anchor&#34; href=&#34;#mount-filesystems&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# mount /dev/lvgroup/root /mnt
+# mkdir /mnt/home
+# mount /dev/lvgroup/home /mnt/home
+
+# mkdir /mnt/boot
+# mount /dev/sda2 /mnt/boot
+# mkdir /mnt/boot/efi
+# mount /dev/sda1 /mnt/boot/efi
+
+# swapon /dev/lvgroup/swap
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;copy-xbps-keys-and-install-base-system&#34;&gt;Copy xbps keys and install base system &lt;a class=&#34;header-anchor&#34; href=&#34;#copy-xbps-keys-and-install-base-system&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# mkdir -p /mnt/var/db/xbps/keys
+# cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys/
+
+# xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi lvm2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;chroot-into-and-configure-new-system&#34;&gt;Chroot into and configure new system &lt;a class=&#34;header-anchor&#34; href=&#34;#chroot-into-and-configure-new-system&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# xchroot /mnt
+[xchroot /mnt] # chown root:root /
+[xchroot /mnt] # chmod 755 /
+[xchroot /mnt] # passwd root
+[xchroot /mnt] # echo void &amp;gt; /etc/hostname
+
+[xchroot /mnt] # echo &amp;quot;LANG=en_US.UTF-8&amp;quot; &amp;gt; /etc/locale.conf
+[xchroot /mnt] # echo &amp;quot;en_US.UTF-8 UTF-8&amp;quot; &amp;gt;&amp;gt; /etc/default/libc-locales
+[xchroot /mnt] # xbps-reconfigure -f glibc-locales
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;edit-etcfstab&#34;&gt;Edit /etc/fstab &lt;a class=&#34;header-anchor&#34; href=&#34;#edit-etcfstab&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Use &lt;code&gt;blkid&lt;/code&gt; to find out UUID of USB stick partitions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# &amp;lt;file system&amp;gt;                             &amp;lt;dir&amp;gt;     &amp;lt;type&amp;gt;   &amp;lt;options&amp;gt;               &amp;lt;dump&amp;gt;  &amp;lt;pass&amp;gt;
+tmpfs                                       /tmp      tmpfs    defaults,nosuid,nodev   0       0
+/dev/lvgroup/root                           /         ext4     defaults                0       0
+/dev/lvgroup/home                           /home     ext4     defaults                0       0
+/dev/lvgroup/swap                           swap      swap     defaults                0       0
+UUID=&amp;quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;quot; /boot     ext2     defaults                0       0
+UUID=&amp;quot;xxxx-xxxx&amp;quot;                            /boot/efi vfat     defaults                0       0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;link-sshd-and-dhcpcd-eth0-services-to-default-runlevel-to-start-at-boot&#34;&gt;Link sshd and dhcpcd-eth0 services to default runlevel to start at boot &lt;a class=&#34;header-anchor&#34; href=&#34;#link-sshd-and-dhcpcd-eth0-services-to-default-runlevel-to-start-at-boot&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # ln -s /etc/sv/sshd /etc/runit/runsvdir/default/
+[xchroot /mnt] # ln -s /etc/sv/dhcpcd-eth0 /etc/runit/runsvdir/default/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;generate-openssh-host-keys-to-be-used-by-dropbear-too&#34;&gt;Generate openssh host keys (to be used by dropbear too) &lt;a class=&#34;header-anchor&#34; href=&#34;#generate-openssh-host-keys-to-be-used-by-dropbear-too&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # ssh-keygen -A
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;install-mkinitcpio-and-related-packages&#34;&gt;Install mkinitcpio and related packages &lt;a class=&#34;header-anchor&#34; href=&#34;#install-mkinitcpio-and-related-packages&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # xbps-install mkinitcpio mkinitcpio-encrypt mkinitcpio-lvm2
+[xchroot /mnt] # xbps-install mkinitcpio-encryptssh mkinitcpio-dropbear
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;switch-from-dracut-to-mkinitcpio&#34;&gt;Switch from dracut to mkinitcpio &lt;a class=&#34;header-anchor&#34; href=&#34;#switch-from-dracut-to-mkinitcpio&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # xbps-alternatives -s mkinitcpio
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;copy-encryptssh-to-encryptssh3-hook-and-edit-it-to-include-luks-header-parameter-to-cryptsetup-commands&#34;&gt;Copy encryptssh to encryptssh3 hook and edit it to include LUKS header parameter to cryptsetup commands &lt;a class=&#34;header-anchor&#34; href=&#34;#copy-encryptssh-to-encryptssh3-hook-and-edit-it-to-include-luks-header-parameter-to-cryptsetup-commands&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # mkdir -p /etc/initcpio/{hooks,install}
+[xchroot /mnt] # cp /usr/lib/initcpio/hooks/encryptssh /etc/initcpio/hooks/encryptssh3
+[xchroot /mnt] # cp /usr/lib/initcpio/install/encryptssh /etc/initcpio/install/encryptssh3
+[xchroot /mnt] # nvi /etc/initcpio/hooks/encryptssh3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;markdown-alert markdown-alert-caution&#34;&gt;
+&lt;p class=&#34;markdown-alert-title&#34;&gt;Caution&lt;/p&gt;
+&lt;p&gt;Do not put quotes around &lt;strong&gt;&lt;code&gt;${cryptheader}&lt;/code&gt;&lt;/strong&gt; in &lt;strong&gt;&lt;code&gt;cryptsetup isLuks ...&lt;/code&gt;&lt;/strong&gt; command (see diff below).&lt;/p&gt;
+&lt;/div&gt;
+&lt;pre&gt;&lt;code class=&#34;language-diff&#34;&gt;$ diff -u /usr/lib/initcpio/hooks/encryptssh /etc/initcpio/hooks/encryptssh3
+--- /usr/lib/initcpio/hooks/encryptssh	2026-07-08 20:20:29.000000000 +0000
++++ /etc/initcpio/hooks/encryptssh3	2026-07-12 10:05:13.214090178 +0000
+@@ -80,6 +80,9 @@
+     IFS=&amp;quot;$OLDIFS&amp;quot;
+     unset OLDIFS
+
++    cryptheader=&amp;quot;--header /boot/header.img&amp;quot;
++    cryptargs=&amp;quot;${cryptargs} ${cryptheader}&amp;quot;
++
+     echo &amp;quot;${cryptname}&amp;quot; &amp;gt; /.cryptname
+     echo &amp;quot;${cryptargs}&amp;quot; &amp;gt; /.cryptargs
+
+@@ -87,7 +90,7 @@
+
+         echo &amp;quot;${resolved}&amp;quot; &amp;gt; /.cryptdev
+
+-        if cryptsetup isLuks &amp;quot;${resolved}&amp;quot; &amp;gt;/dev/null 2&amp;gt;&amp;amp;1; then
++        if cryptsetup isLuks ${cryptheader} &amp;quot;${resolved}&amp;quot; &amp;gt;/dev/null 2&amp;gt;&amp;amp;1; then
+             [ ${DEPRECATED_CRYPT} -eq 1 ] &amp;amp;&amp;amp; warn_deprecated
+             dopassphrase=1
+             # If keyfile exists, try to use that
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;edit-etcmkinitcpioconf&#34;&gt;Edit /etc/mkinitcpio.conf &lt;a class=&#34;header-anchor&#34; href=&#34;#edit-etcmkinitcpioconf&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # nvi /etc/mkinitcpio.conf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-diff&#34;&gt;diff --git a/mkinitcpio.conf b/mkinitcpio.conf
+index 4a2ce87..143021d 100644
+--- a/mkinitcpio.conf
++++ b/mkinitcpio.conf
+@@ -4,7 +4,7 @@
+ # run.  Advanced users may wish to specify all system modules
+ # in this array.  For instance:
+ #     MODULES=(usbhid xhci_hcd)
+-MODULES=()
++MODULES=(loop)
+
+ # BINARIES
+ # This setting includes any additional binaries a given user may
+@@ -16,7 +16,7 @@ BINARIES=()
+ # FILES
+ # This setting is similar to BINARIES above, however, files are added
+ # as-is and are not parsed in any way.  This is useful for config files.
+-FILES=()
++FILES=(/boot/header.img)
+
+ # HOOKS
+ # This is the most important setting in this file.  The HOOKS control the
+@@ -49,12 +49,12 @@ FILES=()
+ #
+ ##   NOTE: If you have /usr on a separate partition, you MUST include the
+ #    usr and fsck hooks.
+-HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block filesystems fsck)
++HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block netconf dropbear encryptssh3 lvm2 filesystems fsck)
+
+ # COMPRESSION
+ # Use this to compress the initramfs image. By default, gzip compression
+ # is used. Use &#39;cat&#39; to create an uncompressed image.
+-#COMPRESSION=&amp;quot;zstd&amp;quot;
++COMPRESSION=&amp;quot;zstd&amp;quot;
+ #COMPRESSION=&amp;quot;gzip&amp;quot;
+ #COMPRESSION=&amp;quot;bzip2&amp;quot;
+ #COMPRESSION=&amp;quot;lzma&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;copy-your-ssh-public-key-to-root-home-directory&#34;&gt;Copy your ssh public key to root home directory &lt;a class=&#34;header-anchor&#34; href=&#34;#copy-your-ssh-public-key-to-root-home-directory&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # mkdir /root/.ssh
+[xchroot /mnt] # chmod 700 /root/.ssh
+[xchroot /mnt] # nvi /root/.ssh/authorized_keys
+[xchroot /mnt] # chmod 600 /root/.ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;copy-your-ssh-public-key-to-dropbear-configuration-to-allow-remote-unlock&#34;&gt;Copy your ssh public key to dropbear configuration to allow remote unlock &lt;a class=&#34;header-anchor&#34; href=&#34;#copy-your-ssh-public-key-to-dropbear-configuration-to-allow-remote-unlock&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Without &lt;code&gt;/etc/dropbear/root_key&lt;/code&gt; file and proper public key in it you won&#39;t be able to unlock internal drive remotely.&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # cp /root/.ssh/authorized_key /etc/dropbear/root_key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;set-proper-grub_cmdline_linux_default-value-in-etcdefaultgrub&#34;&gt;Set proper GRUB_CMDLINE_LINUX_DEFAULT value in /etc/default/grub &lt;a class=&#34;header-anchor&#34; href=&#34;#set-proper-grub_cmdline_linux_default-value-in-etcdefaultgrub&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Ensure you have proper &lt;code&gt;ip&lt;/code&gt; parameters here - host ip address, subnet mask and gateway address.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GRUB_CMDLINE_LINUX_DEFAULT=&amp;quot;loglevel=4 cryptdevice=/dev/nvme0n1p1:cryptlvm root=/dev/lvgroup/root net.ifnames=0 ip=192.168.0.55::192.168.0.1:255.255.255.0::eth0:none&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;install-bootloader&#34;&gt;Install bootloader &lt;a class=&#34;header-anchor&#34; href=&#34;#install-bootloader&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=&amp;quot;Void&amp;quot; --removable
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;reconfigure-the-system&#34;&gt;Reconfigure the system &lt;a class=&#34;header-anchor&#34; href=&#34;#reconfigure-the-system&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;This will generate initramfs and bootloader configuration (&lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; file).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # xbps-reconfigure -fa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;finish-and-reboot&#34;&gt;Finish and reboot &lt;a class=&#34;header-anchor&#34; href=&#34;#finish-and-reboot&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Don&#39;t forget to remove installation media from the box.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;[xchroot /mnt] # exit
+# umount -R /mnt
+# reboot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;connect-to-your-brand-new-system-and-unlock-the-drive&#34;&gt;Connect to your brand new system and unlock the drive &lt;a class=&#34;header-anchor&#34; href=&#34;#connect-to-your-brand-new-system-and-unlock-the-drive&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You have to do it from another computer.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ssh root@192.168.0.55
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Don&#39;t forget to backup your &lt;code&gt;/boot/header.img&lt;/code&gt; file or full USB stick.&lt;/strong&gt;&lt;/p&gt;
 
         </content>
         <author>
