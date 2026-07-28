@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2026-07-27T16:12:00.845148+00:00</updated>
+    <updated>2026-07-28T16:19:38.342562+00:00</updated>
     
     
     
@@ -2660,6 +2660,57 @@ much better on the inside (and it still doesn&#39;t support tags).&lt;/p&gt;
 &lt;p&gt;And &lt;a href=&#34;https://codeberg.org/ysegorov/blog/&#34;&gt;this blog&lt;/a&gt; is now managed by &lt;a href=&#34;https://codeberg.org/ysegorov/wt/&#34;&gt;wt&lt;/a&gt;. Again.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;Let&#39;s move on.&lt;/p&gt;
+
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>AI and other strangers</title>
+        <link href="https://ysegorov.github.io/2026/ai-and-other-strangers/" rel="alternate" />
+        <id>https://ysegorov.github.io/2026/ai-and-other-strangers/</id>
+        <updated>2026-07-28T16:15:00+00:00</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;ai-and-other-strangers&#34;&gt;AI and other strangers &lt;a class=&#34;header-anchor&#34; href=&#34;#ai-and-other-strangers&#34;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;It seems like I should share my attitude towards modern technologies.&lt;/p&gt;
+&lt;h2 id=&#34;artificial-intelligence-ai&#34;&gt;Artificial Intelligence (AI) &lt;a class=&#34;header-anchor&#34; href=&#34;#artificial-intelligence-ai&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Several years ago I&#39;ve used &lt;a href=&#34;https://alphacephei.com/vosk/&#34;&gt;Vosk&lt;/a&gt; to transform 30+ audio records to text to help
+my wife while she was taking her training courses.
+Text quality was not great but acceptable.&lt;/p&gt;
+&lt;p&gt;This is the only case I was using &lt;strong&gt;AI&lt;/strong&gt; in my life
+(not sure &lt;strong&gt;AI&lt;/strong&gt; is the right term here, it was offline use of &lt;a href=&#34;https://alphacephei.com/vosk/models&#34;&gt;Vosk models&lt;/a&gt;,
+no prompts, agents or something like that).&lt;/p&gt;
+&lt;p&gt;I have not used &lt;strong&gt;AI&lt;/strong&gt; to develop software in the past, I do not use it in the present
+and I will not use it in the future.&lt;/p&gt;
+&lt;p&gt;I do not like &lt;strong&gt;AI&lt;/strong&gt; being used by other software developers either.&lt;/p&gt;
+&lt;p&gt;And I will try to minimize my use of software developed using &lt;strong&gt;AI&lt;/strong&gt; (hard task, though).&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://codeberg.org&#34;&gt;Codeberg&lt;/a&gt; is a platform I&#39;m gradually migrating to from &lt;a href=&#34;https://github.com&#34;&gt;GitHub&lt;/a&gt;. You can read
+their article, which I completely agree with, explaining &lt;a href=&#34;https://blog.codeberg.org/protecting-our-floss-commons-from-llms.html&#34;&gt;Codeberg&#39;s stance&lt;/a&gt; on &lt;strong&gt;AI&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I do not like &lt;strong&gt;AI&lt;/strong&gt; being developed at all.&lt;/p&gt;
+&lt;p&gt;And yes, as a developer I see a threat to myself from its use in software development.&lt;/p&gt;
+&lt;h2 id=&#34;cryptocurrency&#34;&gt;Cryptocurrency &lt;a class=&#34;header-anchor&#34; href=&#34;#cryptocurrency&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Another technology I find questionable.
+The idea of &lt;em&gt;&amp;quot;making money out of nothing&amp;quot;&lt;/em&gt; seems unnatural to me.&lt;/p&gt;
+&lt;p&gt;It&#39;s elder than &lt;strong&gt;AI&lt;/strong&gt; but I&#39;ve never wanted to try it and will not use it in
+the future.&lt;/p&gt;
+&lt;p&gt;As a software developer, I don&#39;t want to develop any programs using this technology.&lt;/p&gt;
+&lt;h2 id=&#34;software&#34;&gt;Software &lt;a class=&#34;header-anchor&#34; href=&#34;#software&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This is my personal list of things that I don&#39;t want to use in development and
+operation, and I try to minimize their use (in no particular order):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;systemd&lt;/code&gt;&lt;/strong&gt; - it breaks Unix way of doing things,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;docker&lt;/code&gt;&lt;/strong&gt; - complicates workflow,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;react&lt;/code&gt;&lt;/strong&gt; and it&#39;s ecosystem - &lt;strong&gt;&lt;code&gt;jsx&lt;/code&gt;&lt;/strong&gt; is a mess to me,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;angular&lt;/code&gt;&lt;/strong&gt; - overcomplicated web framework,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;ansible&lt;/code&gt;&lt;/strong&gt; - using &lt;strong&gt;&lt;code&gt;yaml&lt;/code&gt;&lt;/strong&gt; to copy file is so strange,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;FastAPI&lt;/code&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;code&gt;Pydantic&lt;/code&gt;&lt;/strong&gt; - too loud of being &lt;em&gt;&amp;quot;fast, high-performance and simple&amp;quot;&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is not a final list and I will return to it from time to time.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Let&#39;s make world a little bit better place to live.
+We just need to slow down and look around.&lt;/p&gt;
 
         </content>
         <author>

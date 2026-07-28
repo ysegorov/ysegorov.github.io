@@ -188,6 +188,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://ysegorov.github.io/2026/ai-and-other-strangers/</loc>
+        <lastmod>2026-07-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://ysegorov.github.io/</loc>
         <lastmod>2026-07-26</lastmod>
         <changefreq>daily</changefreq>
