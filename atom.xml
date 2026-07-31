@@ -5,7 +5,7 @@
     <link href="https://ysegorov.github.io/" rel="alternative" />
     <link href="https://ysegorov.github.io/atom.xml" rel="self" />
     <id>https://ysegorov.github.io</id>
-    <updated>2026-07-28T16:19:38.342562+00:00</updated>
+    <updated>2026-07-31T16:52:56.521940+00:00</updated>
     
     
     
@@ -2711,6 +2711,160 @@ operation, and I try to minimize their use (in no particular order):&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;Let&#39;s make world a little bit better place to live.
 We just need to slow down and look around.&lt;/p&gt;
+
+        </content>
+        <author>
+            <name>Yuri Egorov</name>
+        </author>
+    </entry>
+    <entry>
+        <title>Passware</title>
+        <link href="https://ysegorov.github.io/2026/passware/" rel="alternate" />
+        <id>https://ysegorov.github.io/2026/passware/</id>
+        <updated>2026-07-31T16:50:00+00:00</updated>
+        <summary></summary>
+        <content type="html">
+            &lt;h1 id=&#34;passware&#34;&gt;Passware &lt;a class=&#34;header-anchor&#34; href=&#34;#passware&#34;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;preface&#34;&gt;Preface &lt;a class=&#34;header-anchor&#34; href=&#34;#preface&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I worked for &lt;a href=&#34;https://www.passware.com&#34;&gt;Passware&lt;/a&gt; from September, 2015 to May 30, 2025, for almost 10 years
+(9 years and 9 months to be exact).&lt;/p&gt;
+&lt;p&gt;Rather long period of time but I&#39;m not sure I can share all notable moments and
+can go into details about software developed.&lt;/p&gt;
+&lt;p&gt;This post will probably be &lt;s&gt;short&lt;/s&gt; long.&lt;/p&gt;
+&lt;h2 id=&#34;context&#34;&gt;Context &lt;a class=&#34;header-anchor&#34; href=&#34;#context&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.passware.com&#34;&gt;Passware&lt;/a&gt; is a small company having less than 100 employees. Quoted from the website:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The world leader in encrypted electronic evidence discovery and decryption.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Password recovery tools for forensic teams, businesses and home office
+with up to 70% success rate.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Thus, the company is developing native Windows/MacOS application for recovering
+passwords, encryption keys and other types of secrets (the top-tier product supports
+over 400 applications/file types, according to the website).&lt;/p&gt;
+&lt;p&gt;My role in the company was significantly different from all other developers&#39; roles
+as I was focused on web development rather than native Windows/MacOS app development.&lt;/p&gt;
+&lt;p&gt;I was involved in the development and support of:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.passware.com/sms-subscription/&#34;&gt;Passware Software Maintenance and Support Subscription&lt;/a&gt;,
+a website-integrated service for end users designed to manage product keys
+and downloads of purchased products,&lt;/li&gt;
+&lt;li&gt;Passware products autoupdate feature,&lt;/li&gt;
+&lt;li&gt;Passware Partners Portal,&lt;/li&gt;
+&lt;li&gt;some other tools and services.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most of the time I worked alone solving problems set by CEO &lt;strong&gt;Dmitry Sumin&lt;/strong&gt; and
+the sales and customer support departments. In some rare cases I&#39;ve collaborated
+with other developers to solve (mostly) integration problems.&lt;/p&gt;
+&lt;p&gt;In my work I was using &lt;strong&gt;Django&lt;/strong&gt;, &lt;strong&gt;PostgreSQL&lt;/strong&gt;, &lt;strong&gt;Celery&lt;/strong&gt;, &lt;strong&gt;Ansible&lt;/strong&gt;,
+&lt;strong&gt;Jenkins&lt;/strong&gt;, &lt;strong&gt;Sentry&lt;/strong&gt;, some &lt;strong&gt;Javascript&lt;/strong&gt; libraries for front-end tasks, &lt;strong&gt;nginx&lt;/strong&gt;,
+&lt;strong&gt;git&lt;/strong&gt; and other tools.&lt;/p&gt;
+&lt;h2 id=&#34;codebase-workflow-and-servers&#34;&gt;Codebase, Workflow and Servers &lt;a class=&#34;header-anchor&#34; href=&#34;#codebase-workflow-and-servers&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The codebase I&#39;ve started to work with in 2015 was pretty small - two &lt;strong&gt;Flask&lt;/strong&gt;-powered
+services and one &lt;strong&gt;Django&lt;/strong&gt;-powered service.&lt;/p&gt;
+&lt;p&gt;Can&#39;t say I liked the code but it was written by &lt;strong&gt;C++&lt;/strong&gt; developers who
+&lt;em&gt;knew &lt;strong&gt;Python&lt;/strong&gt;&lt;/em&gt;, so it was something to be ready for (I was not ready, though).&lt;/p&gt;
+&lt;p&gt;A more serious problem was the lack of testing, automated deployment and
+staging environment - everything I&#39;m used to while working for &lt;a href=&#34;https://ysegorov.github.io/2015/chtd/&#34;&gt;Chtd&lt;/a&gt;.
+Deployments were made by developers by hand, sometimes with code changes
+on the server (ouch!).&lt;/p&gt;
+&lt;p&gt;Not so fast as it could be but all of this was fixed by me.&lt;/p&gt;
+&lt;p&gt;We initially tried to use third-party CI/CD solution but ran into some issues with
+the flow so I ended up setting up self-hosted instance of &lt;strong&gt;Jenkins&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To collect errors I&#39;ve setup self-hosted instance of &lt;strong&gt;Sentry&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The codebase story turned out to be a bit more complicated.
+I rewrote the code twice to get it to a state I consider good and manageable -
+several &lt;strong&gt;Django&lt;/strong&gt;-powered services supported by tests covering up to 60-80% of the code.
+By the end of 2018 it was deployed to production and is likely still running there
+(though the company decided to switch to Typescript for these services).&lt;/p&gt;
+&lt;p&gt;I had never worked with &lt;strong&gt;Ansible&lt;/strong&gt; before this work and not sure I would use it
+but CTO of the company, &lt;strong&gt;Alik Kurdyukov&lt;/strong&gt;, suggested to use it to manage the servers.&lt;/p&gt;
+&lt;p&gt;So, after some try-and-fail efforts, by the end of 2015 I&#39;ve managed to deploy
+&lt;strong&gt;Jenkins&lt;/strong&gt; and &lt;strong&gt;Sentry&lt;/strong&gt; using &lt;strong&gt;Ansible&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Both production and test environments were put under the control of
+&lt;strong&gt;Ansible&lt;/strong&gt; playbooks in the spring of 2019.&lt;/p&gt;
+&lt;p&gt;The test environment was a fully functional copy of the production services
+including a copy of the company&#39;s website allowing us to test almost everything
+we needed.&lt;/p&gt;
+&lt;h2 id=&#34;integrations&#34;&gt;Integrations &lt;a class=&#34;header-anchor&#34; href=&#34;#integrations&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here is a list of third-party services that the company used while I was there:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cleverbridge.com&#34;&gt;Cleverbridge&lt;/a&gt; - end-user payments, license delivery,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.xero.com&#34;&gt;Xero&lt;/a&gt; - invoices for partners and government agencies,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mailchimp.com&#34;&gt;Mailchimp&lt;/a&gt; - mailing lists management,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mandrill.com&#34;&gt;Mandrill&lt;/a&gt; (transformed into &lt;a href=&#34;https://mailchimp.com/developer/transactional/&#34;&gt;Mailchimp Transactional Email&lt;/a&gt;) - transactional emails,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sendgrid.com&#34;&gt;Sendgrid&lt;/a&gt; - transactional emails,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.zendesk.com&#34;&gt;Zendesk&lt;/a&gt; - customer support tickets,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.thinkific.com&#34;&gt;Thinkific&lt;/a&gt; - training courses purchases,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://slack.com&#34;&gt;Slack&lt;/a&gt; - notifications.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;notable-features-and-tasks&#34;&gt;Notable features and tasks &lt;a class=&#34;header-anchor&#34; href=&#34;#notable-features-and-tasks&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This is not an exhaustive list of features and tasks - just a few.&lt;/p&gt;
+&lt;h3 id=&#34;admin-site&#34;&gt;Admin Site &lt;a class=&#34;header-anchor&#34; href=&#34;#admin-site&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I think it was the main feature I&#39;ve introduced while rewriting the old codebase -
+highly customized version of &lt;strong&gt;Django&#39;s Admin Site&lt;/strong&gt;.
+It was used by staff and has grown to a rather large tool with extended possibilities.&lt;/p&gt;
+&lt;p&gt;Most interesting features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;subscriptions management,&lt;/li&gt;
+&lt;li&gt;product release management (including changelog),&lt;/li&gt;
+&lt;li&gt;product license generation,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cleverbridge.com&#34;&gt;Cleverbridge&lt;/a&gt; one-time purchase url generation,&lt;/li&gt;
+&lt;li&gt;access to services events log,&lt;/li&gt;
+&lt;li&gt;subscription expiration email subject A/B testing,&lt;/li&gt;
+&lt;li&gt;and a lot more other useful tools.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;partners-portal&#34;&gt;Partners Portal &lt;a class=&#34;header-anchor&#34; href=&#34;#partners-portal&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;This service was started in 2018 as a simple place for company&#39;s partners to get
+marketing materials and has gradually grown to a full featured portal allowing
+partners to get invoices and products license details.&lt;/p&gt;
+&lt;p&gt;Most interesting features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;role-based access,&lt;/li&gt;
+&lt;li&gt;invites to control new users registration,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.xero.com&#34;&gt;Xero&lt;/a&gt; integration to prepare invoices,&lt;/li&gt;
+&lt;li&gt;license delivery PDF generation using &lt;a href=&#34;https://www.tug.org/texlive/&#34;&gt;TeX Live&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;discount coupons,&lt;/li&gt;
+&lt;li&gt;end-user subscription details.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;retention-rate&#34;&gt;Retention rate &lt;a class=&#34;header-anchor&#34; href=&#34;#retention-rate&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Quite interesting task implemented in 2021 - calculate &lt;a href=&#34;https://en.wikipedia.org/wiki/Retention_rate&#34;&gt;Retention rate&lt;/a&gt; of new,
+active and returned customers in terms of days and products.&lt;/p&gt;
+&lt;p&gt;Admin Site allows to manage subscription period which means retention rate must be
+recalculated every day to ensure proper data.&lt;/p&gt;
+&lt;p&gt;I decided to do all the calculations on the &lt;strong&gt;PostgreSQL&lt;/strong&gt; side using &lt;strong&gt;PL/pgSQL&lt;/strong&gt;
+to minimize the data processing overhead.&lt;/p&gt;
+&lt;p&gt;It worked well.&lt;/p&gt;
+&lt;h3 id=&#34;price-lock&#34;&gt;Price Lock &lt;a class=&#34;header-anchor&#34; href=&#34;#price-lock&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I think this was the most challenging feature to implement as it involves dynamic
+pricing for the selected product.&lt;/p&gt;
+&lt;p&gt;Here is a short description of the feature (quoted from the company&#39;s support site):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There is a price lock for Passware Kit Mobile customers: no price increases
+will be applied for the first two years, and an annual price increase will
+be capped at 5% thereafter, provided an annual license is maintained.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Sounds simple but the implementation was not so.&lt;/p&gt;
+&lt;p&gt;Anyway, it was implemented and hopefully worked as expected.&lt;/p&gt;
+&lt;h3 id=&#34;mjml-renderer&#34;&gt;Mjml renderer &lt;a class=&#34;header-anchor&#34; href=&#34;#mjml-renderer&#34;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Not as challenging feature as the previous one. But it was long awaited feature
+needed to simplify occasional edits of &lt;strong&gt;HTML&lt;/strong&gt; templates used to send in emails.&lt;/p&gt;
+&lt;p&gt;For historical reasons email templates were saved in &lt;strong&gt;HTML&lt;/strong&gt; format.
+Every time the marketing team decided to update the design manual work was required
+to place new layout correctly.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sergei Gromov&lt;/strong&gt;, website developer focused on frontend and &lt;strong&gt;HTML&lt;/strong&gt; design, was also
+responsible for getting the emails right. He used &lt;strong&gt;MJML&lt;/strong&gt; in his work and I was
+impressed by its simplicity.&lt;/p&gt;
+&lt;p&gt;Thus, a separate &lt;strong&gt;nodejs&lt;/strong&gt;-based service for converting &lt;strong&gt;MJML&lt;/strong&gt; to &lt;strong&gt;HTML&lt;/strong&gt; was born.&lt;/p&gt;
+&lt;p&gt;This allowed us to store email templates in &lt;strong&gt;MJML&lt;/strong&gt; format which greatly simplified
+our workflow.&lt;/p&gt;
+&lt;h2 id=&#34;summary&#34;&gt;Summary &lt;a class=&#34;header-anchor&#34; href=&#34;#summary&#34;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Can&#39;t say it was a fun time. But nevertheless I&#39;m grateful to the entire team of
+the company, to CEO and CTO for this time.&lt;/p&gt;
+&lt;p&gt;Working alone was not as easy as I thought. It&#39;s much better to work in a small team,
+say 3-5 colleagues.&lt;/p&gt;
+&lt;p&gt;It&#39;s time to move on.&lt;/p&gt;
 
         </content>
         <author>

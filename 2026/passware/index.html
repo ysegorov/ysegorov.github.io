@@ -1,0 +1,233 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Passware | Words and Thoughts</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+        <link href="/atom.xml" type="application/xml" rel="alternate" title="Words and Thoughts Atom Feed" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="/css/normalize.css?ts=1785516777">
+        <link rel="stylesheet" href="/css/style.css?ts=1785516777">
+        
+        
+
+<!-- see https://www.npmjs.com/package/@highlightjs/cdn-assets?activeTab=code for themes -->
+
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="passware">Passware <a class="header-anchor" href="#passware">¶</a></h1>
+<h2 id="preface">Preface <a class="header-anchor" href="#preface">¶</a></h2>
+<p>I worked for <a href="https://www.passware.com">Passware</a> from September, 2015 to May 30, 2025, for almost 10 years
+(9 years and 9 months to be exact).</p>
+<p>Rather long period of time but I'm not sure I can share all notable moments and
+can go into details about software developed.</p>
+<p>This post will probably be <s>short</s> long.</p>
+<h2 id="context">Context <a class="header-anchor" href="#context">¶</a></h2>
+<p><a href="https://www.passware.com">Passware</a> is a small company having less than 100 employees. Quoted from the website:</p>
+<blockquote>
+<p>The world leader in encrypted electronic evidence discovery and decryption.</p>
+</blockquote>
+<blockquote>
+<p>Password recovery tools for forensic teams, businesses and home office
+with up to 70% success rate.</p>
+</blockquote>
+<p>Thus, the company is developing native Windows/MacOS application for recovering
+passwords, encryption keys and other types of secrets (the top-tier product supports
+over 400 applications/file types, according to the website).</p>
+<p>My role in the company was significantly different from all other developers' roles
+as I was focused on web development rather than native Windows/MacOS app development.</p>
+<p>I was involved in the development and support of:</p>
+<ul>
+<li><a href="https://www.passware.com/sms-subscription/">Passware Software Maintenance and Support Subscription</a>,
+a website-integrated service for end users designed to manage product keys
+and downloads of purchased products,</li>
+<li>Passware products autoupdate feature,</li>
+<li>Passware Partners Portal,</li>
+<li>some other tools and services.</li>
+</ul>
+<p>Most of the time I worked alone solving problems set by CEO <strong>Dmitry Sumin</strong> and
+the sales and customer support departments. In some rare cases I've collaborated
+with other developers to solve (mostly) integration problems.</p>
+<p>In my work I was using <strong>Django</strong>, <strong>PostgreSQL</strong>, <strong>Celery</strong>, <strong>Ansible</strong>,
+<strong>Jenkins</strong>, <strong>Sentry</strong>, some <strong>Javascript</strong> libraries for front-end tasks, <strong>nginx</strong>,
+<strong>git</strong> and other tools.</p>
+<h2 id="codebase-workflow-and-servers">Codebase, Workflow and Servers <a class="header-anchor" href="#codebase-workflow-and-servers">¶</a></h2>
+<p>The codebase I've started to work with in 2015 was pretty small - two <strong>Flask</strong>-powered
+services and one <strong>Django</strong>-powered service.</p>
+<p>Can't say I liked the code but it was written by <strong>C++</strong> developers who
+<em>knew <strong>Python</strong></em>, so it was something to be ready for (I was not ready, though).</p>
+<p>A more serious problem was the lack of testing, automated deployment and
+staging environment - everything I'm used to while working for <a href="/2015/chtd/">Chtd</a>.
+Deployments were made by developers by hand, sometimes with code changes
+on the server (ouch!).</p>
+<p>Not so fast as it could be but all of this was fixed by me.</p>
+<p>We initially tried to use third-party CI/CD solution but ran into some issues with
+the flow so I ended up setting up self-hosted instance of <strong>Jenkins</strong>.</p>
+<p>To collect errors I've setup self-hosted instance of <strong>Sentry</strong>.</p>
+<p>The codebase story turned out to be a bit more complicated.
+I rewrote the code twice to get it to a state I consider good and manageable -
+several <strong>Django</strong>-powered services supported by tests covering up to 60-80% of the code.
+By the end of 2018 it was deployed to production and is likely still running there
+(though the company decided to switch to Typescript for these services).</p>
+<p>I had never worked with <strong>Ansible</strong> before this work and not sure I would use it
+but CTO of the company, <strong>Alik Kurdyukov</strong>, suggested to use it to manage the servers.</p>
+<p>So, after some try-and-fail efforts, by the end of 2015 I've managed to deploy
+<strong>Jenkins</strong> and <strong>Sentry</strong> using <strong>Ansible</strong>.</p>
+<p>Both production and test environments were put under the control of
+<strong>Ansible</strong> playbooks in the spring of 2019.</p>
+<p>The test environment was a fully functional copy of the production services
+including a copy of the company's website allowing us to test almost everything
+we needed.</p>
+<h2 id="integrations">Integrations <a class="header-anchor" href="#integrations">¶</a></h2>
+<p>Here is a list of third-party services that the company used while I was there:</p>
+<ul>
+<li><a href="https://www.cleverbridge.com">Cleverbridge</a> - end-user payments, license delivery,</li>
+<li><a href="https://www.xero.com">Xero</a> - invoices for partners and government agencies,</li>
+<li><a href="https://mailchimp.com">Mailchimp</a> - mailing lists management,</li>
+<li><a href="https://mandrill.com">Mandrill</a> (transformed into <a href="https://mailchimp.com/developer/transactional/">Mailchimp Transactional Email</a>) - transactional emails,</li>
+<li><a href="https://www.sendgrid.com">Sendgrid</a> - transactional emails,</li>
+<li><a href="https://www.zendesk.com">Zendesk</a> - customer support tickets,</li>
+<li><a href="https://www.thinkific.com">Thinkific</a> - training courses purchases,</li>
+<li><a href="https://slack.com">Slack</a> - notifications.</li>
+</ul>
+<h2 id="notable-features-and-tasks">Notable features and tasks <a class="header-anchor" href="#notable-features-and-tasks">¶</a></h2>
+<p>This is not an exhaustive list of features and tasks - just a few.</p>
+<h3 id="admin-site">Admin Site <a class="header-anchor" href="#admin-site">¶</a></h3>
+<p>I think it was the main feature I've introduced while rewriting the old codebase -
+highly customized version of <strong>Django's Admin Site</strong>.
+It was used by staff and has grown to a rather large tool with extended possibilities.</p>
+<p>Most interesting features:</p>
+<ul>
+<li>subscriptions management,</li>
+<li>product release management (including changelog),</li>
+<li>product license generation,</li>
+<li><a href="https://www.cleverbridge.com">Cleverbridge</a> one-time purchase url generation,</li>
+<li>access to services events log,</li>
+<li>subscription expiration email subject A/B testing,</li>
+<li>and a lot more other useful tools.</li>
+</ul>
+<h3 id="partners-portal">Partners Portal <a class="header-anchor" href="#partners-portal">¶</a></h3>
+<p>This service was started in 2018 as a simple place for company's partners to get
+marketing materials and has gradually grown to a full featured portal allowing
+partners to get invoices and products license details.</p>
+<p>Most interesting features:</p>
+<ul>
+<li>role-based access,</li>
+<li>invites to control new users registration,</li>
+<li><a href="https://www.xero.com">Xero</a> integration to prepare invoices,</li>
+<li>license delivery PDF generation using <a href="https://www.tug.org/texlive/">TeX Live</a>,</li>
+<li>discount coupons,</li>
+<li>end-user subscription details.</li>
+</ul>
+<h3 id="retention-rate">Retention rate <a class="header-anchor" href="#retention-rate">¶</a></h3>
+<p>Quite interesting task implemented in 2021 - calculate <a href="https://en.wikipedia.org/wiki/Retention_rate">Retention rate</a> of new,
+active and returned customers in terms of days and products.</p>
+<p>Admin Site allows to manage subscription period which means retention rate must be
+recalculated every day to ensure proper data.</p>
+<p>I decided to do all the calculations on the <strong>PostgreSQL</strong> side using <strong>PL/pgSQL</strong>
+to minimize the data processing overhead.</p>
+<p>It worked well.</p>
+<h3 id="price-lock">Price Lock <a class="header-anchor" href="#price-lock">¶</a></h3>
+<p>I think this was the most challenging feature to implement as it involves dynamic
+pricing for the selected product.</p>
+<p>Here is a short description of the feature (quoted from the company's support site):</p>
+<blockquote>
+<p>There is a price lock for Passware Kit Mobile customers: no price increases
+will be applied for the first two years, and an annual price increase will
+be capped at 5% thereafter, provided an annual license is maintained.</p>
+</blockquote>
+<p>Sounds simple but the implementation was not so.</p>
+<p>Anyway, it was implemented and hopefully worked as expected.</p>
+<h3 id="mjml-renderer">Mjml renderer <a class="header-anchor" href="#mjml-renderer">¶</a></h3>
+<p>Not as challenging feature as the previous one. But it was long awaited feature
+needed to simplify occasional edits of <strong>HTML</strong> templates used to send in emails.</p>
+<p>For historical reasons email templates were saved in <strong>HTML</strong> format.
+Every time the marketing team decided to update the design manual work was required
+to place new layout correctly.</p>
+<p><strong>Sergei Gromov</strong>, website developer focused on frontend and <strong>HTML</strong> design, was also
+responsible for getting the emails right. He used <strong>MJML</strong> in his work and I was
+impressed by its simplicity.</p>
+<p>Thus, a separate <strong>nodejs</strong>-based service for converting <strong>MJML</strong> to <strong>HTML</strong> was born.</p>
+<p>This allowed us to store email templates in <strong>MJML</strong> format which greatly simplified
+our workflow.</p>
+<h2 id="summary">Summary <a class="header-anchor" href="#summary">¶</a></h2>
+<p>Can't say it was a fun time. But nevertheless I'm grateful to the entire team of
+the company, to CEO and CTO for this time.</p>
+<p>Working alone was not as easy as I thought. It's much better to work in a small team,
+say 3-5 colleagues.</p>
+<p>It's time to move on.</p>
+
+            <div class="content-last-modified"><small><em>Last modified: 2026-07-31 16:50:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2026/ai-and-other-strangers/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">AI and other strangers</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words and Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://codeberg.org/ysegorov/" title="Codeberg"><svg width="24" height="24" viewBox="0 0 4.2333332 4.2333335" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="42519.28500000001" x2="42575.33600000001" y1="-7078.7891" y2="-6966.9307"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".49517274" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient><path d="m42519.28500000001-7078.7891a.76086879.56791688 0 0 0 -.738.6739l33.586 125.8886a87.182358 87.182358 0 0 0 39.381-33.7636l-71.565-92.5196a.76086879.56791688 0 0 0 -.664-.2793z" fill="url(#a)" transform="matrix(.02427860986 0 0 .02427860986 -1030.1563562308 172.97083575326)"/><path d="m11249.461-1883.6961c-12.74 0-23.067 10.3275-23.067 23.0671 0 4.3335 1.22 8.5795 3.522 12.2514l19.232-24.8636c.138-.1796.486-.1796.624 0l19.233 24.8646c2.302-3.6721 3.523-7.9185 3.523-12.2524 0-12.7396-10.327-23.0671-23.067-23.0671z" fill="#fff" stroke-width="17.0055" transform="matrix(.0917616758 0 0 .0917616758 -1030.1563562308 172.97083575326)"/></svg></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        
+        
+
+
+
+        
+        
+        
+    </body>
+</html>
