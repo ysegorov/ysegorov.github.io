@@ -200,6 +200,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://ysegorov.github.io/2026/librewolf-certificate-transparency-and-untrusted-ca/</loc>
+        <lastmod>2026-08-11</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://ysegorov.github.io/</loc>
         <lastmod>2026-07-26</lastmod>
         <changefreq>daily</changefreq>

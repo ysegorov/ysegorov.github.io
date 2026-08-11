@@ -1,0 +1,485 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>LibreWolf, Certificate Transparency and Untrusted CA | Words and Thoughts</title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        
+
+        
+        <!-- Place favicon.ico in the root directory -->
+
+        
+        <link href="/atom.xml" type="application/xml" rel="alternate" title="Words and Thoughts Atom Feed" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,Kreon:400,700">
+        <link rel="stylesheet" href="/css/normalize.css?ts=1786463980">
+        <link rel="stylesheet" href="/css/style.css?ts=1786463980">
+        
+        
+
+<!-- see https://www.npmjs.com/package/@highlightjs/cdn-assets?activeTab=code for themes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/humanoid-light.min.css">
+
+    </head>
+    <body>
+        
+<div class="body">
+    <div class="content-wrapper">
+        <div class="content ">
+            <h1 id="librewolf-certificate-transparency-and-untrusted-ca">LibreWolf, Certificate Transparency and Untrusted CA <a class="header-anchor" href="#librewolf-certificate-transparency-and-untrusted-ca">¶</a></h1>
+<p>Hard to believe it's happening but I'm forced to trust some <em>untrusted CA</em>.
+It sounds crazy, I know.</p>
+<h2 id="the-problem">The problem <a class="header-anchor" href="#the-problem">¶</a></h2>
+<p>I am the client of some local banks and from time to time I use their sites for banking.
+Most of them were using <a href="https://www.globalsign.com/">GlobalSign</a> certificates which has
+<a href="https://community.ipinfo.io/t/globalsign-is-revoking-ssl-certificates-for-russian-websites-here-is-what-the-data-shows/7381">recently started revoking them</a>. And banks and some other
+companies were forced to switch to state CA run by The Ministry of Digital Development
+and Communications.</p>
+<p>Here is the problem - those state-issued certificates are not recognized by
+Chrome, Firefox and Safari because they know nothing about this CA.</p>
+<p>Possible solutions to this problem:</p>
+<ul>
+<li>switch to <a href="https://browser.yandex.ru">Yandex browser</a> which has state CA certificate included,</li>
+<li>manually add state CA certificate to OS (making it available for all browsers),</li>
+<li>manually add state CA certificate to selected browser(s).</li>
+</ul>
+<p>I've tried <a href="https://browser.yandex.ru">Yandex browser</a> (which is based on Chromium codebase, by the way) and
+was frustrated by it - too many AI-related options which
+<a href="/2026/ai-and-other-strangers/">I will never use</a>. But it has a nice feature - support for
+<a href="https://browser.yandex.ru/help/ru/security/policy-ct-log">Certificate Transparency</a> (article is in Russian)
+for state-issued certificates.</p>
+<p>Installing state CA certificate to OS was not an option to me.</p>
+<p>Installing it to browser (<a href="https://librewolf.net/">LibreWolf</a> is my browser of choice at the moment) worked but
+<a href="https://en.wikipedia.org/wiki/Certificate_Transparency">Certificate Transparency</a> was missing as browser still knows
+nothing about correspondent <a href="https://browser-resources.s3.yandex.net/ctlog/ctlog.json">CT logs</a>.</p>
+<p>Let's try to fix it.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>While experimenting and looking through the codebase I've found out that
+<a href="https://en.wikipedia.org/wiki/Certificate_Transparency">Certificate Transparency</a> will work for builtin trusted CA only, not for
+imported one.</p>
+</div>
+<h2 id="the-solution">The solution <a class="header-anchor" href="#the-solution">¶</a></h2>
+<div class="markdown-alert markdown-alert-caution">
+<p class="markdown-alert-title">Caution</p>
+<p>I'm neither <a href="https://librewolf.net/">LibreWolf</a> nor <a href="https://www.firefox.com/">Firefox</a> developer so use all steps outlined below
+at your own risk.</p>
+</div>
+<p>After several try-and-fail attempts I've managed to create the build I needed -
+custom <a href="https://librewolf.net/">LibreWolf</a> build with state CA certificate and
+<a href="https://browser-resources.s3.yandex.net/ctlog/ctlog.json">CT logs</a> support included.</p>
+<p>Here is the workflow.</p>
+<h3 id="step-0---prepare-build-host">Step 0 - prepare build host <a class="header-anchor" href="#step-0---prepare-build-host">¶</a></h3>
+<p><a href="https://www.debian.org/">Debian</a> is supported by <a href="https://librewolf.net/">LibreWolf</a> out of the box, so it's a good choice to start
+with. I was using it to prepare my custom build and will use it to run my custom flavour
+of the browser. I use separate virtual machines for both tasks.</p>
+<p>So, initial step is to install <a href="https://www.debian.org/">Debian</a> into virtual machine.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Unless otherwise noted, all opeartions below must be performed on this virtual machine.</p>
+</div>
+<h3 id="step-1---download-librewolf-sources-tarball">Step 1 - download LibreWolf sources (tarball) <a class="header-anchor" href="#step-1---download-librewolf-sources-tarball">¶</a></h3>
+<p><strong>As a preliminary step be sure to read <a href="https://codeberg.org/librewolf/source#build">LibreWolf Build Instructions</a>.</strong></p>
+<p>Go to <a href="https://codeberg.org/librewolf/source/releases">LibreWolf Releases</a> page, choose the latest one, download tarball and
+initialize git repository.</p>
+<p>Git repository will help to prepare the patch but there is no need to commit and push
+it somewhere. You just have to add four files to index to be able to get diff later.</p>
+<p>Files to be patched:</p>
+<ul>
+<li><a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/certdata.txt">security/nss/lib/ckfw/builtins/certdata.txt</a></li>
+<li><a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/nssckbi.h">source/security/nss/lib/ckfw/builtins/nssckbi.h</a></li>
+<li><a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">security/ct/CTKnownLogs.h</a></li>
+<li><a href="https://searchfox.org/firefox-main/source/toolkit/components/certviewer/content/components/logNameTable.mjs">toolkit/components/certviewer/content/components/logNameTable.mjs</a></li>
+</ul>
+<pre><code class="language-bash">$ cd /workdir
+
+$ wget https://codeberg.org/api/packages/librewolf/generic/librewolf-source/153.0.3-1/librewolf-153.0.3-1.source.tar.gz
+$ wget https://codeberg.org/api/packages/librewolf/generic/librewolf-source/153.0.3-1/librewolf-153.0.3-1.source.tar.gz.sha256sum
+$ wget https://codeberg.org/api/packages/librewolf/generic/librewolf-source/153.0.3-1/librewolf-153.0.3-1.source.tar.gz.sha512sum
+
+$ sha256sum -c librewolf-153.0.3-1.source.tar.gz.sha256sum
+librewolf-153.0.3-1.source.tar.gz: OK
+
+$ sha512sum -c librewolf-153.0.3-1.source.tar.gz.sha512sum
+librewolf-153.0.3-1.source.tar.gz: OK
+
+$ tar xf librewolf-153.0.3-1.source.tar.gz
+$ cd librewolf-153.0.3-1/
+
+$ git init
+$ git add security/nss/lib/ckfw/builtins/certdata.txt
+$ git add security/nss/lib/ckfw/builtins/nssckbi.h
+$ git add security/ct/CTKnownLogs.h
+$ git add toolkit/components/certviewer/content/components/logNameTable.mjs
+</code></pre>
+<h3 id="step-2---prepare-diff-for-builtin-trusted-ca-certificates">Step 2 - prepare diff for builtin trusted CA certificates <a class="header-anchor" href="#step-2---prepare-diff-for-builtin-trusted-ca-certificates">¶</a></h3>
+<p><strong>As a preliminary step be sure to read
+<a href="https://firefox-source-docs.mozilla.org/security/nss/runbooks/rootstore.html">Updating NSS's Root Store</a>
+(another copy is <a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/README">available here</a>).</strong></p>
+<p>Assuming you already have new CA certificate downloaded you need to convert it to
+DER format as it's distributed in PEM format:</p>
+<pre><code class="language-bash">$ openssl x509 -outform der -in cert.pem -out cert.der
+</code></pre>
+<p>Now you can add it to builtin root store:</p>
+<pre><code class="language-bash">$ cd security/nss/lib/ckfw/builtins/
+
+$ addbuiltin -n &quot;Russian Trusted Root CA&quot; -t &quot;C,,&quot; -i cert.der &gt;&gt;certdata.txt
+
+$ cd -
+/workdir/librewolf-153.0.3-1
+</code></pre>
+<p>There is a chance you don't have <strong><code>addbuiltin</code></strong> tool installed (I was missing it too).
+I tried to find <a href="https://www.debian.org/">Debian</a> package containing it but no luck there.</p>
+<p>Fortunately, my <a href="https://voidlinux.org/">Void Linux</a> installation have it installed from <strong><code>nss</code></strong> package.</p>
+<pre><code class="language-bash">$ xbps-query -f nss |grep addbuiltin
+/usr/libexec/nss/addbuiltin
+</code></pre>
+<p>So, I have to copy CA certificate and <strong><code>certdata.txt</code></strong> to my laptop, run two
+commands outlined above and copy new version of <strong><code>certdata.txt</code></strong> back to
+build host. Phew.</p>
+<p>One more thing to do here - update <a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/nssckbi.h">nssckbi.h</a> file to
+<a href="https://firefox-source-docs.mozilla.org/security/nss/runbooks/rootstore.html#incrementing-the-root-store-version">bump the version of the module</a>.</p>
+<p>After completing this step you must have two files updated - <a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/certdata.txt">certdata.txt</a> and <a href="https://searchfox.org/firefox-main/source/security/nss/lib/ckfw/builtins/nssckbi.h">nssckbi.h</a>:</p>
+<pre><code class="language-bash">$ git status security/nss/
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+	new file:   security/nss/lib/ckfw/builtins/certdata.txt
+	new file:   security/nss/lib/ckfw/builtins/nssckbi.h
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+	modified:   security/nss/lib/ckfw/builtins/certdata.txt
+	modified:   security/nss/lib/ckfw/builtins/nssckbi.h
+
+...
+</code></pre>
+<p>Be sure to check the diff:</p>
+<pre><code class="language-bash">$ git diff security/nss/
+...
+</code></pre>
+<h3 id="step-3---prepare-diff-for-known-ct-logs-list">Step 3 - prepare diff for known CT Logs list <a class="header-anchor" href="#step-3---prepare-diff-for-known-ct-logs-list">¶</a></h3>
+<p><strong>As a preliminary step be sure to look through <a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">CTKnownLogs.h</a> file.</strong></p>
+<p>You should start with downloading <a href="https://browser-resources.s3.yandex.net/ctlog/ctlog.json">CT Logs list</a>:</p>
+<pre><code class="language-bash">$ cd /workdir &amp;&amp; mkdir ctlog &amp;&amp; cd ctlog
+
+$ wget https://browser-resources.s3.yandex.net/ctlog/ctlog.json
+
+$ cd ../librewolf-153.0.3-1/
+</code></pre>
+<p>I've prepared python script to convert downloaded <strong><code>json</code></strong> file data to put into
+<a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">CTKnownLogs.h</a> file. This script is rather naive and looks ugly to show it here.</p>
+<p>You can use python code from <a href="https://searchfox.org/firefox-main/source/taskcluster/docker/periodic-updates/scripts/getCTKnownLogs.py">getCTKnownLogs.py</a> script to convert <strong><code>json</code></strong> data
+to header file.</p>
+<p>You should update two lists in <a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">CTKnownLogs.h</a>:</p>
+<ul>
+<li><strong><code>kCTLogList</code></strong> containing <strong><code>CTLogInfo</code></strong> structs,</li>
+<li><strong><code>kCTLogOperatorList</code></strong> containing <strong><code>CTLogOperatorInfo</code></strong> structs.</li>
+</ul>
+<p>It is important to put new <strong><code>CTLogInfo</code></strong> structs <em>before</em> <strong><code>Mozilla Test RSA</code></strong> logs
+as long as new <strong><code>CTLogOperatorInfo</code></strong> structs <em>before</em> <strong><code>Mozilla Test</code></strong> orgs which
+means you will have to update <strong><code>Mozilla Test</code></strong> orgs indexes in both structs.</p>
+<p><em>This is needed to have proper CT Logs operators indexes in <strong><code>kCTLogOperatorList</code></strong> in
+production build.</em></p>
+<p>Here is the diff I've prepared (you are encouraged to prepare your very own version
+though):</p>
+<pre><code class="language-diff">diff --git a/security/ct/CTKnownLogs.h b/security/ct/CTKnownLogs.h
+index f5bc780..dc9376b 100644
+--- a/security/ct/CTKnownLogs.h
++++ b/security/ct/CTKnownLogs.h
+@@ -537,10 +537,70 @@ const CTLogInfo kCTLogList[] = {
+      &quot;\xc4\xb5\xc5\x87\x42\x14\x63\x3e\xf7\x6b\xd2\x3b\x93\x19\x14\xa8\xcf\x8d&quot;
+      &quot;\xf3&quot;,
+      91},
++    {&quot;Yandex Agate-2026 log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1731002400000,  // 2024-11-07T18:00:00Z
++     8,              // operated by Yandex
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\x01\x00\x08\xc1\xf1\x1b\x06\x45\x2e&quot;
++     &quot;\xd5\x10\xd2\x2e\x79\x5c\x1a\x85\x65\x31\xb4\x5c\xf3\x04\x02\xd7\x2b\xac&quot;
++     &quot;\x58\xb0\x43\x47\xc7\x37\x70\x92\x32\x93\x41\xed\x23\xe5\x30\x7e\x06\xbd&quot;
++     &quot;\xf7\x3e\x3f\xec\xcb\x7c\x7e\x44\xb0\x55\x31\x90\x90\xc9\x22\xbf\x85\x2c&quot;
++     &quot;\x4f&quot;,
++     91},
++    {&quot;Yandex Agate-2027 log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1764075600000,  // 2025-11-25T13:00:00Z
++     8,              // operated by Yandex
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\x58\xf0\x37\x2c\xed\x63\x27\x0c\x9c&quot;
++     &quot;\x41\xca\xee\x0a\xab\xde\xd9\x13\x34\x33\x5f\x47\x17\xb5\x7d\x20\x50\x81&quot;
++     &quot;\xb1\xe9\x10\x4d\x68\x37\x64\x1f\x26\xf4\xe1\x84\x75\x51\x55\x9c\xdb\xdf&quot;
++     &quot;\xe9\x3e\xa4\xb8\xb3\x76\x99\x15\x7a\x91\xfc\x25\x16\x26\xae\xac\x89\xf2&quot;
++     &quot;\x8f&quot;,
++     91},
++    {&quot;VK 'NCA2026' Log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1730999340000,  // 2024-11-07T17:09:00Z
++     9,              // operated by VK
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\xad\x19\x87\x2f\x48\xd0\xf2\x9e\x1c&quot;
++     &quot;\xb2\x02\xa7\x2f\x53\x5d\x14\xb5\x9e\x2d\x54\x36\xe1\x49\x04\xe9\x7b\x8c&quot;
++     &quot;\xc1\xfc\xd5\xd2\x46\x31\x92\x50\x8c\xa3\xac\x4a\x04\xe6\x38\x4d\x95\xcf&quot;
++     &quot;\x46\xda\xea\x63\x53\x55\x34\x84\x78\x4a\x5e\x95\xa0\x64\xac\xda\x57\xe9&quot;
++     &quot;\x6b&quot;,
++     91},
++    {&quot;VK 'NCA2027' Log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1766059740000,  // 2025-12-18T12:09:00Z
++     9,              // operated by VK
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\xd3\x7d\xec\x07\xd9\x09\xfc\x63\xe6&quot;
++     &quot;\x5d\x40\xf4\xad\x9b\x84\xe5\x49\xec\x73\x32\x5b\x99\x5c\xb8\x3f\x5c\xea&quot;
++     &quot;\x81\x58\x67\xca\x28\x64\x2e\xa0\xaf\x5f\x74\xaa\x98\xa6\x76\x0d\x25\xd3&quot;
++     &quot;\x0d\x77\xe3\xe4\x4b\x14\x9b\x97\x54\x49\x44\xa8\xe1\x10\x9e\x36\xaa\xd1&quot;
++     &quot;\xc1&quot;,
++     91},
++    {&quot;The Ministry of Digital Development and Communications '2026' Log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1732968000000,  // 2024-11-30T12:00:00Z
++     10,             // operated by The Ministry of Digital Development and Communications
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\x2c\xb9\x50\x11\xb0\xd8\xed\xe1\xcc&quot;
++     &quot;\x61\x67\x1e\xde\x6e\x60\xe0\x88\x6e\x60\x62\xb4\x93\xc9\x82\x37\x0e\xc6&quot;
++     &quot;\xe2\xb4\x49\xb8\x90\x20\x01\x31\xaf\xd8\xe0\xc7\x26\xc4\x67\x28\x09\x32&quot;
++     &quot;\x8f\x69\x2f\x5d\x1a\x7d\x2e\xa4\x46\x00\x90\xd5\xab\x23\xed\x75\x7b\x3c&quot;
++     &quot;\x6c&quot;,
++     91},
++    {&quot;The Ministry of Digital Development and Communications '2027' Log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
++     1764504000000,  // 2025-11-30T12:00:00Z
++     10,             // operated by The Ministry of Digital Development and Communications
++     &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
++     &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\xaa\xcb\xb1\x39\xab\xec\x5a\x0e\xdb&quot;
++     &quot;\xa6\x1b\xe7\xdb\xee\xa7\x51\x6d\x8b\xfd\x49\x90\xb7\x1b\x1b\x65\x09\xcf&quot;
++     &quot;\x70\x91\xab\x76\x14\x9d\x82\x43\x3c\x41\xe3\xdf\xc3\x41\x33\x05\x71\xa3&quot;
++     &quot;\x45\x11\xfc\x0b\xf4\x9a\x6b\x53\x98\xe3\x07\xa0\xdc\xf2\x6f\x99\x97\xea&quot;
++     &quot;\xf5&quot;,
++     91},
+ #ifdef DEBUG
+     {&quot;Mozilla Test RSA Log 1&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
+      1721666666000,  // 2024-07-22T16:44:26Z
+-     8,              // operated by Mozilla Test Org 1
++     11              // operated by Mozilla Test Org 1
+      &quot;\x30\x82\x01\x22\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01\x05&quot;
+      &quot;\x00\x03\x82\x01\x0f\x00\x30\x82\x01\x0a\x02\x82\x01\x01\x00\xba\x88\x51&quot;
+      &quot;\xa8\x44\x8e\x16\xd6\x41\xfd\x6e\xb6\x88\x06\x36\x10\x3d\x3c\x13\xd9\xea&quot;
+@@ -563,7 +623,7 @@ const CTLogInfo kCTLogList[] = {
+ #ifdef DEBUG
+     {&quot;Mozilla Test EC Log&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
+      1721666666000,  // 2024-07-22T16:44:26Z
+-     8,              // operated by Mozilla Test Org 1
++     11,             // operated by Mozilla Test Org 1
+      &quot;\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x08\x2a\x86\x48&quot;
+      &quot;\xce\x3d\x03\x01\x07\x03\x42\x00\x04\x4f\xbf\xbb\xbb\x61\xe0\xf8\xf9\xb1&quot;
+      &quot;\xa6\x0a\x59\xac\x87\x04\xe2\xec\x05\x0b\x42\x3e\x3c\xf7\x2e\x92\x3f\x2c&quot;
+@@ -575,7 +635,7 @@ const CTLogInfo kCTLogList[] = {
+ #ifdef DEBUG
+     {&quot;Mozilla Test RSA Log 2&quot;, CTLogState::Admissible, CTLogFormat::RFC6962,
+      1721666666000,  // 2024-07-22T16:44:26Z
+-     9,              // operated by Mozilla Test Org 2
++     12,             // operated by Mozilla Test Org 2
+      &quot;\x30\x82\x01\x22\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01\x05&quot;
+      &quot;\x00\x03\x82\x01\x0f\x00\x30\x82\x01\x0a\x02\x82\x01\x01\x00\xc1\x75\xc6&quot;
+      &quot;\x52\x66\x09\x9f\x77\x08\x2a\x67\x91\xf1\xb8\x76\xc3\x7f\x5c\xe5\x38\xb0&quot;
+@@ -598,7 +658,7 @@ const CTLogInfo kCTLogList[] = {
+ #ifdef DEBUG
+     {&quot;Mozilla Test RSA Log 4&quot;, CTLogState::Admissible, CTLogFormat::Tiled,
+      1750853366000,  // 2025-06-25T12:09:26Z
+-     10,             // operated by Mozilla Test Org 3
++     13,             // operated by Mozilla Test Org 3
+      &quot;\x30\x82\x01\x22\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01\x05&quot;
+      &quot;\x00\x03\x82\x01\x0f\x00\x30\x82\x01\x0a\x02\x82\x01\x01\x00\xb5\x49\x89&quot;
+      &quot;\x5c\x9d\x00\x10\x8d\x11\xa1\xf9\x9f\x87\xa9\xe3\xd1\xa5\xdb\x5d\xfa\xec&quot;
+@@ -629,14 +689,17 @@ const CTLogOperatorInfo kCTLogOperatorList[] = {
+     {&quot;TrustAsia&quot;, 5},
+     {&quot;Geomys&quot;, 6},
+     {&quot;IPng Networks&quot;, 7},
++    {&quot;Yandex&quot;, 8},
++    {&quot;VK&quot;, 9},
++    {&quot;The Ministry of Digital Development and Communications&quot;, 10},
+ #ifdef DEBUG
+-    {&quot;Mozilla Test Org 1&quot;, 8},
++    {&quot;Mozilla Test Org 1&quot;, 11},
+ #endif  // DEBUG
+ #ifdef DEBUG
+-    {&quot;Mozilla Test Org 2&quot;, 9},
++    {&quot;Mozilla Test Org 2&quot;, 12},
+ #endif  // DEBUG
+ #ifdef DEBUG
+-    {&quot;Mozilla Test Org 3&quot;, 10},
++    {&quot;Mozilla Test Org 3&quot;, 13},
+ #endif  // DEBUG
+ };
+</code></pre>
+<p>One more file to edit here - <a href="https://searchfox.org/firefox-main/source/toolkit/components/certviewer/content/components/logNameTable.mjs">logNameTable.mjs</a> which contains mapping between
+<strong><code>CT Log id</code></strong> and <strong><code>CT Log description</code></strong>.</p>
+<p>Here is the diff (but you are still encouraged to prepare your very own version though):</p>
+<pre><code class="language-diff">diff --git a/toolkit/components/certviewer/content/components/logNameTable.mjs b/toolkit/components/certviewer/content/components/logNameTable.mjs
+index c13717b..66ea360 100644
+--- a/toolkit/components/certviewer/content/components/logNameTable.mjs
++++ b/toolkit/components/certviewer/content/components/logNameTable.mjs
+@@ -58,5 +58,11 @@ export const logNameTable = {
+   &quot;utuIpG+cr6QJDoLlk1bbbni0pT9YLbCBl5UkLym2jJg=&quot;: &quot;Google 'ParcelYard2026h2' log&quot;,
+   &quot;wjF+V0UZo0XufzjespBB68fCIVoiv3/Vta12mtkOUs0=&quot;: &quot;DigiCert 'Wyvern2026h2'&quot;,
+   &quot;yKPEf8ezrbk1awE/anoSbeM6TkOlxkb5l605dZkdz5o=&quot;: &quot;Sectigo 'Tiger2026h2'&quot;,
+-  &quot;yzj3FYl8hKFEX1vB3fvJbvKaWc1HCmkFhbDLFMMUWOc=&quot;: &quot;Cloudflare 'Nimbus2026'&quot;
++  &quot;yzj3FYl8hKFEX1vB3fvJbvKaWc1HCmkFhbDLFMMUWOc=&quot;: &quot;Cloudflare 'Nimbus2026'&quot;,
++  &quot;Vh7HRN8a9wLmJoOt38SVz3WjGwxs6KDH6gEDMJC3SIU=&quot;: &quot;Yandex Agate-2026 log&quot;,
++  &quot;GukWh2bX94qcsIb4xJw8Xc64yZMAqa9L/7CbB0+BLBc=&quot;: &quot;Yandex Agate-2027 log&quot;,
++  &quot;eNkSvkIKwAIcul2iVDKRU9tIywYr/EMBJB4Qq8cWnmc=&quot;: &quot;VK 'NCA2026' Log&quot;,
++  &quot;1LN/8nNPJvHlUHXlhVtwT95xu30Fx1fT3OsTf2JDrSQ=&quot;: &quot;VK 'NCA2027' Log&quot;,
++  &quot;ybgRvMAcYl3KJ/TWxEfLX34Ov3LLWZGoMy+Zv5oqPko=&quot;: &quot;The Ministry of Digital Development and Communications '2026' Log&quot;,
++  &quot;TJig3bv0dZNmDDboZiaHFAn5fnh4TpGeqWr4HFMnXNY=&quot;: &quot;The Ministry of Digital Development and Communications '2027' Log&quot;
+ }
+</code></pre>
+<p>After completing this step you must have two more files updated - <a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">CTKnownLogs.h</a>
+and <a href="https://searchfox.org/firefox-main/source/toolkit/components/certviewer/content/components/logNameTable.mjs">logNameTable.mjs</a>:</p>
+<pre><code class="language-bash">$ git status security/ct/ toolkit/
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+	new file:   security/ct/CTKnownLogs.h
+	new file:   toolkit/components/certviewer/content/components/logNameTable.mjs
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+	modified:   security/ct/CTKnownLogs.h
+	modified:   toolkit/components/certviewer/content/components/logNameTable.mjs
+
+  ...
+</code></pre>
+<p>Be sure to check the diff:</p>
+<pre><code class="language-bash">$ git diff security/ct/ toolkit/
+...
+</code></pre>
+<h3 id="step-4---prepare-the-patch">Step 4 - prepare the patch <a class="header-anchor" href="#step-4---prepare-the-patch">¶</a></h3>
+<p>This is quite simple:</p>
+<pre><code class="language-bash">$ pwd
+/workdir/librewolf-153.0.3-1
+
+$ git diff &gt;../ct-known-logs.patch
+</code></pre>
+<h3 id="step-5---clone-librewolf-sources-repository-include-the-patch-and-build">Step 5 - clone LibreWolf sources repository, include the patch and build <a class="header-anchor" href="#step-5---clone-librewolf-sources-repository-include-the-patch-and-build">¶</a></h3>
+<p>Pretty simple too (based on <a href="https://codeberg.org/librewolf/source#build-repository">LibreWolf Build from Repository Instructions</a>):</p>
+<pre><code class="language-bash">$ cd /workdir
+$ git clone --recursive git@codeberg.org:librewolf/source.git librewolf-source --depth=1
+
+$ cp ct-known-logs.patch librewolf-source/patches/
+$ echo &quot;patches/ct-known-logs.patch&quot; &gt;&gt;assets/patches.txt
+
+$ cd librewolf-source
+
+$ make dir &amp;&amp; make bootstrap
+
+$ make build
+
+$ make package
+</code></pre>
+<p><strong>Voila!</strong></p>
+<p>In case of no errors you will have
+<strong><code>librewolf-153.0.3-1.en-US.linux-x86_64.tar.xz</code></strong> tarball - <a href="https://librewolf.net/">LibreWolf</a> package to
+copy to target machine, unpack and run the browser:</p>
+<pre><code class="language-bash">$ cd /opt
+$ sudo tar xf /workdir/librewolf-153.0.3-1.en-US.linux-x86_64.tar.xz
+
+$ cd librewolf
+
+$ ./librewolf
+</code></pre>
+<h3 id="step-6---rebuild">Step 6 - rebuild <a class="header-anchor" href="#step-6---rebuild">¶</a></h3>
+<p>In case you've updated the patch be sure to clean build dir and bootstrap:</p>
+<pre><code class="language-bash">$ pwd
+/workdir/librewolf-source
+
+$ make veryclean
+
+$ make dir &amp;&amp; make bootstrap
+
+$ make build
+
+$ make package
+</code></pre>
+<h3 id="step-7---test-ct-logs">Step 7 - test CT Logs <a class="header-anchor" href="#step-7---test-ct-logs">¶</a></h3>
+<p>Not sure my approach is good enough but to be sure CT Logs for state-issued
+certificates are working properly I've decided to prepare <em>broken</em> build.</p>
+<p>I intentionally changed one byte of the <strong>CT Log key</strong> for all new logs in
+<a href="https://searchfox.org/firefox-main/source/security/ct/CTKnownLogs.h">CTKnownLogs.h</a> file, built the package and attempted to load some bank page
+using this <em>broken</em> build. I've got an error saying something is wrong with the site -
+something I expected.</p>
+<p>Good to know it works.</p>
+<hr />
+<p>Hard to believe it's happening in this world.
+Hard to say I'm happy I managed to find the solution.
+I'd be happy if I never had to deal with this problem.</p>
+<p>Unfortunately, this is something you can't change.
+But you can try to minimize the risks arising from this situation.</p>
+<p>Let's move on.</p>
+
+            <div class="content-last-modified"><small><em>Last modified: 2026-08-11 16:00:00 UTC</em></small></div>
+            
+            <div class="content-prev-next">
+                <div class="content-prev">
+                    <a class="content-prev-link" href="/2026/passware/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                        <span class="ib">Passware</span>
+                    </a>
+                </div>
+                <div class="content-next">
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="blog-title header">Words and Thoughts</div>
+        
+    </div>
+    <nav class="blog-nav">
+        <ul class="blog-nav-list">
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/">Blog</a></li>
+            <li class="blog-nav-item"><a class="blog-nav-link" href="/about/">About</a></li>
+        </ul>
+    </nav>
+    <div class="social-links">
+        <a class="social-link" href="https://codeberg.org/ysegorov/" title="Codeberg"><svg width="24" height="24" viewBox="0 0 4.2333332 4.2333335" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="42519.28500000001" x2="42575.33600000001" y1="-7078.7891" y2="-6966.9307"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".49517274" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient><path d="m42519.28500000001-7078.7891a.76086879.56791688 0 0 0 -.738.6739l33.586 125.8886a87.182358 87.182358 0 0 0 39.381-33.7636l-71.565-92.5196a.76086879.56791688 0 0 0 -.664-.2793z" fill="url(#a)" transform="matrix(.02427860986 0 0 .02427860986 -1030.1563562308 172.97083575326)"/><path d="m11249.461-1883.6961c-12.74 0-23.067 10.3275-23.067 23.0671 0 4.3335 1.22 8.5795 3.522 12.2514l19.232-24.8636c.138-.1796.486-.1796.624 0l19.233 24.8646c2.302-3.6721 3.523-7.9185 3.523-12.2524 0-12.7396-10.327-23.0671-23.067-23.0671z" fill="#fff" stroke-width="17.0055" transform="matrix(.0917616758 0 0 .0917616758 -1030.1563562308 172.97083575326)"/></svg></a>
+        <a class="social-link" href="https://github.com/ysegorov/" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <!-- <a class="social-link" href="https://bitbucket.com/ysegorov/" title="BitBucket"><i class="fa fa-bitbucket fa-2x"></i></a> -->
+    </div>
+    <div class="sidebar-quote-container">
+        <blockquote class="sidebar-quote">
+            <p class="sidebar-quote-text">I know that I know nothing</p>
+            <cite class="sidebar-quote-author">Socrates</cite>
+        </blockquote>
+    </div>
+</div>
+    </div>
+</div>
+
+
+        
+
+        
+        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
+        
+        
+        
+    </body>
+</html>
